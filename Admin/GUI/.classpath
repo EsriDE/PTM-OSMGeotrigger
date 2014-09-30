@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="com.esri.arcgis.javase.core.project.ARCGIS_RUNTIME_JAVA_SDK_DEPENDS/C|/bin/Eclipse_4.4_Runtime_Java/configuration/org.eclipse.osgi/254/0/.cp/lib/"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GeotriggerLib"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

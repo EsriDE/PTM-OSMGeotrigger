@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OSM Trigger</string>
+    <string name="drawer_open">Navigationsmenü öffnen</string>
+    <string name="drawer_close">Navigationsmenü schließen</string>
+    <string name="info_text">OSM Trigger App</string>
+    <string name="geotrigger_preferences">Geotrigger</string>    
+    <string name="send_notifications_title">Benachrichtigungen schicken</string>
+    <string name="send_notifications_summary">Sendet Benachrichtigungen vom ArcGIS Geotrigger Service</string>
+    <string name="categorys_text">Kategorien</string>
+    <string name="search_button">Suchen</string>
+   
+    <string-array name="page_names">
+        <item>Karte</item>
+        <item>Suchen</item>
+        <item>Einstellungen</item>
+        <item>Info</item>
+    </string-array>
+</resources>
