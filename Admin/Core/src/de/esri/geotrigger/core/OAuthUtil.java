@@ -30,6 +30,10 @@ public class OAuthUtil {
 				public void onSuccess(JSONObject json) {
 					accessToken = json.getString("access_token");
 					Params.get().setAccessToken(accessToken);
+					int expireInterval = json.getInt("expires_in");
+					long now = System.currentTimeMillis();
+					long expireTime = now + expireInterval * 1000;
+					Params.get().setExpireTime(expireTime);
 				}
 				
 				@Override

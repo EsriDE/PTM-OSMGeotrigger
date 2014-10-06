@@ -7,6 +7,11 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -106,6 +111,41 @@ public class SetAppIdTool {
 			String clientSecret = clientSecretTextField.getText();
 			Params.get().setClientId(clientId);
 			Params.get().setClientSecret(clientSecret);
+			
+			try {
+				FileOutputStream out = new FileOutputStream("App.properties");
+				Properties properties = new Properties();
+				properties.setProperty("clientid", clientId);
+				properties.setProperty("clientsecret", clientSecret);
+				properties.store(out, null);
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
+	
+	public void loadAppId(){
+		try {
+			File propFile = new File("App.properties");
+			if(!propFile.exists()){
+				propFile.createNewFile();
+			}
+			
+			FileInputStream in = new FileInputStream(propFile);
+			Properties properties = new Properties();
+			properties.load(in);
+			String clientId = properties.getProperty("clientid");
+			if(clientId != null){
+				Params.get().setClientId(clientId);
+			}
+			String clientSecret = properties.getProperty("clientsecret");
+			if(clientSecret != null){
+				Params.get().setClientSecret(clientSecret);				
+			}
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}	
 }

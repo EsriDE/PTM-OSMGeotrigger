@@ -135,7 +135,8 @@ public class AdminApplication implements ActionListener{
 		// "http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
 		// map.getLayers().add(tiledLayer);
 
-
+		SetAppIdTool appIdTool = new SetAppIdTool();
+		appIdTool.loadAppId();
   }
 
   /**

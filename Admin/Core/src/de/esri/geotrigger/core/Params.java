@@ -34,7 +34,7 @@ public class Params {
 	}
 
 	public String getAccessToken() {
-		if(accessToken == null){
+		if(accessToken == null || tokenExpired()){
 			OAuthUtil.getAccessToken();
 		}
 		return accessToken;
@@ -50,5 +50,14 @@ public class Params {
 
 	public void setExpireTime(long expireTime) {
 		this.expireTime = expireTime;
+	}
+	
+	private boolean tokenExpired(){
+		boolean expired = false;
+		long now = System.currentTimeMillis();
+		if(now > (expireTime - 1000)){
+			expired = true;
+		}
+		return expired;
 	}
 }

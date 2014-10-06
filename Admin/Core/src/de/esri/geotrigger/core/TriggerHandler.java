@@ -2,6 +2,8 @@ package de.esri.geotrigger.core;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TriggerHandler {
@@ -160,6 +162,42 @@ public class TriggerHandler {
             @Override
             public void onFailure(Throwable e) {
             	log.error("Error creating trigger: "+e.getMessage());
+            }
+        });
+	}
+	
+	public void deleteTrigger(String[] triggerIds, String[] tags){
+		log.debug("Deleting trigger");
+		JSONObject params = new JSONObject();
+		JSONArray ids = new JSONArray();
+		if(triggerIds != null && triggerIds.length > 0){
+			// delete by trigger ids
+			for(String triggerId : triggerIds){
+				ids.put(triggerId);			
+			}
+		}else if(tags != null && tags.length > 0){
+			// delete by tags
+			JSONObject tagsObject = new JSONObject();
+			JSONArray tagsArray = new JSONArray();
+			for(String tag : tags){
+				tagsArray.put(tag);			
+			}
+			tagsObject.put("tags", tagsArray);
+			ids.put(tagsObject);
+		}
+        try {
+            params.put("triggerIds", ids);
+        } catch (JSONException e) {
+        	log.error("Error setting trigger ids: "+e.getMessage());
+        }
+
+        GeotriggerApiClient.runRequest("trigger/delete", params, new GeotriggerApiListener() {
+            public void onSuccess(JSONObject data) {
+            	log.debug(data.toString());
+            }
+
+            public void onFailure(Throwable error) {
+            	log.error("Error creating trigger: "+error.getMessage());
             }
         });
 	}

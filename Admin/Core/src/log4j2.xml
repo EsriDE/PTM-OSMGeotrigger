@@ -6,7 +6,7 @@
     </File>
   </Appenders> 
   <Loggers>
-    <Logger name="de.esri.java.geotrigger.core" level="debug">
+    <Logger name="de.esri.geotrigger.core" level="debug">
       <AppenderRef ref="FileAppender"/>
     </Logger>
   </Loggers>  

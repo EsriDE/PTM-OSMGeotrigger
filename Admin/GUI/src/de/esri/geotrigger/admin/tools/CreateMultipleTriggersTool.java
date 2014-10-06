@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -167,7 +168,7 @@ public class CreateMultipleTriggersTool {
 			triggerPanel.add(triggerIdTextField, gbc);			
 			gbc.gridx = 0;
 			gbc.gridy = 5;
-			JLabel radiusLabel = new JLabel("Radius");
+			JLabel radiusLabel = new JLabel("Radius (m)");
 			triggerPanel.add(radiusLabel, gbc);
 			gbc.gridx = 1;
 			radiusTextField = new JTextField(10);
@@ -301,7 +302,7 @@ public class CreateMultipleTriggersTool {
 //			queryParams.setWhere(where);
 //			
 ////			UserCredentials credentials = new UserCredentials();
-////			credentials.setUserAccount("rsu4devprog", "devprog42195");
+////			credentials.setUserAccount("", "");
 //			QueryTask task = new QueryTask(layerUrl);
 //			task.execute(queryParams, new CallbackListener<FeatureResult>() {
 //				
@@ -363,7 +364,7 @@ public class CreateMultipleTriggersTool {
 				}
 				TriggerHandler triggerhandler = new TriggerHandler();
 				triggerhandler.createTrigger(triggerId, tags, direction, latitude, longitude, radius, notificationText, notificationUrl, null, null, notificationData, callBackUrl, properties, trackingProfile, -1, -1, null, null, -1, -1);					
-				
+				JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(map), "Triggers created.");
 			}
 			
 //			Iterator<Object> i = result.iterator();
