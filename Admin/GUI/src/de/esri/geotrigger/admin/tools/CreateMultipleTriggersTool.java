@@ -255,6 +255,7 @@ public class CreateMultipleTriggersTool {
 			add(buttonPanel, BorderLayout.SOUTH);			
 			
 			pack();
+			setResizable(false);
 			setLocationRelativeTo(parent);
 		}
 		

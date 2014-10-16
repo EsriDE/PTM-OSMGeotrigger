@@ -127,6 +127,15 @@ public class OpenWebMapTool {
 			add(buttonPanel, BorderLayout.SOUTH);
 			pack();
 			setLocationRelativeTo(parent);
+			
+			showTestMap();
+		}
+		
+		private void showTestMap(){
+			portalUrlTextField.setText("http://esri-de-dev.maps.arcgis.com/");
+			webMapTextField.setText("bf5dbd7d583543f795fde3e6731d48c6");
+			userTextField.setText("rsu4devprog");
+			passwordTextField.setText("devprog42195");
 		}
 		
 		@Override

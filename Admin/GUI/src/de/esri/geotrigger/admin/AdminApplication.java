@@ -2,10 +2,12 @@ package de.esri.geotrigger.admin;
 
 import java.awt.EventQueue;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JToolBar;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -23,6 +25,7 @@ import com.esri.map.MapOptions.MapType;
 
 import de.esri.geotrigger.admin.tools.AddLayerTool;
 import de.esri.geotrigger.admin.tools.CreateMultipleTriggersTool;
+import de.esri.geotrigger.admin.tools.CreateTriggerTool;
 import de.esri.geotrigger.admin.tools.NewMapTool;
 import de.esri.geotrigger.admin.tools.OpenWebMapTool;
 import de.esri.geotrigger.admin.tools.SetAppIdTool;
@@ -40,7 +43,7 @@ import de.esri.geotrigger.admin.tools.SetAppIdTool;
 public class AdminApplication implements ActionListener{
 //	private String portalUrl = "http://esri-de-dev.maps.arcgis.com";
 //	private String webMapId = "bf5dbd7d583543f795fde3e6731d48c6";
-	private JFrame window;
+	private static JFrame window;
 	private JMap map;
 	private JMenuItem appIdMenuItem;
 	private JMenuItem exitMenuItem;
@@ -49,6 +52,12 @@ public class AdminApplication implements ActionListener{
 	private JMenuItem addLayerMenuItem;
 	private JMenuItem createTriggerMenuItem;
 	private JMenuItem createMultipleTriggersMenuItem;
+	private SetAppIdTool appIdTool;
+	private NewMapTool newMapTool;
+	private OpenWebMapTool openWebMapTool;
+	private AddLayerTool addLayerTool;
+	private CreateTriggerTool createTriggerTool;
+	private CreateMultipleTriggersTool createMultipleTriggersTool;
 
 	public AdminApplication() {
 		window = new JFrame();
@@ -127,16 +136,24 @@ public class AdminApplication implements ActionListener{
 		//create a map using the map options
 		map = new JMap();
 //		map.loadWebMap(webMap);
-		window.getContentPane().add(map);
+		window.getContentPane().add(map, BorderLayout.CENTER);
 
 
 		// The code below shows how to add a tiled layer if you don't use MapOptions
 		//ArcGISTiledMapServiceLayer tiledLayer = new ArcGISTiledMapServiceLayer(
 		// "http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
 		// map.getLayers().add(tiledLayer);
-
-		SetAppIdTool appIdTool = new SetAppIdTool();
+		
+		// tools
+		appIdTool = new SetAppIdTool(map);
 		appIdTool.loadAppId();
+		newMapTool = new NewMapTool(map);
+		openWebMapTool = new OpenWebMapTool(map);
+		addLayerTool = new AddLayerTool(map);
+		createTriggerTool = new CreateTriggerTool(map);
+//		JToolBar triggerToolBar = createTriggerTool.getTriggerToolBar();
+//		window.getContentPane().add(triggerToolBar, BorderLayout.PAGE_START);
+		createMultipleTriggersTool = new CreateMultipleTriggersTool(map);
   }
 
   /**
@@ -164,24 +181,24 @@ public class AdminApplication implements ActionListener{
   	public void actionPerformed(ActionEvent e) {
   		Object src = e.getSource();
   		if(src.equals(appIdMenuItem)){
-  			SetAppIdTool appIdTool = new SetAppIdTool(map);
   			appIdTool.showAppIdDialog();
   		}else if(src.equals(exitMenuItem)){
   			System.exit(0);
   		}else if(src.equals(newMapMenuItem)){
-  			NewMapTool newMapTool = new NewMapTool(map);
   			newMapTool.createNewMap();
   		}else if(src.equals(openWebMapMenuItem)){
-  			OpenWebMapTool openWebMapTool = new OpenWebMapTool(map);
   			openWebMapTool.showOpenWebMapDialog();
   		}else if(src.equals(addLayerMenuItem)){
-  			AddLayerTool addLayerTool = new AddLayerTool(map);
   			addLayerTool.showAddLayerDialog();
   		}else if(src.equals(createTriggerMenuItem)){
-  			
+  			//createTriggerTool.start();
+  			//createTriggerTool.getTriggerToolBar().setVisible(true);
   		}else if(src.equals(createMultipleTriggersMenuItem)){
-  			CreateMultipleTriggersTool createMultipleTriggersTool = new CreateMultipleTriggersTool(map);
   			createMultipleTriggersTool.showCreateTriggersDialog();
   		}
+  	}
+  	
+  	public static JFrame getFrame(){
+  		return window;
   	}
 }

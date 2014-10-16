@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<query>
+		<overpass>
+			<url>http://www.overpass-api.de/api/xapi?way[bbox=7.1,51.2,7.2,51.3][highway=residential][fixme=*]</url>
+		</overpass>
+		<arcgis>
+			<type>polygon</type>
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/fixmePolygon/FeatureServer/0</featureClass>
+			<login user="petevdev" password="abc"/>
+		</arcgis>
+		<matching>
+			<fields>
+				<field tag="name" name="name"/>
+				<field tag="highway" name="highway"/>
+				<field tag="fixme" name="fixme"/>
+			</fields>
+		</matching>
+	</query>
+	<query>
+		<overpass>
+			<url>http://www.overpass-api.de/api/xapi?node[bbox=7.1,51.2,7.2,51.3][highway=residential][fixme=*]</url>
+		</overpass>
+		<arcgis>
+			<type>point</type>
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/fixmePoint/FeatureServer/0</featureClass>
+			<login user="petevdev" password="abc"/>
+		</arcgis>
+		<matching>
+			<fields>
+				<field tag="name" name="name"/>
+				<field tag="highway" name="highway"/>
+				<field tag="fixme" name="fixme"/>
+			</fields>
+		</matching>
+	</query>
+</configuration>

@@ -95,7 +95,7 @@ public class TriggerHandler {
 		builder.setTags(tags);
 		builder.setDirection(direction);
 		JSONObject geoJsonObject = new JSONObject(geoJson);
-		builder.setGeoFromGeoJSON(geoJsonObject);
+		builder.setGeoFromEsriJSON(geoJsonObject);
 		if(!Util.isEmpty(notificationText)){
 			builder.setNotificationText(notificationText);			
 		}
