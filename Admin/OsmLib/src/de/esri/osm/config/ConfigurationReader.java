@@ -17,7 +17,7 @@ public class ConfigurationReader {
 	/**
 	 * The path to the package.
 	 */
-	private final String packagePath = "de.esri.osm.model";
+	private final String packagePath = "de.esri.osm.config";
 	
 	/**
 	 * The relative path to the schema file.

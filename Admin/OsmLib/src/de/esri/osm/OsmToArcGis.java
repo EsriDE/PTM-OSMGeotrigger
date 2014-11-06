@@ -86,6 +86,7 @@ public class OsmToArcGis {
 		return overpassHandler.read();
 	}
 	
+	//TODO EVP: Wäre es nicht besser, die Features direkt beim Einlesen in den Feature Service zu schreiben?
 	private void createFeatureServices(OSM osm)
 	{
 		FeatureClassHandler featureClassHandler = new FeatureClassHandler(configuration, osm);
