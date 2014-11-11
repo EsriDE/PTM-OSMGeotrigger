@@ -3,6 +3,9 @@ package de.esri.osm;
 import java.io.File;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.esri.osm.config.Configuration;
 import de.esri.osm.config.ConfigurationReader;
 import de.esri.osm.config.ReaderException;
@@ -14,6 +17,7 @@ import de.esri.osm.data.OSM;
 
 
 public class OsmToArcGis {
+	private static Logger log = LogManager.getLogger(OsmToArcGis.class.getName());
 	
 	private Configuration configuration;
 
@@ -28,6 +32,7 @@ public class OsmToArcGis {
 		else
 		{
 			//TODO Rainald Loggen
+			log.error("No configuration file specified.");
 		}
 	}
 	
@@ -46,7 +51,7 @@ public class OsmToArcGis {
 		createFeatureServices(osm);
 				
 		//Create Trigger
-		createTrigger();
+		createTrigger(osm);
 	}
 	
 	/**
@@ -73,7 +78,7 @@ public class OsmToArcGis {
 			}
 			
 		} catch (ReaderException e) {
-			e.printStackTrace();
+			log.error("Error parsing configuration file: " + e.getMessage());
 			//TODO Rainald abfangen, richtiges Logging
 		}
 		
@@ -96,9 +101,12 @@ public class OsmToArcGis {
 	/**
 	 * 
 	 */
-	private void createTrigger()
+	private void createTrigger(OSM osm)
 	{
 		//TODO Eva: Dummy-Feature Services anlegen
 		//TODO Rainald, mit configuration
+		
+		TriggerGenerator triggerGenerator = new TriggerGenerator(configuration);
+		triggerGenerator.generateTriggers(osm);
 	}
 }
