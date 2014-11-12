@@ -8,10 +8,9 @@
 
 package de.esri.osm.config;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -26,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element ref="{}query" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element ref="{}fields"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -37,40 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "query"
+    "fields"
 })
-@XmlRootElement(name = "configuration")
-public class Configuration {
+@XmlRootElement(name = "matching")
+public class Matching {
 
-    protected List<Query> query;
+    @XmlElement(required = true)
+    protected Fields fields;
 
     /**
-     * Gets the value of the query property.
+     * Gets the value of the fields property.
      * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the query property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getQuery().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Query }
-     * 
-     * 
+     * @return
+     *     possible object is
+     *     {@link Fields }
+     *     
      */
-    public List<Query> getQuery() {
-        if (query == null) {
-            query = new ArrayList<Query>();
-        }
-        return this.query;
+    public Fields getFields() {
+        return fields;
+    }
+
+    /**
+     * Sets the value of the fields property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Fields }
+     *     
+     */
+    public void setFields(Fields value) {
+        this.fields = value;
     }
 
 }

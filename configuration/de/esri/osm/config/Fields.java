@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element ref="{}query" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element ref="{}field" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -37,40 +37,40 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "query"
+    "field"
 })
-@XmlRootElement(name = "configuration")
-public class Configuration {
+@XmlRootElement(name = "fields")
+public class Fields {
 
-    protected List<Query> query;
+    protected List<Field> field;
 
     /**
-     * Gets the value of the query property.
+     * Gets the value of the field property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the query property.
+     * This is why there is not a <CODE>set</CODE> method for the field property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getQuery().add(newItem);
+     *    getField().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Query }
+     * {@link Field }
      * 
      * 
      */
-    public List<Query> getQuery() {
-        if (query == null) {
-            query = new ArrayList<Query>();
+    public List<Field> getField() {
+        if (field == null) {
+            field = new ArrayList<Field>();
         }
-        return this.query;
+        return this.field;
     }
 
 }

@@ -6,12 +6,12 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.esri.osm.config.Arcgis;
 import de.esri.osm.config.Configuration;
 import de.esri.osm.config.ConfigurationReader;
+import de.esri.osm.config.Overpass;
+import de.esri.osm.config.Query;
 import de.esri.osm.config.ReaderException;
-import de.esri.osm.config.Configuration.Query;
-import de.esri.osm.config.Configuration.Query.Arcgis;
-import de.esri.osm.config.Configuration.Query.Overpass;
 import de.esri.osm.data.OSM;
 
 
@@ -66,7 +66,7 @@ public class OsmToArcGis {
 		this.configuration = null;
 		try {
 			this.configuration = reader.read();
-			List<Query> queries = configuration.getQuery();
+			List<de.esri.osm.config.Query> queries = configuration.getQuery();
 			for(int i = 0; i < queries.size(); i++){
 				Query query = queries.get(i);
 				Overpass overpass = query.getOverpass();

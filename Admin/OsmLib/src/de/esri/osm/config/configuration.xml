@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<query>
+		<overpass>
+			<url>http://www.overpass-api.de/api/xapi?node[bbox=11.2,48.0,11.7,48.7][highway=*][fixme=*]</url>
+		</overpass>
+		<arcgis>
+			<type>point</type><!-- point, polyline, polygon -->
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Points/FeatureServer/0</featureClass>
+			<login user="petevdev" password="TODO"/>
+		</arcgis>
+		<matching>
+			<fields>
+				<field tag="name" name="name"/>
+				<field tag="highway" name="highway"/>
+				<field tag="fixme" name="fixme"/>
+			</fields>
+		</matching>
+		<trigger>
+			<direction>enter</direction><!-- enter, leave -->
+			<triggerID>{{OBJECTID}}</triggerID>
+			<radius>100</radius><!-- Meters -->
+			<tags>FIMXE</tags>
+			<notification>
+				<text>FIXME Highway {{highway}} {{name}}</text>
+				<url>http://www.openstreetmap.org/node/{{OSMID}}</url>
+				<data>{{KeyValueAll}}</data>
+			</notification>
+		</trigger>
+	</query>
+	<query>
+		<overpass>
+			<url>http://www.overpass-api.de/api/xapi?way[bbox=11.2,48.0,11.7,48.7][highway=residential][fixme=*]</url>
+		</overpass>
+		<arcgis>
+			<type>polyline</type><!-- point, polyline, polygon -->
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Polylines/FeatureServer/0</featureClass>
+			<login user="petevdev" password="TODO"/>
+		</arcgis>
+		<matching>
+			<fields>
+				<field tag="name" name="name"/>
+				<field tag="highway" name="highway"/>
+				<field tag="fixme" name="fixme"/>
+			</fields>
+		</matching>
+		<trigger>
+			<direction>enter</direction><!-- enter, leave -->
+			<triggerID>{{OBJECTID}}</triggerID>
+			<radius>100</radius><!-- Meters -->
+			<tags>FIMXE</tags>
+			<notification>
+				<text>FIXME Highway {{highway}} {{name}}</text>
+				<url>http://www.openstreetmap.org/way/{{OSMID}}</url>
+				<data>{{KeyValueAll}}</data>
+			</notification>
+		</trigger>
+	</query>
+	<query>
+		<overpass>
+			<url>http://www.overpass-api.de/api/xapi?way[bbox=11.2,48.0,11.7,48.7][natural=water][area=yes]</url>
+		</overpass>
+		<arcgis>
+			<type>polygon</type><!-- point, polyline, polygon -->
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/Natural_Water_Polygons/FeatureServer/0</featureClass>
+			<login user="petevdev" password="TODO"/>
+		</arcgis>
+		<matching>
+			<fields>
+				<field tag="name" name="name"/>
+				<field tag="natural" name="natural"/>
+			</fields>
+		</matching>
+		<trigger>
+			<direction>enter</direction><!-- enter, leave -->
+			<triggerID>{{OBJECTID}}</triggerID>
+			<radius>1000</radius><!-- Meters -->
+			<tags>Natural Water</tags>
+			<notification>
+				<text>Natural Water {{name}}</text>
+				<url>http://www.openstreetmap.org/way/{{OSMID}}</url>
+				<data>{{KeyValueAll}}</data>
+			</notification>
+		</trigger>
+	</query>
+</configuration>

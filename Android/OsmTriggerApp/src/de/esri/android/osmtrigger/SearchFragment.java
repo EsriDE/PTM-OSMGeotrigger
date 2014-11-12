@@ -36,5 +36,6 @@ public class SearchFragment extends Fragment implements OnClickListener{
 	
 	private void search(){
 		Toast.makeText(getActivity(), "Starte Suche", Toast.LENGTH_LONG).show();
+		
 	}
 }

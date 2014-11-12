@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration>
+  <Appenders>
+    <File name="FileAppender" fileName="C:/Temp/Logs/OSM.log" append="false">
+      <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
+    </File>
+  </Appenders> 
+  <Loggers>
+    <Logger name="de.esri.osm" level="debug">
+      <AppenderRef ref="FileAppender"/>
+    </Logger>
+  </Loggers>  
+</Configuration>
+

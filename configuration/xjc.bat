@@ -1,0 +1,2 @@
+"C:\data\evp\Esri\Projekte\Location Based Alarm mit OSM und Geotrigger\jaxb-ri-2.2.11\jaxb-ri\bin\xjc.bat" "C:\data\evp\Esri\Projekte\Location Based Alarm mit OSM und Geotrigger\configuration\configuration.xsd" -d "C:\data\evp\Esri\Projekte\Location Based Alarm mit OSM und Geotrigger\configuration" -p de.esri.osm.config
+pause
