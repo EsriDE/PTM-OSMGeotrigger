@@ -166,6 +166,11 @@ public class TriggerHandler {
         });
 	}
 	
+	public void createTriggersFromService(String serviceUrl, String triggerId, String[] tags, String direction, double radius,
+			String notificationText, String notificationUrl, String notificationData){
+		
+	}
+	
 	public void deleteTrigger(String[] triggerIds, String[] tags){
 		log.debug("Deleting trigger");
 		JSONObject params = new JSONObject();

@@ -51,7 +51,7 @@ public class OsmToArcGis {
 		createFeatureServices(osm);
 				
 		//Create Trigger
-		createTrigger(osm);
+		createTrigger();
 	}
 	
 	/**
@@ -101,12 +101,12 @@ public class OsmToArcGis {
 	/**
 	 * 
 	 */
-	private void createTrigger(OSM osm)
+	private void createTrigger()
 	{
 		//TODO Eva: Dummy-Feature Services anlegen
 		//TODO Rainald, mit configuration
 		
 		TriggerGenerator triggerGenerator = new TriggerGenerator(configuration);
-		triggerGenerator.generateTriggers(osm);
+		triggerGenerator.generateTriggers();
 	}
 }
