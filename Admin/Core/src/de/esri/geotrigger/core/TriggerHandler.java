@@ -166,9 +166,44 @@ public class TriggerHandler {
         });
 	}
 	
-	public void createTriggersFromService(String serviceUrl, String triggerId, String[] tags, String direction, double radius,
-			String notificationText, String notificationUrl, String notificationData){
-		
+	public void createTriggersFromService(String serviceUrl, String user, String password, String clientId, String clientSecret, String triggerId, String[] tags, 
+			String direction, double radius, String notificationText, String notificationUrl, String notificationData, String where){		
+		Params.get().setClientId(clientId);
+		Params.get().setClientSecret(clientSecret);
+		String tokenParam = "";
+		if(!Util.isEmpty(user) && !Util.isEmpty(password)){
+			// request user token
+			String userToken = OAuthUtil.requestUserToken(user, password);
+			tokenParam = "token=" + userToken + "&";
+		}
+		// WHERE ROWNUM = 1
+		String whereParam = "";
+		if(!Util.isEmpty(where)){
+			whereParam = "where=" + where + "&";
+		}
+		String url = serviceUrl + "/query?" + whereParam + "outFields=*&outSR=4326&" + tokenParam + "f=json";
+		String response = HttpUtil.getRequest(url);
+		JSONObject responseJson = new JSONObject(response);
+		String geometryType = responseJson.getString("geometryType");
+		if(geometryType.equals("esriGeometryPoint")){
+			// features
+			JSONArray features = responseJson.getJSONArray("features");
+			for(int i = 0; i < features.length(); i++){
+				JSONObject feature = features.getJSONObject(i);
+				JSONObject geometry = feature.getJSONObject("geometry");
+				double latitude = geometry.getDouble("y");
+				double longitude = geometry.getDouble("x");
+
+				// parse trigger id, notification text, notification data
+				String parsedTriggerId = Util.parseAttributes(triggerId, feature);
+				String parsedNotificationText = Util.parseAttributes(notificationText, feature);
+				String parsedNotificationData = Util.parseAttributes(notificationData, feature);
+				
+				createTrigger(parsedTriggerId, tags, direction, latitude, longitude, radius, parsedNotificationText, notificationUrl, null, null, parsedNotificationData, null, null, null, -1, -1, null, null, -1, -1);
+			}
+		}else{
+			log.info("Only point features are supported.");
+		}
 	}
 	
 	public void deleteTrigger(String[] triggerIds, String[] tags){

@@ -17,9 +17,11 @@ import org.json.JSONObject;
 
 public class OAuthUtil {
 	private static Logger log = LogManager.getLogger(OAuthUtil.class.getName());
-	private static final String TOKEN_URL = "https://www.arcgis.com/sharing/oauth2/token";
+	private static final String OAUTH_TOKEN_URL = "https://www.arcgis.com/sharing/oauth2/token";
+	private static final String USER_TOKEN_URL = "https://www.arcgis.com/sharing/rest/generateToken";
 	private static final String CONTENTTYPE_FORM = "application/x-www-form-urlencoded";
 	private static String accessToken;
+	private static String userToken;
 			
 	public static void getAccessToken(){	
 		String clientId = Params.get().getClientId();
@@ -60,7 +62,7 @@ public class OAuthUtil {
 			nameValuePairs.add(new BasicNameValuePair("f", "json"));
 			HttpEntity entity = new UrlEncodedFormEntity(nameValuePairs);
 			// post request
-			HttpUtil.postRequest(TOKEN_URL, null, CONTENTTYPE_FORM, entity, new JsonRequestListener() {				
+			HttpUtil.postRequest(OAUTH_TOKEN_URL, null, CONTENTTYPE_FORM, entity, new JsonRequestListener() {				
 				@Override
 				public void onSuccess(JSONObject jsonObject) {
 					log.debug("Response access token: " + jsonObject.toString());
@@ -88,5 +90,53 @@ public class OAuthUtil {
 		} catch (UnsupportedEncodingException e) {
 			listener.onFailure(new Exception(e));
 		}		
+	}
+	
+	/**
+	 * Request a user token for secured services that need authentication with user/password.
+	 * @param user The user name.
+	 * @param password The password.
+	 * @return The user token.
+	 */
+	public static String requestUserToken(String user, String password){
+		try {
+			log.debug("Requesting user token...");
+			// add POST parameters
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+			nameValuePairs.add(new BasicNameValuePair("username", user));	
+			nameValuePairs.add(new BasicNameValuePair("password", password));
+			nameValuePairs.add(new BasicNameValuePair("f", "json"));
+			nameValuePairs.add(new BasicNameValuePair("referer", "http://www.arcgis.com"));
+			HttpEntity entity = new UrlEncodedFormEntity(nameValuePairs);
+			// post request
+			HttpUtil.postRequest(USER_TOKEN_URL, null, CONTENTTYPE_FORM, entity, new JsonRequestListener() {				
+				@Override
+				public void onSuccess(JSONObject jsonObject) {
+					log.debug("Response user token: " + jsonObject.toString());
+					JSONObject errorObject = jsonObject.optJSONObject("error");
+					if(errorObject == null){
+						userToken = jsonObject.getString("token");
+					}else{
+						int errorCode = errorObject.optInt("code", 400);
+						log.error("Error requesting user token. Code: " + errorCode);
+					}
+				}
+				
+				@Override
+				public void onError(JSONObject jsonObject, StatusLine statusLine) {
+					log.error("Error requesting user token: " + statusLine);
+				}
+				
+				@Override
+				public void onFailure(Throwable error) {
+					log.error("Error requesting user token: " + error);
+				}
+			});
+			
+		}catch (UnsupportedEncodingException e) {
+			log.error("Error: "+e.getMessage());
+		}
+		
+		return userToken;
 	}
 }

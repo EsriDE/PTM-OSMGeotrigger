@@ -5,13 +5,17 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
 public class HttpUtil {
+	private static Logger log = LogManager.getLogger(HttpUtil.class.getName());
 	
 	public static void postJsonRequest(String url, Header[] headers, JSONObject json, JsonRequestListener listener){
         StringEntity entity;
@@ -24,7 +28,6 @@ public class HttpUtil {
 	}
 	
 	public static void postRequest(String url, Header[] headers, String contentType, HttpEntity entity, JsonRequestListener listener){
-		//HttpClient client = HttpClientBuilder.create().build();
 		HttpClient client = new DefaultHttpClient();
 		HttpPost post = new HttpPost(url);
 		post.setHeaders(headers);
@@ -43,5 +46,18 @@ public class HttpUtil {
 		} catch (Exception e) {
 			listener.onFailure(new Exception(e));
 		}
-	}	
+	}
+	
+	public static String getRequest(String url){
+		String response = "";
+		HttpClient client = new DefaultHttpClient();
+		HttpGet get = new HttpGet(url);
+		try{
+			HttpResponse httpResponse = client.execute(get);
+			response = EntityUtils.toString(httpResponse.getEntity());
+		}catch(Exception e){
+			log.error("Error on GET request: "+e.getMessage());
+		}
+		return response;
+	}
 }

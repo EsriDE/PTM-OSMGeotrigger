@@ -41,7 +41,7 @@ public class Geotrigger {
 	public static final String CLIENTID = "clientid";
 	public static final String CLIENTSECRET = "clientsecret";
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {	
 		CommandLineArgs commandLineArgs = new CommandLineArgs(args);
 		switch(commandLineArgs.getCommand()){
 		case CommandLineArgs.HELP:
@@ -188,11 +188,39 @@ public class Geotrigger {
 	
 	
 	
-	// ##################
+	// ################## Test
+	
+	private static void createTriggers(){
+		System.setProperty("http.proxyHost", "127.0.0.1");
+		System.setProperty("http.proxyPort", "8888");
+		
+		String clientId = "Ied6w56BNs5jSrQ0";
+		String clientSecret = "b569f1d96b1d46f1a868a434b113b675";
+		String user = "";
+		String password = "";
+		
+//		String serviceUrl = "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Petroleum/KSWells/MapServer/1";
+		String serviceUrl = "http://services2.arcgis.com/jUpNdisbWqRpMo35/arcgis/rest/services/Events/FeatureServer/0";
+		String triggerId = "{{OBJECTID}}";
+		String tagStr = "Trigger, OSM";
+		String[] tags = tagStr.split(",");
+		String direction = "enter";
+		double radius = 200.0;
+		String notificationText = "Event {{name}}";
+		String notificationUrl = "";
+		String notificationData = "{{{Attributes}}}";
+		String where = "OBJECTID=1";
+		
+		TriggerHandler triggerHandler = new TriggerHandler();
+		triggerHandler.createTriggersFromService(serviceUrl, user, password, clientId, clientSecret, triggerId, tags, direction, radius, notificationText, notificationUrl, notificationData, where);
+	}
 	
 	private static void query(){
 		System.setProperty("http.proxyHost", "127.0.0.1");
 		System.setProperty("http.proxyPort", "8888");
+	    System.setProperty("https.proxyHost", "127.0.0.1");
+	    System.setProperty("https.proxyPort", "8888");
+		
 		String layerUrl = "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Petroleum/KSWells/MapServer/1";
 		String where = "OBJECTID=205239";
 		QueryParameters queryParams = new QueryParameters();

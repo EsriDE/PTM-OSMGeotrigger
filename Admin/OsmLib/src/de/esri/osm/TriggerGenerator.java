@@ -30,6 +30,10 @@ public class TriggerGenerator {
 		for(Query query : queries){
 			Arcgis arcgis = query.getArcgis();
 			String featureServiceUrl = arcgis.getFeatureClass();
+			String user = arcgis.getLogin().getUser();
+			String password = arcgis.getLogin().getPassword();
+			String clientId = ""; 		// TODO: client ID in config aufnehmen		
+			String clientSecret = "";	// TODO: client secret in config aufnehmen
 			
 			Trigger trigger = query.getTrigger();
 			String triggerId = trigger.getTriggerID();			
@@ -41,9 +45,10 @@ public class TriggerGenerator {
 			String notificationText = notification.getText();
 			String notificationUrl = notification.getUrl();
 			String notificationData = notification.getData();
+			String where = ""; // TODO: ev. where clause in config aufnehmen
 			
 			TriggerHandler triggerHandler = new TriggerHandler();
-			triggerHandler.createTriggersFromService(featureServiceUrl, triggerId, tags, direction, radius, notificationText, notificationUrl, notificationData);
+			triggerHandler.createTriggersFromService(featureServiceUrl, user, password, clientId, clientSecret, triggerId, tags, direction, radius, notificationText, notificationUrl, notificationData, where);
 		}
 		
 		log.info("Triggers created.");
