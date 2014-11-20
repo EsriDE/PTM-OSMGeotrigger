@@ -8,11 +8,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class SearchFragment extends Fragment implements OnClickListener{
 	private ListView categoryList;
-	private String[] categories = new String[]{"Fix-me","Blitzer","Tankstellen","Briefkästen"};
+	private int count = 0;
 
 	public SearchFragment(){
 		
@@ -22,7 +21,7 @@ public class SearchFragment extends Fragment implements OnClickListener{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.search_fragment, container, false);
 		categoryList = (ListView)view.findViewById(R.id.category_list);
-		CategoryAdapter categoryAdapter = new CategoryAdapter(getActivity(), R.layout.category_list_item, categories);
+		CategoryAdapter categoryAdapter = new CategoryAdapter(getActivity(), R.layout.category_list_item, GeotriggerManager.CATEGORIES);
 		categoryList.setAdapter(categoryAdapter);
 		Button searchButton = (Button)view.findViewById(R.id.search_button);
 		searchButton.setOnClickListener(this);
@@ -35,7 +34,13 @@ public class SearchFragment extends Fragment implements OnClickListener{
 	}
 	
 	private void search(){
-		Toast.makeText(getActivity(), "Starte Suche", Toast.LENGTH_LONG).show();
-		
+		if(count == 0){
+			GeotriggerManager geotriggerManager = new GeotriggerManager(getActivity());
+			geotriggerManager.setSearchCategories();
+			count++;
+		}else if(count == 1){
+			GeotriggerManager geotriggerManager = new GeotriggerManager(getActivity());
+			geotriggerManager.runTrigger("11");
+		}
 	}
 }

@@ -1,11 +1,23 @@
 package de.esri.android.osmtrigger;
 
+import com.esri.android.geotrigger.GeotriggerBroadcastReceiver;
+import com.esri.android.geotrigger.GeotriggerService;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -14,20 +26,22 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
- * http://esri-de-dev.maps.arcgis.com/home/item.html?id=26d316dfb7034da1991cc862a51d04e2
- *
+ * Web Map: http://esri-de-dev.maps.arcgis.com/home/item.html?id=26d316dfb7034da1991cc862a51d04e2
+ * Feature Service: http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Points/FeatureServer/0
  */
-public class OsmTriggerActivity extends Activity {
+public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastReceiver.PushMessageListener {
 	private static final String TAG = "OSM Geotrigger";
-//	private static final String AGO_CLIENT_ID = "Ied6w56BNs5jSrQ0";
-//	private static final String GCM_SENDER_ID = "509218283675";
-//	private static final String[] TAGS = new String[] {"osm", "geotrigger"};
+	private static final String AGO_CLIENT_ID = "Ied6w56BNs5jSrQ0";
+	private static final String GCM_SENDER_ID = "509218283675";
+	private static final String METHOD_NOTIFICATION = "Notification";
 	private static final String TAG_MAP_FRAGMENT = "MapFragment";
 	private static final String TAG_SEARCH_FRAGMENT = "SearchFragment";
 	private static final String TAG_SETTINGS_FRAGMENT = "SettingsFragment";
 	private static final String TAG_INFO_FRAGMENT = "InfoFragment";
+	private GeotriggerBroadcastReceiver geotriggerBroadcastReceiver;
 	private String[] pageNames;
 	private DrawerLayout drawerLayout;
 	private ActionBarDrawerToggle drawerToggle;
@@ -78,12 +92,37 @@ public class OsmTriggerActivity extends Activity {
         };
         drawerLayout.setDrawerListener(drawerToggle);
         
-        //geotriggerBroadcastReceiver = new GeotriggerBroadcastReceiver();
+        geotriggerBroadcastReceiver = new GeotriggerBroadcastReceiver();
         
         if (savedInstanceState == null) {
             selectItem(0);
         }
     }
+    
+    @Override
+    public void onStart() {
+        super.onStart();
+    	GeotriggerService.setLoggingLevel(Log.DEBUG);
+    	GeotriggerService.setPushNotificationHandlingEnabled(this, false);
+    	GeotriggerService.init(this, AGO_CLIENT_ID, GCM_SENDER_ID, GeotriggerService.TRACKING_PROFILE_ADAPTIVE);      
+    }    
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		unregisterReceiver(geotriggerBroadcastReceiver);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		registerReceiver(geotriggerBroadcastReceiver, GeotriggerBroadcastReceiver.getDefaultIntentFilter());
+	}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -186,5 +225,68 @@ public class OsmTriggerActivity extends Activity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
-    }  
+    }
+
+	@Override
+	public void onPushMessage(Bundle data) {
+		//Toast.makeText(this, "Message received from geotrigger service!", Toast.LENGTH_LONG).show();
+		selectItem(0);
+		
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean showNotifications = settings.getBoolean("send_notifications", false);
+		if(showNotifications){
+			String notificationText = data.getString("text");
+			
+			Intent intent = new Intent(this, OsmTriggerActivity.class);
+			intent.putExtra("Method", METHOD_NOTIFICATION);
+			intent.putExtra("Data", data);
+			PendingIntent pendingIntent = PendingIntent.getActivity(this,  0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			
+			NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setContentTitle("OSM Trigger")
+				.setContentText(notificationText)
+				.setContentIntent(pendingIntent);
+			
+			Notification notification = notificationBuilder.build();
+			
+			NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			notificationManager.notify(1, notification);
+		}
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		String method = intent.getStringExtra("Method");
+		if(method != null && method.equals(METHOD_NOTIFICATION)){
+			selectItem(0);
+			Bundle data = intent.getBundleExtra("Data");
+			showNotificationDetails(data);
+		}
+	}
+	
+	// ### Delete
+	public void showObject(){
+		String text = "FIXME: Türkenstraße";
+		String url = "http://www.openstreetmap.org/node/296231135";
+		String triggerdata = "{ \"layer\": \"FIXME_Points\", \"tags\": { \"OBJECTID\": \"11\", \"bus_routes\": \"154; 153\", \"fixme\": \"genaue Position\", \"highway\": \"bus_stop\", \"name\": \"TÃ¼rkenstraÃŸe\", \"operator\": \"MVG\", \"public_transport\": \"stop_position\", \"wheelchair\": \"yes\" } }";
+		Bundle data = new Bundle();
+		data.putString("text", text);
+		data.putString("url", url);
+		data.putString("data", triggerdata);
+		onPushMessage(data);
+	}
+	
+	private void showNotificationDetails(Bundle data){
+		// show the details of the geotrigger like text and data
+		String text = data.getString("text");
+		Log.d(TAG, "Text: "+text);
+		String url = data.getString("url");
+		Log.d(TAG, "URL: "+url);
+		String triggerData = data.getString("data");
+		Log.d(TAG, "Data: "+triggerData);
+		mapFragment.showFeature(text, url, triggerData);
+//		String msg = text + "\n" + triggerData;
+//		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+	}
 }
