@@ -52,6 +52,7 @@ public class CategoryAdapter extends ArrayAdapter<String> implements OnCheckedCh
 	}
 	
 	private boolean isCategoryActive(String category) {
+		//TODO Webinar SharedPreferences, um Einstellung über Activity- und App-Laufzeit hinaus zu speichern
 		SharedPreferences preferences = ((Activity) context).getPreferences(Context.MODE_PRIVATE);
 		boolean isActive = preferences.getBoolean(category, false);
 		return isActive;
@@ -64,6 +65,7 @@ public class CategoryAdapter extends ArrayAdapter<String> implements OnCheckedCh
 		prefEditor.commit();
 	}
 
+	//TODO Webinar Wenn Einstellungen geändert wurden. 
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		String category = (String)buttonView.getTag();

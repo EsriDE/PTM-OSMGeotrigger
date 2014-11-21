@@ -42,24 +42,26 @@ public class Geotrigger {
 	public static final String CLIENTSECRET = "clientsecret";
 
 	public static void main(String[] args) {	
-		CommandLineArgs commandLineArgs = new CommandLineArgs(args);
-		switch(commandLineArgs.getCommand()){
-		case CommandLineArgs.HELP:
-			// write help
-			break;
-		case CommandLineArgs.CREATE_TRIGGER:
-			// create Trigger
-			createTrigger(commandLineArgs.getParameters());
-			break;
-		case CommandLineArgs.RUN_TRIGGER:
-			// run Trigger
-			runTrigger(commandLineArgs.getParameters());
-			break;
-		case CommandLineArgs.DELETE_TRIGGER:
-			// create Trigger
-			deleteTrigger(commandLineArgs.getParameters());
-			break;
-		}
+		createTriggers();
+		
+//		CommandLineArgs commandLineArgs = new CommandLineArgs(args);
+//		switch(commandLineArgs.getCommand()){
+//		case CommandLineArgs.HELP:
+//			// write help
+//			break;
+//		case CommandLineArgs.CREATE_TRIGGER:
+//			// create Trigger
+//			createTrigger(commandLineArgs.getParameters());
+//			break;
+//		case CommandLineArgs.RUN_TRIGGER:
+//			// run Trigger
+//			runTrigger(commandLineArgs.getParameters());
+//			break;
+//		case CommandLineArgs.DELETE_TRIGGER:
+//			// create Trigger
+//			deleteTrigger(commandLineArgs.getParameters());
+//			break;
+//		}
 	}
 	
 	private static void createTrigger(Map<String, String> params){
@@ -189,27 +191,30 @@ public class Geotrigger {
 	
 	
 	// ################## Test
-	
+	//TODO Rainald löschen (Trigger erzeugen)
 	private static void createTriggers(){
 		System.setProperty("http.proxyHost", "127.0.0.1");
 		System.setProperty("http.proxyPort", "8888");
+	    System.setProperty("https.proxyHost", "127.0.0.1");
+	    System.setProperty("https.proxyPort", "8888");
 		
 		String clientId = "Ied6w56BNs5jSrQ0";
 		String clientSecret = "b569f1d96b1d46f1a868a434b113b675";
-		String user = "";
-		String password = "";
+		String user = "rsu4devprog";
+		String password = "devprog42195";
 		
 //		String serviceUrl = "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Petroleum/KSWells/MapServer/1";
-		String serviceUrl = "http://services2.arcgis.com/jUpNdisbWqRpMo35/arcgis/rest/services/Events/FeatureServer/0";
-		String triggerId = "{{OBJECTID}}";
-		String tagStr = "Trigger, OSM";
+//		String serviceUrl = "http://services2.arcgis.com/jUpNdisbWqRpMo35/arcgis/rest/services/Events/FeatureServer/0";
+		String serviceUrl = "http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Points/FeatureServer/0";		
+		String triggerId = "{{OBJECTID}}"; //TODO Rainald osmid verwenden
+		String tagStr = "FIXME, OSM";
 		String[] tags = tagStr.split(",");
 		String direction = "enter";
-		double radius = 200.0;
-		String notificationText = "Event {{name}}";
-		String notificationUrl = "";
-		String notificationData = "{{{Attributes}}}";
-		String where = "OBJECTID=1";
+		double radius = 1000.0;
+		String notificationText = "FIXME: {{name}}";
+		String notificationUrl = "http://www.openstreetmap.org/node/{{OSMID}}";
+		String notificationData = "{{KeyValueAll}}";
+		String where = "OBJECTID<15";
 		
 		TriggerHandler triggerHandler = new TriggerHandler();
 		triggerHandler.createTriggersFromService(serviceUrl, user, password, clientId, clientSecret, triggerId, tags, direction, radius, notificationText, notificationUrl, notificationData, where);

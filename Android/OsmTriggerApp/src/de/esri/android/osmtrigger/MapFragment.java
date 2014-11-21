@@ -28,7 +28,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -41,7 +40,7 @@ public class MapFragment extends Fragment{
 	private static final String TAG = "OSM Geotrigger";
 	private String webMapUrl = "http://esri-de-dev.maps.arcgis.com/home/item.html?id=26d316dfb7034da1991cc862a51d04e2";
 	private String user = "rsu4devprog";
-	private String password = "devprog42195";
+	private String password = "devprog42195"; //TODO Rainald Passwort entfernen
 	private MapView mapView;
 	private String mapState;
 	private final String MAP_STATE = "MapState";
@@ -95,6 +94,7 @@ public class MapFragment extends Fragment{
 		mapView.pause();
 	}	
 	
+	//TODO Webinar Layer suchen und nach Feature abfragen
 	/**
 	 * Show a feature and a popup with its attributes when a trigger notification is send.
 	 * @param text The notification test.
@@ -137,7 +137,6 @@ public class MapFragment extends Fragment{
 			        }
 			    };
 			    if(featurelayer != null){
-					//featurelayer.selectFeatures(query, SELECTION_METHOD.NEW, callback);		  
 					featurelayer.queryFeatures(query, callback);
 			    }
 			}

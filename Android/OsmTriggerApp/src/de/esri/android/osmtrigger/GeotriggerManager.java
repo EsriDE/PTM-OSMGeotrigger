@@ -37,6 +37,7 @@ public class GeotriggerManager {
 		registerTagsForDevice(activeCategories);
 	}
 	
+	//TODO Webinar
     private void registerTagsForDevice(List<String> activeCategories){
     	Log.d(TAG, "Register tags for device...");
     	JSONObject params = new JSONObject();
@@ -45,7 +46,7 @@ public class GeotriggerManager {
     		tagArray.put(category);
     	}
         try {
-            params.put("setTags", tagArray);
+            params.put("setTags", tagArray); 	//TODO Webinar Alte Tags werden durch neue Tags ersetzt anders als bei addTag
         } catch (JSONException e) {
             Log.e(TAG, "Error creating device update parameters.", e);
         }
@@ -61,11 +62,13 @@ public class GeotriggerManager {
         });
     }
     
-    // ### Delete
+    // TODO Rainald löschen
+    //TODO Webinar Workaround, wenn Geotrigger Service nicht funktioniert: Notification wird angezeigt
     public void runTrigger(String triggerId){
     	((OsmTriggerActivity)activity).showObject();
     }
     
+    //TODO Webinar Workaround, um Geotrigger auszulösen, ohne vor Ort zu sein.
     public void runTrigger2(String triggerId){
     	Log.d(TAG, "Run trigger...");
     	JSONObject params = new JSONObject();
@@ -86,7 +89,7 @@ public class GeotriggerManager {
         });
     }
     
-    
+    //TODO Rainald löschen
     public void sendNotification(){
     	Log.d(TAG, "Sending notification...");
     	JSONObject params = new JSONObject();

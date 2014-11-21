@@ -1,5 +1,7 @@
 package de.esri.geotrigger.core;
 
+import java.net.URLEncoder;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
@@ -167,45 +169,52 @@ public class TriggerHandler {
 	}
 	
 	public void createTriggersFromService(String serviceUrl, String user, String password, String clientId, String clientSecret, String triggerId, String[] tags, 
-			String direction, double radius, String notificationText, String notificationUrl, String notificationData, String where){		
-		Params.get().setClientId(clientId);
-		Params.get().setClientSecret(clientSecret);
-		String tokenParam = "";
-		if(!Util.isEmpty(user) && !Util.isEmpty(password)){
-			// request user token
-			String userToken = OAuthUtil.requestUserToken(user, password);
-			tokenParam = "token=" + userToken + "&";
-		}
-		// WHERE ROWNUM = 1
-		String whereParam = "";
-		if(!Util.isEmpty(where)){
-			whereParam = "where=" + where + "&";
-		}
-		String url = serviceUrl + "/query?" + whereParam + "outFields=*&outSR=4326&" + tokenParam + "f=json";
-		String response = HttpUtil.getRequest(url);
-		JSONObject responseJson = new JSONObject(response);
-		String geometryType = responseJson.getString("geometryType");
-		if(geometryType.equals("esriGeometryPoint")){
-			// features
-			JSONArray features = responseJson.getJSONArray("features");
-			for(int i = 0; i < features.length(); i++){
-				JSONObject feature = features.getJSONObject(i);
-				JSONObject geometry = feature.getJSONObject("geometry");
-				double latitude = geometry.getDouble("y");
-				double longitude = geometry.getDouble("x");
-
-				// parse trigger id, notification text, notification data
-				String parsedTriggerId = Util.parseAttributes(triggerId, feature);
-				String parsedNotificationText = Util.parseAttributes(notificationText, feature);
-				String parsedNotificationData = Util.parseAttributes(notificationData, feature);
-				
-				createTrigger(parsedTriggerId, tags, direction, latitude, longitude, radius, parsedNotificationText, notificationUrl, null, null, parsedNotificationData, null, null, null, -1, -1, null, null, -1, -1);
+			String direction, double radius, String notificationText, String notificationUrl, String notificationData, String where){	
+		try{
+			Params.get().setClientId(clientId);
+			Params.get().setClientSecret(clientSecret);
+			String tokenParam = "";
+			if(!Util.isEmpty(user) && !Util.isEmpty(password)){
+				// request user token
+				String userToken = OAuthUtil.requestUserToken(user, password);
+				tokenParam = "token=" + userToken + "&";
 			}
-		}else{
-			log.info("Only point features are supported.");
+			// WHERE ROWNUM = 1
+			String whereParam = "";
+			if(!Util.isEmpty(where)){
+				whereParam = "where=" + URLEncoder.encode(where, "UTF-8") + "&";
+			}
+			String url = serviceUrl + "/query?" + whereParam + "outFields=*&outSR=4326&" + tokenParam + "f=json";
+			String response = HttpUtil.getRequest(url);
+			JSONObject responseJson = new JSONObject(response);
+			String geometryType = responseJson.getString("geometryType");
+			if(geometryType.equals("esriGeometryPoint")){
+				// features
+				JSONArray features = responseJson.getJSONArray("features");
+				for(int i = 0; i < features.length(); i++){
+					JSONObject feature = features.getJSONObject(i);
+					JSONObject geometry = feature.getJSONObject("geometry");
+					double latitude = geometry.getDouble("y");
+					double longitude = geometry.getDouble("x");
+
+					// parse trigger id, notification text, notification data
+					String parsedTriggerId = Util.parseAttributes(triggerId, feature);
+					String parsedNotificationText = Util.parseAttributes(notificationText, feature);
+					String parsedNotificationUrl = Util.parseAttributes(notificationUrl, feature);
+					String parsedNotificationData = Util.parseAttributes(notificationData, feature);
+					
+					createTrigger(parsedTriggerId, tags, direction, latitude, longitude, radius, parsedNotificationText, parsedNotificationUrl, null, null, parsedNotificationData, null, null, null, -1, -1, null, null, -1, -1);
+				}
+			}else{
+				log.info("Only point features are supported.");
+			}
+		}catch(Exception ex){
+			log.error(ex.getMessage());
 		}
 	}
 	
+	//TODO Rainald: Trigger, die in Feature Class weggefallen sind, löschen
+	//TODO Webinar Man kann nur über IDs oder Tags löschen. Alle löschen geht nicht.
 	public void deleteTrigger(String[] triggerIds, String[] tags){
 		log.debug("Deleting trigger");
 		JSONObject params = new JSONObject();

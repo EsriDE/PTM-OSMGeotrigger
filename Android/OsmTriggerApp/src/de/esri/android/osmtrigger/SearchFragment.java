@@ -40,7 +40,7 @@ public class SearchFragment extends Fragment implements OnClickListener{
 			count++;
 		}else if(count == 1){
 			GeotriggerManager geotriggerManager = new GeotriggerManager(getActivity());
-			geotriggerManager.runTrigger("11");
+			geotriggerManager.runTrigger("11"); //TODO Webinar Workaround, weil Geotrigger Service nicht funktioniert.
 		}
 	}
 }

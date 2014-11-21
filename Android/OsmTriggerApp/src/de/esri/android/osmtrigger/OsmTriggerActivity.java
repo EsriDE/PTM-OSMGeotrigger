@@ -34,8 +34,8 @@ import android.widget.Toast;
  */
 public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastReceiver.PushMessageListener {
 	private static final String TAG = "OSM Geotrigger";
-	private static final String AGO_CLIENT_ID = "Ied6w56BNs5jSrQ0";
-	private static final String GCM_SENDER_ID = "509218283675";
+	private static final String AGO_CLIENT_ID = "Ied6w56BNs5jSrQ0"; //TODO Webinar Client ID
+	private static final String GCM_SENDER_ID = "509218283675"; //TODO Webinar Google Cloud Messaging
 	private static final String METHOD_NOTIFICATION = "Notification";
 	private static final String TAG_MAP_FRAGMENT = "MapFragment";
 	private static final String TAG_SEARCH_FRAGMENT = "SearchFragment";
@@ -92,6 +92,7 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
         };
         drawerLayout.setDrawerListener(drawerToggle);
         
+        //TODO Webinar
         geotriggerBroadcastReceiver = new GeotriggerBroadcastReceiver();
         
         if (savedInstanceState == null) {
@@ -102,8 +103,9 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
     @Override
     public void onStart() {
         super.onStart();
+        //TODO Webinar: GeotriggerSerivce ist als Android Service implementiert
     	GeotriggerService.setLoggingLevel(Log.DEBUG);
-    	GeotriggerService.setPushNotificationHandlingEnabled(this, false);
+    	GeotriggerService.setPushNotificationHandlingEnabled(this, false); //TODO Webinar: Wenn diese Zeile fehlt oder true gesetzt ist, werden die Standard-Notifications von Google angezeigt
     	GeotriggerService.init(this, AGO_CLIENT_ID, GCM_SENDER_ID, GeotriggerService.TRACKING_PROFILE_ADAPTIVE);      
     }    
 
@@ -148,6 +150,7 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
         }
     }
     
+    //TODO Webinar Wechsel der Fragments (z.B. zu Karte)
     private void selectItem(int position) {
     	Log.i(TAG, "OSM Activity, selectItem()");
     	if(position != currentPosition){
@@ -227,6 +230,8 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
+    //TODO Webinar Methode von PushMessageListener, um Push Notification zu empfangen
+    //TODO Webinar data enthält alle Trigger-Infos: Notification Text, Notification URL und Notification Data
 	@Override
 	public void onPushMessage(Bundle data) {
 		//Toast.makeText(this, "Message received from geotrigger service!", Toast.LENGTH_LONG).show();
@@ -234,6 +239,7 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
 		
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean showNotifications = settings.getBoolean("send_notifications", false);
+		//TODO Webinar eigene Notification erzeugen
 		if(showNotifications){
 			String notificationText = data.getString("text");
 			
@@ -255,8 +261,10 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
 		}
 	}
 	
+	//TODO Webinar Wenn auf Notification gedrückt
 	@Override
 	protected void onNewIntent(Intent intent) {
+		//TODO Webinar Mit Methode Prüfen, ob Intent tatsächlich von Geotrigger kommt
 		String method = intent.getStringExtra("Method");
 		if(method != null && method.equals(METHOD_NOTIFICATION)){
 			selectItem(0);
@@ -266,6 +274,7 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
 	}
 	
 	// ### Delete
+	//TODO Webinar Workaround, wenn Geotrigger Service nicht funktioniert: Notification wird angezeigt
 	public void showObject(){
 		String text = "FIXME: Türkenstraße";
 		String url = "http://www.openstreetmap.org/node/296231135";
