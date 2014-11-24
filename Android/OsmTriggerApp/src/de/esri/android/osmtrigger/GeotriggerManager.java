@@ -64,12 +64,12 @@ public class GeotriggerManager {
     
     // TODO Rainald löschen
     //TODO Webinar Workaround, wenn Geotrigger Service nicht funktioniert: Notification wird angezeigt
-    public void runTrigger(String triggerId){
+    public void createNotification(String triggerId){
     	((OsmTriggerActivity)activity).showObject();
     }
     
     //TODO Webinar Workaround, um Geotrigger auszulösen, ohne vor Ort zu sein.
-    public void runTrigger2(String triggerId){
+    public void runTrigger(String triggerId){
     	Log.d(TAG, "Run trigger...");
     	JSONObject params = new JSONObject();
         try {

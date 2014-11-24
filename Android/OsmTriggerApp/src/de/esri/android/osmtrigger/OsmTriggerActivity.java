@@ -278,7 +278,7 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
 	public void showObject(){
 		String text = "FIXME: T�rkenstra�e";
 		String url = "http://www.openstreetmap.org/node/296231135";
-		String triggerdata = "{ \"layer\": \"FIXME_Points\", \"tags\": { \"OBJECTID\": \"11\", \"bus_routes\": \"154; 153\", \"fixme\": \"genaue Position\", \"highway\": \"bus_stop\", \"name\": \"Türkenstraße\", \"operator\": \"MVG\", \"public_transport\": \"stop_position\", \"wheelchair\": \"yes\" } }";
+		String triggerdata = "{ \"layer\": \"FIXME_Points\",\"osmid\":\"296231135\",\"tags\": { \"OSMID\": \"296231135\", \"bus_routes\": \"154; 153\", \"fixme\": \"genaue Position\", \"highway\": \"bus_stop\", \"name\": \"Türkenstraße\", \"operator\": \"MVG\", \"public_transport\": \"stop_position\", \"wheelchair\": \"yes\" } }";
 		Bundle data = new Bundle();
 		data.putString("text", text);
 		data.putString("url", url);

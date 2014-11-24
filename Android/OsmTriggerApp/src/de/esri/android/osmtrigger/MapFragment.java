@@ -117,9 +117,8 @@ public class MapFragment extends Fragment{
 					}
 				}
 				// get OBJECTID
-				JSONObject attributes = dataJson.getJSONObject("tags");
-				String objectId = attributes.getString("OBJECTID");
-				String where = "OBJECTID=" + objectId;
+				String osmId = dataJson.getString("osmid");
+				String where = "OSMID=" + osmId;
 				// select the feature
 				Query query = new Query();
 				query.setWhere(where);

@@ -206,7 +206,7 @@ public class Geotrigger {
 //		String serviceUrl = "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Petroleum/KSWells/MapServer/1";
 //		String serviceUrl = "http://services2.arcgis.com/jUpNdisbWqRpMo35/arcgis/rest/services/Events/FeatureServer/0";
 		String serviceUrl = "http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Points/FeatureServer/0";		
-		String triggerId = "{{OBJECTID}}"; //TODO Rainald osmid verwenden
+		String triggerId = "{{OSMID}}"; //TODO Rainald osmid verwenden
 		String tagStr = "FIXME, OSM";
 		String[] tags = tagStr.split(",");
 		String direction = "enter";

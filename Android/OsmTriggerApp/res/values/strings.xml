@@ -9,6 +9,8 @@
     <string name="send_notifications_summary">Sendet Benachrichtigungen vom ArcGIS Geotrigger Service</string>
     <string name="categorys_text">Kategorien</string>
     <string name="search_button">Suchen</string>
+    <string name="run_trigger_button">Trigger auslösen</string>
+    <string name="create_notification_button">Notification senden</string>
     <string name="link_hint">In OSM anzeigen</string>
    
     <string-array name="page_names">

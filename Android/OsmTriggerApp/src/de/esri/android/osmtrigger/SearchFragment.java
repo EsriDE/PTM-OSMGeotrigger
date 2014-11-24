@@ -11,7 +11,6 @@ import android.widget.ListView;
 
 public class SearchFragment extends Fragment implements OnClickListener{
 	private ListView categoryList;
-	private int count = 0;
 
 	public SearchFragment(){
 		
@@ -24,7 +23,26 @@ public class SearchFragment extends Fragment implements OnClickListener{
 		CategoryAdapter categoryAdapter = new CategoryAdapter(getActivity(), R.layout.category_list_item, GeotriggerManager.CATEGORIES);
 		categoryList.setAdapter(categoryAdapter);
 		Button searchButton = (Button)view.findViewById(R.id.search_button);
-		searchButton.setOnClickListener(this);
+		searchButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				search();
+			}
+		});
+		Button runTriggerButton = (Button)view.findViewById(R.id.run_trigger_button);
+		runTriggerButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				runTrigger();
+			}
+		});
+		Button createNotificationButton = (Button)view.findViewById(R.id.create_notification_button);
+		createNotificationButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				createNotification();
+			}
+		});
 		return view;
 	}
 
@@ -34,13 +52,17 @@ public class SearchFragment extends Fragment implements OnClickListener{
 	}
 	
 	private void search(){
-		if(count == 0){
-			GeotriggerManager geotriggerManager = new GeotriggerManager(getActivity());
-			geotriggerManager.setSearchCategories();
-			count++;
-		}else if(count == 1){
-			GeotriggerManager geotriggerManager = new GeotriggerManager(getActivity());
-			geotriggerManager.runTrigger("11"); //TODO Webinar Workaround, weil Geotrigger Service nicht funktioniert.
-		}
+		GeotriggerManager geotriggerManager = new GeotriggerManager(getActivity());
+		geotriggerManager.setSearchCategories();
+	}
+	
+	private void runTrigger(){
+		GeotriggerManager geotriggerManager = new GeotriggerManager(getActivity());
+		geotriggerManager.runTrigger("296231135");
+	}
+	
+	private void createNotification(){
+		GeotriggerManager geotriggerManager = new GeotriggerManager(getActivity());
+		geotriggerManager.createNotification("296231135");
 	}
 }
