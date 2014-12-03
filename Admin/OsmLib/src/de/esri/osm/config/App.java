@@ -24,8 +24,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="tag" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="clientId" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="clientSecret" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,60 +35,60 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
-@XmlRootElement(name = "field")
-public class Field {
+@XmlRootElement(name = "app")
+public class App {
 
-    @XmlAttribute(name = "tag")
-    protected String tag;
-    @XmlAttribute(name = "name")
-    protected String name;
+    @XmlAttribute(name = "clientId")
+    protected String clientId;
+    @XmlAttribute(name = "clientSecret")
+    protected String clientSecret;
 
     /**
-     * Gets the value of the tag property.
+     * Gets the value of the clientId property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getTag() {
-        return tag;
+    public String getClientId() {
+        return clientId;
     }
 
     /**
-     * Sets the value of the tag property.
+     * Sets the value of the clientId property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setTag(String value) {
-        this.tag = value;
+    public void setClientId(String value) {
+        this.clientId = value;
     }
 
     /**
-     * Gets the value of the name property.
+     * Gets the value of the clientSecret property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getName() {
-        return name;
+    public String getClientSecret() {
+        return clientSecret;
     }
 
     /**
-     * Sets the value of the name property.
+     * Sets the value of the clientSecret property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setClientSecret(String value) {
+        this.clientSecret = value;
     }
 
 }

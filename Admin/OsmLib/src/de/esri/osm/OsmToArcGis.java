@@ -99,14 +99,14 @@ public class OsmToArcGis {
 	}
 	
 	/**
-	 * 
+	 * Create triggers as defined in the configuration file.
 	 */
 	private void createTrigger()
 	{
-		//TODO Eva: Dummy-Feature Services anlegen
-		//TODO Rainald, mit configuration
-		
 		TriggerGenerator triggerGenerator = new TriggerGenerator(configuration);
+		// delete old triggers
+		triggerGenerator.deleteTriggers();
+		// create new triggers
 		triggerGenerator.generateTriggers();
 	}
 }

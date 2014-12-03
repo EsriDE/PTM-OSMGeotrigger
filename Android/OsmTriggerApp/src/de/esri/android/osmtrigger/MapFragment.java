@@ -39,8 +39,6 @@ import android.widget.TextView;
 public class MapFragment extends Fragment{
 	private static final String TAG = "OSM Geotrigger";
 	private String webMapUrl = "http://esri-de-dev.maps.arcgis.com/home/item.html?id=26d316dfb7034da1991cc862a51d04e2";
-	private String user = "rsu4devprog";
-	private String password = "devprog42195"; //TODO Rainald Passwort entfernen
 	private MapView mapView;
 	private String mapState;
 	private final String MAP_STATE = "MapState";
@@ -61,7 +59,7 @@ public class MapFragment extends Fragment{
 		Log.i(TAG, "MapFragment, onCreateView()");
 		
 		// load webmap
-		mapView = new MapView(getActivity(), webMapUrl, user, password);
+		mapView = new MapView(getActivity(), webMapUrl, null, null);
 		
 	    if (savedInstanceState != null) {
 	        mapState = savedInstanceState.getString(MAP_STATE);
@@ -94,10 +92,9 @@ public class MapFragment extends Fragment{
 		mapView.pause();
 	}	
 	
-	//TODO Webinar Layer suchen und nach Feature abfragen
 	/**
 	 * Show a feature and a popup with its attributes when a trigger notification is send.
-	 * @param text The notification test.
+	 * @param text The notification text.
 	 * @param url The notification url.
 	 * @param data The notification data.
 	 */
@@ -116,10 +113,10 @@ public class MapFragment extends Fragment{
 						break;
 					}
 				}
-				// get OBJECTID
+				// get the osmid
 				String osmId = dataJson.getString("osmid");
 				String where = "OSMID=" + osmId;
-				// select the feature
+				// query the feature
 				Query query = new Query();
 				query.setWhere(where);
 			    CallbackListener<FeatureSet> callback = new CallbackListener<FeatureSet>() {
@@ -144,6 +141,10 @@ public class MapFragment extends Fragment{
 		}		
 	}
 	
+	/**
+	 * Show a popup window with information about the feature.
+	 * @param feature The feature.
+	 */
 	private void showPopup(Graphic feature){
 		Activity activity = getActivity();
 		
@@ -232,7 +233,6 @@ public class MapFragment extends Fragment{
 			mapPoint = env.getCenter();
 		}
 		mapView.centerAt(mapPoint, false);
-		Point p = mapView.getCenter();
 		popup.show(mapPoint);
 	}
 }

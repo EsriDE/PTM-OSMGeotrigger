@@ -29,13 +29,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 /**
- * Web Map: http://esri-de-dev.maps.arcgis.com/home/item.html?id=26d316dfb7034da1991cc862a51d04e2
- * Feature Service: http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Points/FeatureServer/0
+ * The main activity of the application.
  */
 public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastReceiver.PushMessageListener {
 	private static final String TAG = "OSM Geotrigger";
-	private static final String AGO_CLIENT_ID = "Ied6w56BNs5jSrQ0"; //TODO Webinar Client ID
-	private static final String GCM_SENDER_ID = "509218283675"; //TODO Webinar Google Cloud Messaging
+	private static final String AGO_CLIENT_ID = ""; //TODO insert your ArcGIS Client ID
+	private static final String GCM_SENDER_ID = ""; //TODO insert your Google Cloud Messaging ID
 	private static final String METHOD_NOTIFICATION = "Notification";
 	private static final String TAG_MAP_FRAGMENT = "MapFragment";
 	private static final String TAG_SEARCH_FRAGMENT = "SearchFragment";
@@ -82,17 +81,16 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
                 ) {
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(pageTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu(); 
             }
 
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(getTitle());
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu(); 
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
         
-        //TODO Webinar
         geotriggerBroadcastReceiver = new GeotriggerBroadcastReceiver();
         
         if (savedInstanceState == null) {
@@ -103,9 +101,8 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
     @Override
     public void onStart() {
         super.onStart();
-        //TODO Webinar: GeotriggerSerivce ist als Android Service implementiert
     	GeotriggerService.setLoggingLevel(Log.DEBUG);
-    	GeotriggerService.setPushNotificationHandlingEnabled(this, false); //TODO Webinar: Wenn diese Zeile fehlt oder true gesetzt ist, werden die Standard-Notifications von Google angezeigt
+    	GeotriggerService.setPushNotificationHandlingEnabled(this, false);
     	GeotriggerService.init(this, AGO_CLIENT_ID, GCM_SENDER_ID, GeotriggerService.TRACKING_PROFILE_ADAPTIVE);      
     }    
 
@@ -136,8 +133,6 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
         }
         // Handle action buttons
         switch(item.getItemId()) {
-//        case R.id.action_websearch:
-//            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -150,7 +145,10 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
         }
     }
     
-    //TODO Webinar Wechsel der Fragments (z.B. zu Karte)
+    /**
+     * Select the content fragment (map, search, ...).
+     * @param position The index of the fragment position.
+     */
     private void selectItem(int position) {
     	Log.i(TAG, "OSM Activity, selectItem()");
     	if(position != currentPosition){
@@ -229,20 +227,19 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
     }
-
-    //TODO Webinar Methode von PushMessageListener, um Push Notification zu empfangen
-    //TODO Webinar data enthält alle Trigger-Infos: Notification Text, Notification URL und Notification Data
+    
+    /**
+     * Handle push message events.
+     */
 	@Override
-	public void onPushMessage(Bundle data) {
-		//Toast.makeText(this, "Message received from geotrigger service!", Toast.LENGTH_LONG).show();
+	public void onPushMessage(Bundle data) {;
 		selectItem(0);
 		
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		boolean showNotifications = settings.getBoolean("send_notifications", false);
-		//TODO Webinar eigene Notification erzeugen
 		if(showNotifications){
 			String notificationText = data.getString("text");
-			
+			// create notification
 			Intent intent = new Intent(this, OsmTriggerActivity.class);
 			intent.putExtra("Method", METHOD_NOTIFICATION);
 			intent.putExtra("Data", data);
@@ -261,20 +258,23 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
 		}
 	}
 	
-	//TODO Webinar Wenn auf Notification gedrückt
+	/**
+	 * Handle new intent events.
+	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
-		//TODO Webinar Mit Methode Prüfen, ob Intent tatsächlich von Geotrigger kommt
 		String method = intent.getStringExtra("Method");
 		if(method != null && method.equals(METHOD_NOTIFICATION)){
+			// notification item was pressed
 			selectItem(0);
 			Bundle data = intent.getBundleExtra("Data");
 			showNotificationDetails(data);
 		}
 	}
 	
-	// ### Delete
-	//TODO Webinar Workaround, wenn Geotrigger Service nicht funktioniert: Notification wird angezeigt
+	/**
+	 * Show a specific OSM object (for testing).
+	 */
 	public void showObject(){
 		String text = "FIXME: Türkenstraße";
 		String url = "http://www.openstreetmap.org/node/296231135";
@@ -286,6 +286,10 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
 		onPushMessage(data);
 	}
 	
+	/**
+	 * Show the notification details in the map.
+	 * @param data The notification data.
+	 */
 	private void showNotificationDetails(Bundle data){
 		// show the details of the geotrigger like text and data
 		String text = data.getString("text");
@@ -295,7 +299,5 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
 		String triggerData = data.getString("data");
 		Log.d(TAG, "Data: "+triggerData);
 		mapFragment.showFeature(text, url, triggerData);
-//		String msg = text + "\n" + triggerData;
-//		Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 	}
 }

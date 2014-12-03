@@ -29,6 +29,7 @@
 				<xs:element type="xs:string" name="type"/>
 				<xs:element type="xs:anyURI" name="featureClass"/>
 				<xs:element ref="login"  minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="app"  minOccurs="0" maxOccurs="1"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -36,6 +37,12 @@
 		<xs:complexType>
 			<xs:attribute type="xs:string" name="user" use="optional"/>
 			<xs:attribute type="xs:string" name="password" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="app">
+		<xs:complexType>
+			<xs:attribute type="xs:string" name="clientId" use="optional"/>
+			<xs:attribute type="xs:string" name="clientSecret" use="optional"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="matching">
@@ -74,6 +81,7 @@
 					</xs:annotation>
 				</xs:element>
 				<xs:element ref="notification"  minOccurs="1" maxOccurs="1"/>
+				<xs:element type="xs:string" name="where"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

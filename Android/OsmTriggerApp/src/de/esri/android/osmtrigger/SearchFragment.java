@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class SearchFragment extends Fragment implements OnClickListener{
+public class SearchFragment extends Fragment{
 	private ListView categoryList;
 
 	public SearchFragment(){
@@ -30,25 +30,24 @@ public class SearchFragment extends Fragment implements OnClickListener{
 			}
 		});
 		Button runTriggerButton = (Button)view.findViewById(R.id.run_trigger_button);
-		runTriggerButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				runTrigger();
-			}
-		});
+		if(runTriggerButton != null){
+			runTriggerButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					runTrigger();
+				}
+			});
+		}
 		Button createNotificationButton = (Button)view.findViewById(R.id.create_notification_button);
-		createNotificationButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				createNotification();
-			}
-		});
+		if(createNotificationButton != null){
+			createNotificationButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					createNotification();
+				}
+			});			
+		}
 		return view;
-	}
-
-	@Override
-	public void onClick(View view) {
-		search();
 	}
 	
 	private void search(){
@@ -58,11 +57,12 @@ public class SearchFragment extends Fragment implements OnClickListener{
 	
 	private void runTrigger(){
 		GeotriggerManager geotriggerManager = new GeotriggerManager(getActivity());
+		// run a trigger by its trigger id (insert proper id).
 		geotriggerManager.runTrigger("296231135");
 	}
 	
 	private void createNotification(){
 		GeotriggerManager geotriggerManager = new GeotriggerManager(getActivity());
-		geotriggerManager.createNotification("296231135");
+		geotriggerManager.createNotification();
 	}
 }

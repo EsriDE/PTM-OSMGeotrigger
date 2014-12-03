@@ -179,7 +179,6 @@ public class TriggerHandler {
 				String userToken = OAuthUtil.requestUserToken(user, password);
 				tokenParam = "token=" + userToken + "&";
 			}
-			// WHERE ROWNUM = 1
 			String whereParam = "";
 			if(!Util.isEmpty(where)){
 				whereParam = "where=" + URLEncoder.encode(where, "UTF-8") + "&";
@@ -213,27 +212,47 @@ public class TriggerHandler {
 		}
 	}
 	
-	//TODO Rainald: Trigger, die in Feature Class weggefallen sind, löschen
-	//TODO Webinar Man kann nur über IDs oder Tags löschen. Alle löschen geht nicht.
-	public void deleteTrigger(String[] triggerIds, String[] tags){
+	public void deleteTriggersByIds(String[] triggerIds, String clientId, String clientSecret){
 		log.debug("Deleting trigger");
+		Params.get().setClientId(clientId);
+		Params.get().setClientSecret(clientSecret);
+		
 		JSONObject params = new JSONObject();
 		JSONArray ids = new JSONArray();
-		if(triggerIds != null && triggerIds.length > 0){
-			// delete by trigger ids
-			for(String triggerId : triggerIds){
-				ids.put(triggerId);			
-			}
-		}else if(tags != null && tags.length > 0){
-			// delete by tags
-			JSONObject tagsObject = new JSONObject();
-			JSONArray tagsArray = new JSONArray();
-			for(String tag : tags){
-				tagsArray.put(tag);			
-			}
-			tagsObject.put("tags", tagsArray);
-			ids.put(tagsObject);
+		for(String triggerId : triggerIds){
+			ids.put(triggerId);			
 		}
+        try {
+            params.put("triggerIds", ids);
+        } catch (JSONException e) {
+        	log.error("Error setting trigger ids: "+e.getMessage());
+        }
+
+        GeotriggerApiClient.runRequest("trigger/delete", params, new GeotriggerApiListener() {
+            public void onSuccess(JSONObject data) {
+            	log.debug(data.toString());
+            }
+
+            public void onFailure(Throwable error) {
+            	log.error("Error creating trigger: "+error.getMessage());
+            }
+        });
+	}
+	
+	public void deleteTriggersByTags(String[] tags, String clientId, String clientSecret){
+		log.debug("Deleting trigger");
+		Params.get().setClientId(clientId);
+		Params.get().setClientSecret(clientSecret);
+		
+		JSONObject params = new JSONObject();
+		JSONArray ids = new JSONArray();
+		JSONObject tagsObject = new JSONObject();
+		JSONArray tagsArray = new JSONArray();
+		for(String tag : tags){
+			tagsArray.put(tag);			
+		}
+		tagsObject.put("tags", tagsArray);
+		ids.put(tagsObject);
         try {
             params.put("triggerIds", ids);
         } catch (JSONException e) {

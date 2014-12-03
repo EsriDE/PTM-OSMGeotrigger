@@ -17,6 +17,7 @@ import android.util.Log;
 
 
 public class GeotriggerManager {
+	// define the categories used in your service (insert your own categories)
 	public static final String[] CATEGORIES = new String[]{"FIXME","Natural Water"};
 	private static final String TAG = "OSM Geotrigger";
 	private Activity activity;
@@ -25,6 +26,9 @@ public class GeotriggerManager {
 		this.activity = activity;
 	}
 	
+	/**
+	 * Sets the selected search categories by updating the tags registered for the device.
+	 */
 	public void setSearchCategories(){
 		List<String> activeCategories = new ArrayList<String>();
 		SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);		
@@ -37,7 +41,10 @@ public class GeotriggerManager {
 		registerTagsForDevice(activeCategories);
 	}
 	
-	//TODO Webinar
+	/**
+	 * Register tags (according to the selected categories) for the device.
+	 * @param activeCategories The active categories.
+	 */
     private void registerTagsForDevice(List<String> activeCategories){
     	Log.d(TAG, "Register tags for device...");
     	JSONObject params = new JSONObject();
@@ -46,7 +53,7 @@ public class GeotriggerManager {
     		tagArray.put(category);
     	}
         try {
-            params.put("setTags", tagArray); 	//TODO Webinar Alte Tags werden durch neue Tags ersetzt anders als bei addTag
+            params.put("setTags", tagArray);
         } catch (JSONException e) {
             Log.e(TAG, "Error creating device update parameters.", e);
         }
@@ -62,13 +69,17 @@ public class GeotriggerManager {
         });
     }
     
-    // TODO Rainald löschen
-    //TODO Webinar Workaround, wenn Geotrigger Service nicht funktioniert: Notification wird angezeigt
-    public void createNotification(String triggerId){
+    /**
+     * Create a notification for a trigger. 
+     */
+    public void createNotification(){
     	((OsmTriggerActivity)activity).showObject();
     }
     
-    //TODO Webinar Workaround, um Geotrigger auszulösen, ohne vor Ort zu sein.
+    /**
+     * Run a trigger specified by its id.
+     * @param triggerId The trigger ID.
+     */
     public void runTrigger(String triggerId){
     	Log.d(TAG, "Run trigger...");
     	JSONObject params = new JSONObject();
@@ -87,27 +98,5 @@ public class GeotriggerManager {
                 Log.d(TAG, "Failed to run trigger.", error);
             }
         });
-    }
-    
-    //TODO Rainald löschen
-    public void sendNotification(){
-    	Log.d(TAG, "Sending notification...");
-    	JSONObject params = new JSONObject();
-    	try {
-    	    params.put("text", "Push notification from Geotrigger Service!");
-    	    params.put("url", "http://developers.arcgis.com");
-    	} catch (JSONException e) {
-    	    Log.e(TAG, "Error creating device/notify params", e);
-    	}
-
-    	GeotriggerApiClient.runRequest(activity, "device/notify", params, new GeotriggerApiListener() {
-    	    public void onSuccess(JSONObject json) {
-    	        Log.i(TAG, "device/notify success: " + json);
-    	    }
-
-    	    public void onFailure(Throwable error) {
-    	        Log.e(TAG, "device/notify failure", error);
-    	    }
-    	});
     }
 }

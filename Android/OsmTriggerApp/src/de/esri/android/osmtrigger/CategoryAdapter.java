@@ -12,6 +12,10 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Switch;
 import android.widget.TextView;
 
+/**
+ * Shows a list of the possible categories in the search page.
+ * The user can activate or deactivate categories 
+ */
 public class CategoryAdapter extends ArrayAdapter<String> implements OnCheckedChangeListener{
 	private Context context;
 	private int layoutResourceId;
@@ -51,13 +55,22 @@ public class CategoryAdapter extends ArrayAdapter<String> implements OnCheckedCh
 		Switch categorySwitch;
 	}
 	
+	/**
+	 * Checks whether a category is active.
+	 * @param category The category.
+	 * @return A boolean value indicating whether the category is active or not.
+	 */
 	private boolean isCategoryActive(String category) {
-		//TODO Webinar SharedPreferences, um Einstellung über Activity- und App-Laufzeit hinaus zu speichern
 		SharedPreferences preferences = ((Activity) context).getPreferences(Context.MODE_PRIVATE);
 		boolean isActive = preferences.getBoolean(category, false);
 		return isActive;
 	}
 	
+	/**
+	 * Set the category state.
+	 * @param category The category.
+	 * @param isActive The state of the cagegory (active or inactive).
+	 */
 	private void setCategoryState(String category, boolean isActive) {
 		SharedPreferences preferences = ((Activity) context).getPreferences(Context.MODE_PRIVATE);
 		SharedPreferences.Editor prefEditor = preferences.edit();
@@ -65,7 +78,9 @@ public class CategoryAdapter extends ArrayAdapter<String> implements OnCheckedCh
 		prefEditor.commit();
 	}
 
-	//TODO Webinar Wenn Einstellungen geändert wurden. 
+	/**
+	 * Event handler function called when a category state was changed by its switch. 
+	 */
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		String category = (String)buttonView.getTag();

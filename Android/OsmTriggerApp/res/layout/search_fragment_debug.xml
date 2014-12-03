@@ -24,4 +24,20 @@
 	    android:layout_marginTop="25dp"
 	    android:layout_below="@id/category_list"
 	    android:text="@string/search_button" />    
+	<Button 
+	    android:id="@+id/run_trigger_button"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="25dp"
+	    android:layout_below="@id/search_button"
+	    android:text="@string/run_trigger_button" />
+	<Button 
+	    android:id="@+id/create_notification_button"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="25dp"
+	    android:layout_below="@id/run_trigger_button"
+	    android:text="@string/create_notification_button" />		        
 </RelativeLayout>

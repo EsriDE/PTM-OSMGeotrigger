@@ -8,6 +8,7 @@
 			<type>point</type><!-- point, polyline, polygon -->
 			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Points/FeatureServer/0</featureClass>
 			<login user="petevdev" password="TODO"/>
+			<app clientId="" clientsecret=""/>
 		</arcgis>
 		<matching>
 			<fields>
@@ -26,6 +27,7 @@
 				<url>http://www.openstreetmap.org/node/{{OSMID}}</url>
 				<data>{{KeyValueAll}}</data>
 			</notification>
+			<where></where>
 		</trigger>
 	</query>
 	<query>
