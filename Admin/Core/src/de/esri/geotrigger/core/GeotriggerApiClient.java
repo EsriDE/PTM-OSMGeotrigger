@@ -15,10 +15,21 @@ public class GeotriggerApiClient {
     {
     }
     
+    /**
+     * Run a request to the geotrigger service.
+     * @param route The route of the geotrigger endpoint (like "trigger/create").
+     * @param listener The GeotriggerApiListener.
+     */
     public static void runRequest(String route, GeotriggerApiListener listener){
         runRequest(route, null, listener);
     }
     
+    /**
+     * Run a request to the geotrigger service.
+     * @param route The route of the geotrigger endpoint (like "trigger/create").
+     * @param params The parameter JSON object.
+     * @param listener The GeotriggerApiListener.
+     */
     public static void runRequest(String route, JSONObject params, GeotriggerApiListener listener){
     	String url = new StringBuilder().append(GEOTRIGGER_BASE_URL).append("/").append(route).toString();
     	Header headers[] = {

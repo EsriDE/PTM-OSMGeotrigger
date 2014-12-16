@@ -23,6 +23,9 @@ public class OAuthUtil {
 	private static String accessToken;
 	private static String userToken;
 			
+	/**
+	 * Get an access token for secured requests.
+	 */
 	public static void getAccessToken(){	
 		String clientId = Params.get().getClientId();
 		String clientSecret = Params.get().getClientSecret();
@@ -51,6 +54,12 @@ public class OAuthUtil {
 		}
 	}
 
+	/**
+	 * Request an OAuth access token.
+	 * @param clientId The client ID.
+	 * @param clientSecret The client secret.
+	 * @param listener The listener for the response.
+	 */
 	public static void requestAccessToken(String clientId, String clientSecret, JsonRequestListener listener){
 		try {
 			log.debug("Requesting access token...");

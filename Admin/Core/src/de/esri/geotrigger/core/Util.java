@@ -9,6 +9,12 @@ import com.esri.core.map.Feature;
 public class Util {
 	
 
+	/**
+	 * Parse the attributes of a feature. The attribute name(s) are substituted by the attribute values.
+	 * @param text The text with the attribute(s) to substitute.
+	 * @param feature The feature.
+	 * @return The parsed text.
+	 */
 	public static String parseAttributes(String text, Feature feature){
 		String temp = text;
 		if(temp.contains("{{{Attributes}}}")){
@@ -41,6 +47,12 @@ public class Util {
 		return temp;
 	}
 	
+	/**
+	 * Parse the attributes of a feature. The attribute name(s) are substituted by the attribute values.
+	 * @param text The text with the attribute(s) to substitute.
+	 * @param feature The feature as a JSON object.
+	 * @return The parsed text.
+	 */
 	public static String parseAttributes(String text, JSONObject feature){
 		String temp = text;
 		JSONObject attributes = feature.getJSONObject("attributes");
@@ -75,6 +87,11 @@ public class Util {
 		return temp;
 	}	
 	
+	/**
+	 * Checks if a string is null or an empty string.
+	 * @param text The string.
+	 * @return A boolean value indicating whether a string is null or an empty string.
+	 */
 	public static boolean isEmpty(String text){
 		boolean isEmpty = false;
 		if(text == null || text.equals("")){

@@ -6,7 +6,7 @@
     </File>
   </Appenders> 
   <Loggers>
-    <Logger name="de.esri.osm" level="debug">
+    <Logger name="de.esri" level="debug">
       <AppenderRef ref="FileAppender"/>
     </Logger>
   </Loggers>  

@@ -21,17 +21,24 @@ public class OsmToArcGis {
 	
 	private Configuration configuration;
 
+	/**
+	 * Start method of this command line tool.
+	 * @param args The command line arguments. Pass the configuration file as a parameter.
+	 */
 	public static void main(String[] args) {
 		if(args.length > 0){
 			
 			String xmlConfig = args[0];
-			OsmToArcGis osmToArcGis = new OsmToArcGis(xmlConfig);
-			osmToArcGis.process();
-			
+			File configFile = new File(xmlConfig);			
+			if(configFile.exists()){
+				OsmToArcGis osmToArcGis = new OsmToArcGis(xmlConfig);
+				osmToArcGis.process();
+			}else{
+				log.error("The configuration file does not exist.");
+			}
 		}
 		else
 		{
-			//TODO Rainald Loggen
 			log.error("No configuration file specified.");
 		}
 	}
@@ -55,31 +62,20 @@ public class OsmToArcGis {
 	}
 	
 	/**
-	 * TODO
-	 * 
+	 * Parse the xml configuration file.
 	 * @param xmlConfig
 	 * @return
 	 */
 	private Configuration parseConfig(String xmlConfig){
+		log.debug("Parsing configuration file...");
 		File file = new File(xmlConfig);
 		ConfigurationReader reader = new ConfigurationReader(file);
 		this.configuration = null;
 		try {
 			this.configuration = reader.read();
-			List<de.esri.osm.config.Query> queries = configuration.getQuery();
-			for(int i = 0; i < queries.size(); i++){
-				Query query = queries.get(i);
-				Overpass overpass = query.getOverpass();
-				String overpassUrl = overpass.getUrl();
-				Arcgis arcgis = query.getArcgis();
-				String featureClass = arcgis.getFeatureClass();
-				String type = arcgis.getType();
-				
-			}
 			
 		} catch (ReaderException e) {
 			log.error("Error parsing configuration file: " + e.getMessage());
-			//TODO Rainald abfangen, richtiges Logging
 		}
 		
 		return configuration;

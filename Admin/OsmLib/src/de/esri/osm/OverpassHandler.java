@@ -17,6 +17,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -31,6 +33,7 @@ import de.esri.osm.data.OSMNode;
 import de.esri.osm.data.OSMWay;
 
 public class OverpassHandler {
+	private static Logger log = LogManager.getLogger(OverpassHandler.class.getName());
 	private Configuration configuration;
 	
 	public OverpassHandler(Configuration configuration)
@@ -48,8 +51,7 @@ public class OverpassHandler {
 			OSM osm = getOSM(xmlDocument);
 			System.out.println(osm);
 		} catch (IOException | SAXException | ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 		return null;
 	}
@@ -104,11 +106,9 @@ public class OverpassHandler {
 			}
 
 		} catch (NoOSMNodeException e) {
-			//TODO EVP: richtiges Logging
-			e.printStackTrace();
+			log.error(e.getMessage());
 		} catch (NoOSMWayException e) {
-			//TODO EVP: richtiges Logging
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 		
 		OSM osm = new OSM(osmNodes, osmWays);

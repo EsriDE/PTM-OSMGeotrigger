@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.esri.geotrigger.core.Params;
 import de.esri.geotrigger.core.TriggerHandler;
 import de.esri.osm.config.Arcgis;
 import de.esri.osm.config.Configuration;
@@ -23,6 +24,9 @@ public class TriggerGenerator {
 		this.configuration = configuration;
 	}
 	
+	/**
+	 * Generate triggers for the features in the services as defined in the configuration.
+	 */
 	public void generateTriggers(){
 		log.info("Creating triggers...");
 		
@@ -34,6 +38,7 @@ public class TriggerGenerator {
 			String password = arcgis.getLogin().getPassword();
 			String clientId = arcgis.getApp().getClientId();		
 			String clientSecret = arcgis.getApp().getClientSecret();
+			setAppId(clientId, clientSecret);
 			
 			Trigger trigger = query.getTrigger();
 			String triggerId = trigger.getTriggerID();			
@@ -48,12 +53,15 @@ public class TriggerGenerator {
 			String where = trigger.getWhere();
 			
 			TriggerHandler triggerHandler = new TriggerHandler();
-			triggerHandler.createTriggersFromService(featureServiceUrl, user, password, clientId, clientSecret, triggerId, tags, direction, radius, notificationText, notificationUrl, notificationData, where);
+			triggerHandler.createTriggersFromService(featureServiceUrl, user, password, triggerId, tags, direction, radius, notificationText, notificationUrl, notificationData, where);
 		}
 		
 		log.info("Triggers created.");
 	}
 	
+	/**
+	 * Delete the old triggers by the specified tags.
+	 */
 	public void deleteTriggers(){
 		log.info("Delete triggers...");
 		List<Query> queries = configuration.getQuery();
@@ -61,14 +69,20 @@ public class TriggerGenerator {
 			Arcgis arcgis = query.getArcgis();
 			String clientId = arcgis.getApp().getClientId();		
 			String clientSecret = arcgis.getApp().getClientSecret();
+			setAppId(clientId, clientSecret);
 			
 			Trigger trigger = query.getTrigger();			
 			String tagStr = trigger.getTags();
 			String[] tags = tagStr.split(",");
 			
 			TriggerHandler triggerHandler = new TriggerHandler();
-			triggerHandler.deleteTriggersByTags(tags, clientId, clientSecret);
+			triggerHandler.deleteTriggersByTags(tags);
 		}
 		log.info("Triggers deleted.");
+	}
+	
+	private void setAppId(String clientId, String clientSecret){
+		Params.get().setClientId(clientId);
+		Params.get().setClientSecret(clientSecret);
 	}
 }

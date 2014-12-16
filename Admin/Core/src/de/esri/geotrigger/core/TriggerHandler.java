@@ -10,7 +10,30 @@ import org.json.JSONObject;
 
 public class TriggerHandler {
 	private static Logger log = LogManager.getLogger(TriggerHandler.class.getName());
-
+	
+	/**
+	 * Create a trigger in the ArcGIS geotrigger service. The trigger will be a circle.
+	 * @param triggerId The trigger id.
+	 * @param tags The tags for the trigger.
+	 * @param direction The trigger direction (enter / leave).
+	 * @param latitude The latitude value. (WGS84)
+	 * @param longitude The longitude value. (WGS84)
+	 * @param radius The trigger radius.
+	 * @param notificationText The notification text of the trigger.
+	 * @param notificationUrl The notification URL.
+	 * @param notificationIcon The notification icon.
+	 * @param notificationSound The notification sound.
+	 * @param notificationData The notification Data.
+	 * @param callBackUrl The callback URL.
+	 * @param properties The trigger properties.
+	 * @param trackingProfile The tracking profile.
+	 * @param times The times value.
+	 * @param rateLimit The rate limit.
+	 * @param boundingBoxReturnFormat The format of the bounding boc return value.
+	 * @param geoReturnFormat The format of the geo return value.
+	 * @param fromTimestamp The from timestamp value.
+	 * @param toTimestamp The to timestamp value.
+	 */
 	public void createTrigger(String triggerId, String[] tags, String direction, double latitude, double longitude, double radius, String notificationText, 
 			String notificationUrl, String notificationIcon, String notificationSound, String notificationData, String callBackUrl, String properties,
 			String trackingProfile, int times, int rateLimit, String boundingBoxReturnFormat, String geoReturnFormat, long fromTimestamp, long toTimestamp){
@@ -89,6 +112,27 @@ public class TriggerHandler {
         });
 	}
 	
+	/**
+	 * Create a trigger in the ArcGIS geotrigger service. The trigger will be a polygon.
+	 * @param triggerId The trigger id.
+	 * @param tags The tags for the trigger.
+	 * @param direction The trigger direction (enter / leave).
+	 * @param geoJson The JSON of the polygon.
+	 * @param notificationText The notification text of the trigger.
+	 * @param notificationUrl The notification URL.
+	 * @param notificationIcon The notification icon.
+	 * @param notificationSound The notification sound.
+	 * @param notificationData The notification Data.
+	 * @param callBackUrl The callback URL.
+	 * @param properties The trigger properties.
+	 * @param trackingProfile The tracking profile.
+	 * @param times The times value.
+	 * @param rateLimit The rate limit.
+	 * @param boundingBoxReturnFormat The format of the bounding boc return value.
+	 * @param geoReturnFormat The format of the geo return value.
+	 * @param fromTimestamp The from timestamp value.
+	 * @param toTimestamp The to timestamp value.
+	 */
 	public void createTrigger(String triggerId, String[] tags, String direction, String geoJson, String notificationText, 
 			String notificationUrl, String notificationIcon, String notificationSound, String notificationData, String callBackUrl, String properties,
 			String trackingProfile, int times, int rateLimit, String boundingBoxReturnFormat, String geoReturnFormat, long fromTimestamp, long toTimestamp){
@@ -168,23 +212,38 @@ public class TriggerHandler {
         });
 	}
 	
-	public void createTriggersFromService(String serviceUrl, String user, String password, String clientId, String clientSecret, String triggerId, String[] tags, 
+	/**
+	 * Create triggers for the features of an ArcGIS feature service. 
+	 * @param serviceUrl The URL of the feature service.
+	 * @param user The ArcGIS user name (if required by the service.
+	 * @param password The ArcGIS password (if required by the service).
+	 * @param triggerId The trigger id.
+	 * @param tags The tags for the triggers.
+	 * @param direction The trigger direction (enter / leave).
+	 * @param radius The radius of the trigger.
+	 * @param notificationText The notification text of the trigger.
+	 * @param notificationUrl The notification URL.
+	 * @param notificationData The notification Data.
+	 * @param where A SQL where clause to limit the features/triggers.
+	 */
+	public void createTriggersFromService(String serviceUrl, String user, String password, String triggerId, String[] tags, 
 			String direction, double radius, String notificationText, String notificationUrl, String notificationData, String where){	
+		log.debug("Create triggers from service...");
 		try{
-			Params.get().setClientId(clientId);
-			Params.get().setClientSecret(clientSecret);
 			String tokenParam = "";
 			if(!Util.isEmpty(user) && !Util.isEmpty(password)){
 				// request user token
 				String userToken = OAuthUtil.requestUserToken(user, password);
 				tokenParam = "token=" + userToken + "&";
 			}
-			String whereParam = "";
+			String whereParam = "where=1%3D1&";
 			if(!Util.isEmpty(where)){
 				whereParam = "where=" + URLEncoder.encode(where, "UTF-8") + "&";
 			}
 			String url = serviceUrl + "/query?" + whereParam + "outFields=*&outSR=4326&" + tokenParam + "f=json";
+			log.debug("Request URL: " + url);
 			String response = HttpUtil.getRequest(url);
+			//log.debug("Response: " + response);
 			JSONObject responseJson = new JSONObject(response);
 			String geometryType = responseJson.getString("geometryType");
 			if(geometryType.equals("esriGeometryPoint")){
@@ -212,10 +271,12 @@ public class TriggerHandler {
 		}
 	}
 	
-	public void deleteTriggersByIds(String[] triggerIds, String clientId, String clientSecret){
+	/**
+	 * Delete triggers by ids.
+	 * @param triggerIds The trigger ids.
+	 */
+	public void deleteTriggersByIds(String[] triggerIds){
 		log.debug("Deleting trigger");
-		Params.get().setClientId(clientId);
-		Params.get().setClientSecret(clientSecret);
 		
 		JSONObject params = new JSONObject();
 		JSONArray ids = new JSONArray();
@@ -239,22 +300,20 @@ public class TriggerHandler {
         });
 	}
 	
-	public void deleteTriggersByTags(String[] tags, String clientId, String clientSecret){
+	/**
+	 * Delete triggers by tags.
+	 * @param tags The tags of the triggers..
+	 */
+	public void deleteTriggersByTags(String[] tags){
 		log.debug("Deleting trigger");
-		Params.get().setClientId(clientId);
-		Params.get().setClientSecret(clientSecret);
 		
 		JSONObject params = new JSONObject();
-		JSONArray ids = new JSONArray();
-		JSONObject tagsObject = new JSONObject();
 		JSONArray tagsArray = new JSONArray();
 		for(String tag : tags){
 			tagsArray.put(tag);			
 		}
-		tagsObject.put("tags", tagsArray);
-		ids.put(tagsObject);
         try {
-            params.put("triggerIds", ids);
+            params.put("tags", tagsArray);
         } catch (JSONException e) {
         	log.error("Error setting trigger ids: "+e.getMessage());
         }

@@ -3,6 +3,9 @@ package de.esri.geotrigger.core;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class used to parse the command line arguments.
+ */
 public class CommandLineArgs {
 	public static final String HELP = "help";
 	public static final String CREATE_TRIGGER = "createtrigger";
@@ -46,10 +49,18 @@ public class CommandLineArgs {
 		}
 	}
 	
+	/**
+	 * Get the command.
+	 * @return The command.
+	 */
 	public String getCommand(){
 		return command;
 	}
 	
+	/**
+	 * Get the command line parameters.
+	 * @return The command line parameters.
+	 */
 	public Map<String, String> getParameters(){
 		return params;
 	}

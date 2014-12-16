@@ -7,8 +7,8 @@
 		<arcgis>
 			<type>point</type><!-- point, polyline, polygon -->
 			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Points/FeatureServer/0</featureClass>
-			<login user="petevdev" password="TODO"/>
-			<app clientId="" clientsecret=""/>
+			<login user="" password=""/>
+			<app clientId="" clientSecret=""/>
 		</arcgis>
 		<matching>
 			<fields>
@@ -37,7 +37,7 @@
 		<arcgis>
 			<type>polyline</type><!-- point, polyline, polygon -->
 			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Polylines/FeatureServer/0</featureClass>
-			<login user="petevdev" password="TODO"/>
+			<login user="" password=""/>
 		</arcgis>
 		<matching>
 			<fields>
@@ -65,7 +65,7 @@
 		<arcgis>
 			<type>polygon</type><!-- point, polyline, polygon -->
 			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/Natural_Water_Polygons/FeatureServer/0</featureClass>
-			<login user="petevdev" password="TODO"/>
+			<login user="" password=""/>
 		</arcgis>
 		<matching>
 			<fields>

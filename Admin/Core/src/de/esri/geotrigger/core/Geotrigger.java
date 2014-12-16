@@ -13,6 +13,9 @@ import com.esri.core.map.FeatureResult;
 import com.esri.core.tasks.query.QueryParameters;
 import com.esri.core.tasks.query.QueryTask;
 
+/**
+ * Command line tool to create triggers and perform other geotrigger tasks.
+ */
 public class Geotrigger {
 	private static Logger log = LogManager.getLogger(Geotrigger.class.getName());
 	
@@ -42,28 +45,26 @@ public class Geotrigger {
 	public static final String CLIENTSECRET = "clientsecret";
 
 	public static void main(String[] args) {	
-		createTriggers();
-		
-//		CommandLineArgs commandLineArgs = new CommandLineArgs(args);
-//		switch(commandLineArgs.getCommand()){
-//		case CommandLineArgs.HELP:
-//			// write help
-//			break;
-//		case CommandLineArgs.CREATE_TRIGGER:
-//			// create Trigger
-//			createTrigger(commandLineArgs.getParameters());
-//			break;
-//		case CommandLineArgs.RUN_TRIGGER:
-//			// run Trigger
-//			runTrigger(commandLineArgs.getParameters());
-//			break;
-//		case CommandLineArgs.DELETE_TRIGGER:
-//			// create Trigger
-//			deleteTrigger(commandLineArgs.getParameters());
-//			break;
-//		}
+		CommandLineArgs commandLineArgs = new CommandLineArgs(args);
+		switch(commandLineArgs.getCommand()){
+		case CommandLineArgs.HELP:
+			// write help
+			break;
+		case CommandLineArgs.CREATE_TRIGGER:
+			// create Trigger
+			createTrigger(commandLineArgs.getParameters());
+			break;
+		case CommandLineArgs.DELETE_TRIGGER:
+			// create Trigger
+			deleteTrigger(commandLineArgs.getParameters());
+			break;
+		}
 	}
 	
+	/**
+	 * Create a geotrigger.
+	 * @param params The parameters for the trigger.
+	 */
 	private static void createTrigger(Map<String, String> params){
 		log.debug("Creating trigger...");
 		String triggerId = params.containsKey(TRIGGER_ID) ? params.get(TRIGGER_ID) : null;
@@ -157,13 +158,11 @@ public class Geotrigger {
 		}		
 	}
 	
-	private static void runTrigger(Map<String, String> params){
-		
-	}
-	
+	/**
+	 * Delete a trigger.
+	 * @param params The parameters for the trigger.
+	 */
 	private static void deleteTrigger(Map<String, String> params){
-		String triggerIdsStr = params.containsKey(TRIGGER_IDS) ? params.get(TRIGGER_IDS) : null;
-		String[] triggerIds = triggerIdsStr.split(",");
 		String tagStr = params.containsKey(TAGS) ? params.get(TAGS) : null;
 		String[] tags = tagStr.split(",");
 		
@@ -177,7 +176,7 @@ public class Geotrigger {
 			}else{
 				setAppId(clientId, clientSecret);
 				TriggerHandler handler = new TriggerHandler();
-				handler.deleteTrigger(triggerIds, tags);
+				handler.deleteTriggersByTags(tags);
 			}
 		}
 	}
@@ -185,103 +184,5 @@ public class Geotrigger {
 	private static void setAppId(String clientId, String clientSecret){
 		Params.get().setClientId(clientId);
 		Params.get().setClientSecret(clientSecret);
-	}
-	
-	
-	
-	
-	// ################## Test
-	//TODO Rainald löschen (Trigger erzeugen)
-	private static void createTriggers(){
-		System.setProperty("http.proxyHost", "127.0.0.1");
-		System.setProperty("http.proxyPort", "8888");
-	    System.setProperty("https.proxyHost", "127.0.0.1");
-	    System.setProperty("https.proxyPort", "8888");
-		
-		String clientId = "Ied6w56BNs5jSrQ0";
-		String clientSecret = "b569f1d96b1d46f1a868a434b113b675";
-		String user = "rsu4devprog";
-		String password = "devprog42195";
-		
-//		String serviceUrl = "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Petroleum/KSWells/MapServer/1";
-//		String serviceUrl = "http://services2.arcgis.com/jUpNdisbWqRpMo35/arcgis/rest/services/Events/FeatureServer/0";
-		String serviceUrl = "http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Points/FeatureServer/0";		
-		String triggerId = "{{OSMID}}"; //TODO Rainald osmid verwenden
-		String tagStr = "FIXME, OSM";
-		String[] tags = tagStr.split(",");
-		String direction = "enter";
-		double radius = 1000.0;
-		String notificationText = "FIXME: {{name}}";
-		String notificationUrl = "http://www.openstreetmap.org/node/{{OSMID}}";
-		String notificationData = "{{KeyValueAll}}";
-		String where = "OBJECTID<15";
-		
-		TriggerHandler triggerHandler = new TriggerHandler();
-		triggerHandler.createTriggersFromService(serviceUrl, user, password, clientId, clientSecret, triggerId, tags, direction, radius, notificationText, notificationUrl, notificationData, where);
-	}
-	
-	private static void query(){
-		System.setProperty("http.proxyHost", "127.0.0.1");
-		System.setProperty("http.proxyPort", "8888");
-	    System.setProperty("https.proxyHost", "127.0.0.1");
-	    System.setProperty("https.proxyPort", "8888");
-		
-		String layerUrl = "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Petroleum/KSWells/MapServer/1";
-		String where = "OBJECTID=205239";
-		QueryParameters queryParams = new QueryParameters();
-		String[] outfields = new String[]{"FIELD_NAME","WELL_TYPE","LEASE_NAME"};
-		//queryParams.setOutFields(new String[] {"*"});
-		queryParams.setOutFields(outfields);		
-		queryParams.setOutSpatialReference(SpatialReference.create(SpatialReference.WKID_WGS84));
-		queryParams.setWhere(where);
-		
-		QueryTask task = new QueryTask(layerUrl);
-		task.execute(queryParams, new CallbackListener<FeatureResult>() {
-			
-			@Override
-			public void onCallback(FeatureResult result) {
-				long count = result.featureCount();
-				System.out.println("Count: "+count);
-				for (Object record : result) {
-					Feature feature = (Feature)record;
-					Object id = feature.getAttributeValue("OBJECTID");
-					System.out.println("OID: "+id);
-				}
-			}
-			
-			@Override
-			public void onError(Throwable e) {
-				System.out.println("Error: "+e.getMessage());
-			}
-		});
-		
-	}
-	
-	private void createTestTrigger(){
-		System.out.println("Creating geotrigger");
-		
-		JSONObject params = new TriggerBuilder()
-		.setTriggerId("Trigger 4711")
-		.setTags(new String[]{"London"})
-		.setGeo(48.418, 11.6067, 100.0)
-		.setDirection(TriggerBuilder.DIRECTION_ENTER)
-		.setNotificationText("Besuchen Sie unser Kaffeehaus in London")
-		.build();
-		
-		GeotriggerApiClient.runRequest("trigger/create", params, new GeotriggerApiListener() {
-            @Override
-            public void onSuccess(JSONObject data) {
-                String res = data.toString();
-                System.out.println("Response: " + res);
-                
-            }
-
-            @Override
-            public void onFailure(Throwable e) {
-                
-            }
-        });
-		
-		System.out.println("Program end.");
 	}
 }

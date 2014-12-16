@@ -17,6 +17,13 @@ import org.json.JSONObject;
 public class HttpUtil {
 	private static Logger log = LogManager.getLogger(HttpUtil.class.getName());
 	
+	/**
+	 * Send a request by HTTP POST method.
+	 * @param url The URL of the request.
+	 * @param headers The headers.
+	 * @param json The JSON content.
+	 * @param listener The listener for the response.
+	 */
 	public static void postJsonRequest(String url, Header[] headers, JSONObject json, JsonRequestListener listener){
         StringEntity entity;
         if(json == null){
@@ -27,6 +34,14 @@ public class HttpUtil {
         postRequest(url, headers, "application/json", entity,  listener);
 	}
 	
+	/**
+	 * Send a request by HTTP POST method.
+	 * @param url The URL of the request.
+	 * @param headers The headers.
+	 * @param contentType The content type.
+	 * @param entity The HTTP entity.
+	 * @param listener The listener for the response.
+	 */
 	public static void postRequest(String url, Header[] headers, String contentType, HttpEntity entity, JsonRequestListener listener){
 		HttpClient client = new DefaultHttpClient();
 		HttpPost post = new HttpPost(url);
@@ -48,6 +63,11 @@ public class HttpUtil {
 		}
 	}
 	
+	/**
+	 * Send a request by HTTP GET method.
+	 * @param url The URL of the request.
+	 * @return The response string.
+	 */
 	public static String getRequest(String url){
 		String response = "";
 		HttpClient client = new DefaultHttpClient();

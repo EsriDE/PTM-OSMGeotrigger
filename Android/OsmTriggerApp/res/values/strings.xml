@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">OSM Trigger</string>
+    <string name="app_name">OSM-Geotrigger-App</string>
     <string name="drawer_open">Navigationsmenü öffnen</string>
     <string name="drawer_close">Navigationsmenü schließen</string>
     <string name="info_text">OSM Trigger App</string>
