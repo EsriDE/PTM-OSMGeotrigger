@@ -38,6 +38,7 @@
 			<type>polyline</type><!-- point, polyline, polygon -->
 			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Polylines/FeatureServer/0</featureClass>
 			<login user="" password=""/>
+			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
 		</arcgis>
 		<matching>
 			<fields>
@@ -66,6 +67,7 @@
 			<type>polygon</type><!-- point, polyline, polygon -->
 			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/Natural_Water_Polygons/FeatureServer/0</featureClass>
 			<login user="" password=""/>
+			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
 		</arcgis>
 		<matching>
 			<fields>

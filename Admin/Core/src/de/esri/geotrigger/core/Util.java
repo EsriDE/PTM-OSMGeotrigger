@@ -2,12 +2,20 @@ package de.esri.geotrigger.core;
 
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.esri.core.geometry.Geometry;
+import com.esri.core.geometry.GeometryEngine;
+import com.esri.core.geometry.Polygon;
+import com.esri.core.geometry.Polyline;
+import com.esri.core.geometry.SpatialReference;
 import com.esri.core.map.Feature;
 
 public class Util {
-	
+	private static Logger log = LogManager.getLogger(Util.class.getName());
 
 	/**
 	 * Parse the attributes of a feature. The attribute name(s) are substituted by the attribute values.
@@ -17,32 +25,36 @@ public class Util {
 	 */
 	public static String parseAttributes(String text, Feature feature){
 		String temp = text;
-		if(temp.contains("{{{Attributes}}}")){
-			StringBuilder json = new StringBuilder();
-			json.append("{");
-			Map<String, Object> attributes = feature.getAttributes();
-			int attrCount = 0;
-			for(Map.Entry<String, Object> entry : attributes.entrySet()){
-				json.append("\"").append(entry.getKey()).append("\":\"").append(entry.getValue()).append("\"");
-				attrCount++;
-				if(attrCount < attributes.size()){
-					json.append(",");
+		try{
+			if(temp.contains("{{{Attributes}}}")){
+				StringBuilder json = new StringBuilder();
+				json.append("{");
+				Map<String, Object> attributes = feature.getAttributes();
+				int attrCount = 0;
+				for(Map.Entry<String, Object> entry : attributes.entrySet()){
+					json.append("\"").append(entry.getKey()).append("\":\"").append(entry.getValue()).append("\"");
+					attrCount++;
+					if(attrCount < attributes.size()){
+						json.append(",");
+					}
+				}
+				json.append("}");
+				temp = json.toString();
+			}else{
+				while(temp.contains("{{")){
+					int start = temp.indexOf("{{");
+					int end = temp.indexOf("}}");
+					String attributeName = temp.substring(start + 2, end);
+					String valueStr = "";
+					Object attributeValue = feature.getAttributeValue(attributeName);
+					if(attributeValue != null){
+						valueStr = attributeValue.toString();
+					}
+					temp = temp.substring(0, start) + valueStr + temp.substring(end + 2);
 				}
 			}
-			json.append("}");
-			temp = json.toString();
-		}else{
-			while(temp.contains("{{")){
-				int start = temp.indexOf("{{");
-				int end = temp.indexOf("}}");
-				String attributeName = temp.substring(start + 2, end);
-				String valueStr = "";
-				Object attributeValue = feature.getAttributeValue(attributeName);
-				if(attributeValue != null){
-					valueStr = attributeValue.toString();
-				}
-				temp = temp.substring(0, start) + valueStr + temp.substring(end + 2);
-			}
+		}catch(Exception e){
+			log.error("Error parsing attributes: "+e.getMessage());
 		}
 		return temp;
 	}
@@ -55,37 +67,76 @@ public class Util {
 	 */
 	public static String parseAttributes(String text, JSONObject feature){
 		String temp = text;
-		JSONObject attributes = feature.getJSONObject("attributes");
-		if(temp.contains("{{{Attributes}}}")){
-			StringBuilder json = new StringBuilder();
-			json.append("{");			
-			String[] attributeNames = JSONObject.getNames(attributes);
-			int attrCount = 0;
-			for(String attributeName : attributeNames){
-				Object attributeValue = attributes.get(attributeName);
-				json.append("\"").append(attributeName).append("\":\"").append(attributeValue).append("\"");
-				attrCount++;
-				if(attrCount < attributeNames.length){
-					json.append(",");
+		try{
+			JSONObject attributes = feature.getJSONObject("attributes");
+			if(temp.contains("{{{Attributes}}}")){
+				StringBuilder json = new StringBuilder();
+				json.append("{");			
+				String[] attributeNames = JSONObject.getNames(attributes);
+				int attrCount = 0;
+				for(String attributeName : attributeNames){
+					Object attributeValue = attributes.get(attributeName);
+					json.append("\"").append(attributeName).append("\":\"").append(attributeValue).append("\"");
+					attrCount++;
+					if(attrCount < attributeNames.length){
+						json.append(",");
+					}
+				}
+				json.append("}");
+				temp = json.toString();
+			}else{
+				while(temp.contains("{{")){
+					int start = temp.indexOf("{{");
+					int end = temp.indexOf("}}");
+					String attributeName = temp.substring(start + 2, end);
+					String valueStr = "";
+					Object attributeValue = attributes.get(attributeName);
+					if(attributeValue != null){
+						valueStr = attributeValue.toString();
+					}
+					temp = temp.substring(0, start) + valueStr + temp.substring(end + 2);
 				}
 			}
-			json.append("}");
-			temp = json.toString();
-		}else{
-			while(temp.contains("{{")){
-				int start = temp.indexOf("{{");
-				int end = temp.indexOf("}}");
-				String attributeName = temp.substring(start + 2, end);
-				String valueStr = "";
-				Object attributeValue = attributes.get(attributeName);
-				if(attributeValue != null){
-					valueStr = attributeValue.toString();
-				}
-				temp = temp.substring(0, start) + valueStr + temp.substring(end + 2);
-			}
+		}catch(Exception e){
+			log.error("Error parsing attributes: "+e.getMessage());
 		}
 		return temp;
-	}	
+	}
+	
+	/**
+	 * Create a buffer for e line.
+	 * @param lineJsonString A JSON string defining the line.
+	 * @param distance The buffer distance.
+	 * @return A JSON string with the buffer polygon.
+	 */
+	public static String bufferLine(String lineJsonString, double distance){
+		String geoJson = null;
+		try{
+			Polyline polyline = new Polyline();
+			JSONObject lineJson = new JSONObject(lineJsonString);
+			JSONArray paths = lineJson.getJSONArray("paths");
+			JSONArray line = paths.getJSONArray(0);
+			for(int k = 0; k < line.length(); k++){
+				JSONArray point = line.getJSONArray(k);
+				double x = point.getDouble(0);
+				double y = point.getDouble(1);
+				if(k == 0){
+					polyline.startPath(x, y);
+				}else{
+					polyline.lineTo(x, y);
+				}
+			}
+			SpatialReference srsWGS84 = SpatialReference.create(SpatialReference.WKID_WGS84);
+			SpatialReference srsWebMercator = SpatialReference.create(SpatialReference.WKID_WGS84_WEB_MERCATOR);
+			Geometry mercatorPolyline = GeometryEngine.project(polyline, srsWGS84, srsWebMercator);
+			Polygon mercatorPolygon = GeometryEngine.buffer(mercatorPolyline, srsWebMercator, distance, srsWebMercator.getUnit());
+			Polygon polygon = (Polygon) GeometryEngine.project(mercatorPolygon, srsWebMercator, srsWGS84);
+			geoJson = GeometryEngine.geometryToJson(srsWGS84, polygon);			
+		}catch(Exception e){
+			log.error("Error creating line buffer: "+e.getMessage());
+		}
+		return geoJson;
+	}
 	
 	/**
 	 * Checks if a string is null or an empty string.

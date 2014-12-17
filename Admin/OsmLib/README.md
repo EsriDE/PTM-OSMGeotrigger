@@ -1,9 +1,17 @@
-# **Geotrigger Core**
-*Geotrigger Core ist eine in Java geschriebene Bibliothek, mit der man den ArcGIS Geotrigger Service ansprechen kann. Mit der Bibliothe können Geotrigger-Requests z.B. zum Anlegen oder Löschen von Triggern gesendet werden  uvm.*
+# **OSM Library**
+*Kurzbeschreibung + aussagekräftiges Bild (optional)*
+
+*Beispiel:*
+
+This repository contains the source code for .....
+
+![Testbild](https://developers.arcgis.com/img/homepage/github-browser.png "")
 
 
-## **Features** 
+## **Features** (optional)
 *Kurze Funktionsbeschreibung in Stichpunkten*
+
+*Beispiel:*
 * View and search for web maps
 * Navigate a map with your fingertips
 

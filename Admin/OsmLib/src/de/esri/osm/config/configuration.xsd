@@ -28,8 +28,8 @@
 			<xs:sequence>
 				<xs:element type="xs:string" name="type"/>
 				<xs:element type="xs:anyURI" name="featureClass"/>
-				<xs:element ref="login"  minOccurs="0" maxOccurs="1"/>
-				<xs:element ref="app"  minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="login" minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="app" minOccurs="0" maxOccurs="1"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -81,7 +81,7 @@
 					</xs:annotation>
 				</xs:element>
 				<xs:element ref="notification"  minOccurs="1" maxOccurs="1"/>
-				<xs:element type="xs:string" name="where"/>
+				<xs:element type="xs:string" name="where" minOccurs="0" maxOccurs="1"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

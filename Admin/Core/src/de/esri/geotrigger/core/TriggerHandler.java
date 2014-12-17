@@ -102,7 +102,7 @@ public class TriggerHandler {
         GeotriggerApiClient.runRequest("trigger/create", params, new GeotriggerApiListener() {
             @Override
             public void onSuccess(JSONObject data) {
-            	log.debug("Trigger created.");
+            	log.info("Trigger created.");
             }
 
             @Override
@@ -140,8 +140,13 @@ public class TriggerHandler {
 		builder.setTriggerId(triggerId);
 		builder.setTags(tags);
 		builder.setDirection(direction);
-		JSONObject geoJsonObject = new JSONObject(geoJson);
-		builder.setGeoFromEsriJSON(geoJsonObject);
+		JSONObject geoJsonObject;
+		try {
+			geoJsonObject = new JSONObject(geoJson);
+			builder.setGeoFromEsriJSON(geoJsonObject);
+		} catch (JSONException e) {
+			log.error("Error parsing geoJSON: " + e.getMessage());
+		}
 		if(!Util.isEmpty(notificationText)){
 			builder.setNotificationText(notificationText);			
 		}
@@ -202,7 +207,7 @@ public class TriggerHandler {
         GeotriggerApiClient.runRequest("trigger/create", params, new GeotriggerApiListener() {
             @Override
             public void onSuccess(JSONObject data) {
-            	log.debug("Trigger created.");
+            	log.info("Trigger created.");
             }
 
             @Override
@@ -215,7 +220,7 @@ public class TriggerHandler {
 	/**
 	 * Create triggers for the features of an ArcGIS feature service. 
 	 * @param serviceUrl The URL of the feature service.
-	 * @param user The ArcGIS user name (if required by the service.
+	 * @param user The ArcGIS user name (if required by the service).
 	 * @param password The ArcGIS password (if required by the service).
 	 * @param triggerId The trigger id.
 	 * @param tags The tags for the triggers.
@@ -228,7 +233,7 @@ public class TriggerHandler {
 	 */
 	public void createTriggersFromService(String serviceUrl, String user, String password, String triggerId, String[] tags, 
 			String direction, double radius, String notificationText, String notificationUrl, String notificationData, String where){	
-		log.debug("Create triggers from service...");
+		log.info("Create triggers from service...");
 		try{
 			String tokenParam = "";
 			if(!Util.isEmpty(user) && !Util.isEmpty(password)){
@@ -243,29 +248,37 @@ public class TriggerHandler {
 			String url = serviceUrl + "/query?" + whereParam + "outFields=*&outSR=4326&" + tokenParam + "f=json";
 			log.debug("Request URL: " + url);
 			String response = HttpUtil.getRequest(url);
-			//log.debug("Response: " + response);
+			log.debug("Response: " + response);
 			JSONObject responseJson = new JSONObject(response);
 			String geometryType = responseJson.getString("geometryType");
-			if(geometryType.equals("esriGeometryPoint")){
-				// features
-				JSONArray features = responseJson.getJSONArray("features");
-				for(int i = 0; i < features.length(); i++){
-					JSONObject feature = features.getJSONObject(i);
-					JSONObject geometry = feature.getJSONObject("geometry");
+			// features
+			JSONArray features = responseJson.getJSONArray("features");
+			for(int i = 0; i < features.length(); i++){
+				JSONObject feature = features.getJSONObject(i);
+				
+				// parse trigger id, notification text, notification data
+				String parsedTriggerId = Util.parseAttributes(triggerId, feature);
+				String parsedNotificationText = Util.parseAttributes(notificationText, feature);
+				String parsedNotificationUrl = Util.parseAttributes(notificationUrl, feature);
+				String parsedNotificationData = Util.parseAttributes(notificationData, feature);
+				
+				JSONObject geometry = feature.getJSONObject("geometry");
+				if(geometryType.equals("esriGeometryPoint")){
 					double latitude = geometry.getDouble("y");
 					double longitude = geometry.getDouble("x");
-
-					// parse trigger id, notification text, notification data
-					String parsedTriggerId = Util.parseAttributes(triggerId, feature);
-					String parsedNotificationText = Util.parseAttributes(notificationText, feature);
-					String parsedNotificationUrl = Util.parseAttributes(notificationUrl, feature);
-					String parsedNotificationData = Util.parseAttributes(notificationData, feature);
-					
 					createTrigger(parsedTriggerId, tags, direction, latitude, longitude, radius, parsedNotificationText, parsedNotificationUrl, null, null, parsedNotificationData, null, null, null, -1, -1, null, null, -1, -1);
+				}else if(geometryType.equals("esriGeometryPolyline")){
+					String lineJson = geometry.toString();
+					String polygonJson = Util.bufferLine(lineJson, radius);
+					createTrigger(parsedTriggerId, tags, direction, polygonJson, parsedNotificationText, parsedNotificationUrl, null, null, parsedNotificationData, null, null, null, -1, -1, null, null, -1, -1);
+				}else if(geometryType.equals("esriGeometryPolygon")){
+					String geoJson = geometry.toString();
+					createTrigger(parsedTriggerId, tags, direction, geoJson, parsedNotificationText, parsedNotificationUrl, null, null, parsedNotificationData, null, null, null, -1, -1, null, null, -1, -1);
+				}else{
+					log.info("Geometry type not supported.");
 				}
-			}else{
-				log.info("Only point features are supported.");
 			}
+			log.info("Triggers for service created.");
 		}catch(Exception ex){
 			log.error(ex.getMessage());
 		}
@@ -276,7 +289,7 @@ public class TriggerHandler {
 	 * @param triggerIds The trigger ids.
 	 */
 	public void deleteTriggersByIds(String[] triggerIds){
-		log.debug("Deleting trigger");
+		log.info("Deleting triggers");
 		
 		JSONObject params = new JSONObject();
 		JSONArray ids = new JSONArray();
@@ -292,10 +305,11 @@ public class TriggerHandler {
         GeotriggerApiClient.runRequest("trigger/delete", params, new GeotriggerApiListener() {
             public void onSuccess(JSONObject data) {
             	log.debug(data.toString());
+            	log.info("Triggers deleted.");
             }
 
             public void onFailure(Throwable error) {
-            	log.error("Error creating trigger: "+error.getMessage());
+            	log.error("Error deleating triggers: "+error.getMessage());
             }
         });
 	}
@@ -305,7 +319,7 @@ public class TriggerHandler {
 	 * @param tags The tags of the triggers..
 	 */
 	public void deleteTriggersByTags(String[] tags){
-		log.debug("Deleting trigger");
+		log.info("Deleting triggers");
 		
 		JSONObject params = new JSONObject();
 		JSONArray tagsArray = new JSONArray();
@@ -321,10 +335,11 @@ public class TriggerHandler {
         GeotriggerApiClient.runRequest("trigger/delete", params, new GeotriggerApiListener() {
             public void onSuccess(JSONObject data) {
             	log.debug(data.toString());
+            	log.info("Triggers deleted.");
             }
 
             public void onFailure(Throwable error) {
-            	log.error("Error creating trigger: "+error.getMessage());
+            	log.error("Error deleating triggers: "+error.getMessage());
             }
         });
 	}

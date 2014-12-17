@@ -4,14 +4,6 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
-
-import com.esri.core.geometry.SpatialReference;
-import com.esri.core.map.CallbackListener;
-import com.esri.core.map.Feature;
-import com.esri.core.map.FeatureResult;
-import com.esri.core.tasks.query.QueryParameters;
-import com.esri.core.tasks.query.QueryTask;
 
 /**
  * Command line tool to create triggers and perform other geotrigger tasks.
@@ -66,7 +58,7 @@ public class Geotrigger {
 	 * @param params The parameters for the trigger.
 	 */
 	private static void createTrigger(Map<String, String> params){
-		log.debug("Creating trigger...");
+		log.info("Creating trigger...");
 		String triggerId = params.containsKey(TRIGGER_ID) ? params.get(TRIGGER_ID) : null;
 		String tagStr = params.containsKey(TAGS) ? params.get(TAGS) : null;
 		String[] tags = tagStr.split(",");
@@ -163,6 +155,7 @@ public class Geotrigger {
 	 * @param params The parameters for the trigger.
 	 */
 	private static void deleteTrigger(Map<String, String> params){
+		log.info("Deleating trigger...");
 		String tagStr = params.containsKey(TAGS) ? params.get(TAGS) : null;
 		String[] tags = tagStr.split(",");
 		
