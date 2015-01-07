@@ -13,6 +13,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.message.BasicStatusLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class OAuthUtil {
@@ -33,12 +34,16 @@ public class OAuthUtil {
 			requestAccessToken(clientId, clientSecret, new JsonRequestListener() {
 				@Override
 				public void onSuccess(JSONObject json) {
-					accessToken = json.getString("access_token");
-					Params.get().setAccessToken(accessToken);
-					int expireInterval = json.getInt("expires_in");
-					long now = System.currentTimeMillis();
-					long expireTime = now + expireInterval * 1000;
-					Params.get().setExpireTime(expireTime);
+					try {
+						accessToken = json.getString("access_token");
+						Params.get().setAccessToken(accessToken);
+						int expireInterval = json.getInt("expires_in");
+						long now = System.currentTimeMillis();
+						long expireTime = now + expireInterval * 1000;
+						Params.get().setExpireTime(expireTime);
+					} catch (Exception e) {
+						log.error("Error: " + e.getMessage());
+					}
 				}
 				
 				@Override
@@ -60,7 +65,7 @@ public class OAuthUtil {
 	 * @param clientSecret The client secret.
 	 * @param listener The listener for the response.
 	 */
-	public static void requestAccessToken(String clientId, String clientSecret, JsonRequestListener listener){
+	public static void requestAccessToken(String clientId, String clientSecret, final JsonRequestListener listener){
 		try {
 			log.debug("Requesting access token...");
 			// add POST parameters
@@ -124,7 +129,11 @@ public class OAuthUtil {
 					log.debug("Response user token: " + jsonObject.toString());
 					JSONObject errorObject = jsonObject.optJSONObject("error");
 					if(errorObject == null){
-						userToken = jsonObject.getString("token");
+						try {
+							userToken = jsonObject.getString("token");
+						} catch (Exception e) {
+							log.error("Error: "+e.getMessage());
+						}
 					}else{
 						int errorCode = errorObject.optInt("code", 400);
 						log.error("Error requesting user token. Code: " + errorCode);

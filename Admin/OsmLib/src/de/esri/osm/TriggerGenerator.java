@@ -28,8 +28,6 @@ public class TriggerGenerator {
 	 * Generate triggers for the features in the services as defined in the configuration.
 	 */
 	public void generateTriggers(){
-		log.info("Creating triggers...");
-		
 		List<Query> queries = configuration.getQuery();
 		for(Query query : queries){
 			Arcgis arcgis = query.getArcgis();
@@ -55,15 +53,12 @@ public class TriggerGenerator {
 			TriggerHandler triggerHandler = new TriggerHandler();
 			triggerHandler.createTriggersFromService(featureServiceUrl, user, password, triggerId, tags, direction, radius, notificationText, notificationUrl, notificationData, where);
 		}
-		
-		log.info("Triggers created.");
 	}
 	
 	/**
 	 * Delete the old triggers by the specified tags.
 	 */
 	public void deleteTriggers(){
-		log.info("Delete triggers...");
 		List<Query> queries = configuration.getQuery();
 		for(Query query : queries){
 			Arcgis arcgis = query.getArcgis();
@@ -78,7 +73,6 @@ public class TriggerGenerator {
 			TriggerHandler triggerHandler = new TriggerHandler();
 			triggerHandler.deleteTriggersByTags(tags);
 		}
-		log.info("Triggers deleted.");
 	}
 	
 	private void setAppId(String clientId, String clientSecret){
