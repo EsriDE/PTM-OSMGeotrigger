@@ -1,18 +1,13 @@
 package de.esri.osm;
 
 import java.io.File;
-import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.esri.osm.config.Arcgis;
 import de.esri.osm.config.Configuration;
 import de.esri.osm.config.ConfigurationReader;
-import de.esri.osm.config.Overpass;
-import de.esri.osm.config.Query;
 import de.esri.osm.config.ReaderException;
-import de.esri.osm.data.OSM;
 
 
 
@@ -49,13 +44,15 @@ public class OsmToArcGis {
 		this.configuration = parseConfig(xmlConfig);
 	}
 	
+	/**
+	 * Read OSM data.
+	 * Fill feature services with OSM data.
+	 * Create triggers from feature services.
+	 */
 	private void process()
 	{
-		//Read OSM over OverpassAPI
-		OSM osm = readOSM();
-				
-		//Create Feature Services
-		createFeatureServices(osm);
+		//Read OSM over OverpassAPI and fill feature services
+		fillFeatureServices();
 				
 		//Create Trigger
 		createTrigger();
@@ -81,17 +78,13 @@ public class OsmToArcGis {
 		return configuration;
 	}
 	
-	private OSM readOSM()
+	/**
+	 * Fills features services with OSM data.
+	 */
+	private void fillFeatureServices()
 	{
-		OverpassHandler overpassHandler = new OverpassHandler(configuration);
-		return overpassHandler.read();
-	}
-	
-	//TODO EVP: Wäre es nicht besser, die Features direkt beim Einlesen in den Feature Service zu schreiben?
-	private void createFeatureServices(OSM osm)
-	{
-		FeatureClassHandler featureClassHandler = new FeatureClassHandler(configuration, osm);
-		featureClassHandler.write();
+		OSMHandler osmHandler = new OSMHandler(configuration);
+		osmHandler.start();
 	}
 	
 	/**

@@ -2,11 +2,12 @@
 <configuration>
 	<query>
 		<overpass>
-			<url>http://www.overpass-api.de/api/xapi?node[bbox=11.2,48.0,11.7,48.7][highway=*][fixme=*]</url>
+			<url>http://www.overpass-api.de/api/interpreter?data=[out:json];node(48.0,11.2,48.7,11.7)[highway][fixme];out%20geom;</url>
 		</overpass>
 		<arcgis>
 			<type>point</type><!-- point, polyline, polygon -->
-			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Points/FeatureServer/0</featureClass>
+			<!--<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Points/FeatureServer/0</featureClass>-->
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Points_Test/FeatureServer/0</featureClass>
 			<login user="" password=""/>
 			<app clientId="" clientSecret=""/>
 		</arcgis>
@@ -21,7 +22,7 @@
 			<direction>enter</direction><!-- enter, leave -->
 			<triggerID>{{OBJECTID}}</triggerID>
 			<radius>100</radius><!-- Meters -->
-			<tags>FIMXE</tags>
+			<tags>FIMXE</tags> 
 			<notification>
 				<text>FIXME Highway {{highway}} {{name}}</text>
 				<url>http://www.openstreetmap.org/node/{{OSMID}}</url>
@@ -32,11 +33,12 @@
 	</query>
 	<query>
 		<overpass>
-			<url>http://www.overpass-api.de/api/xapi?way[bbox=11.2,48.0,11.7,48.7][highway=residential][fixme=*]</url>
+			<url>http://www.overpass-api.de/api/interpreter?data=[out:json];way(48.0,11.2,48.7,11.7)[highway=residential][fixme];out%20geom;</url>
 		</overpass>
 		<arcgis>
 			<type>polyline</type><!-- point, polyline, polygon -->
-			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Polylines/FeatureServer/0</featureClass>
+			<!--<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Polylines/FeatureServer/0</featureClass>-->
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Polylines_Test/FeatureServer/0</featureClass>
 			<login user="" password=""/>
 			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
 		</arcgis>
@@ -61,11 +63,12 @@
 	</query>
 	<query>
 		<overpass>
-			<url>http://www.overpass-api.de/api/xapi?way[bbox=11.2,48.0,11.7,48.7][natural=water][area=yes]</url>
+			<url>http://www.overpass-api.de/api/interpreter?data=[out:json];way(48.0,11.2,48.7,11.7)[natural=water][area=yes];out%20geom;</url>
 		</overpass>
 		<arcgis>
 			<type>polygon</type><!-- point, polyline, polygon -->
-			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/Natural_Water_Polygons/FeatureServer/0</featureClass>
+			<!--<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/Natural_Water_Polygons/FeatureServer/0</featureClass>-->
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/FIXME_Polygons_Test/FeatureServer/0</featureClass>
 			<login user="" password=""/>
 			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
 		</arcgis>

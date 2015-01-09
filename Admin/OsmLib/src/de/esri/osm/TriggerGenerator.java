@@ -1,7 +1,6 @@
 package de.esri.osm;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,8 +12,6 @@ import de.esri.osm.config.Configuration;
 import de.esri.osm.config.Notification;
 import de.esri.osm.config.Query;
 import de.esri.osm.config.Trigger;
-import de.esri.osm.data.OSM;
-import de.esri.osm.data.OSMNode;
 
 public class TriggerGenerator {
 	private static Logger log = LogManager.getLogger(TriggerGenerator.class.getName());

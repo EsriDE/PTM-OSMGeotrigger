@@ -1,24 +1,24 @@
-package de.esri.osm.data;
+package de.esri.osm;
 
 /**
- * This exception is thrown if the given XML node is not an OSM node.
+ * This exception is thrown if the geometry types of OSM and ArcGIS are not supported.
  *
  * @author Eva Peters
  *
  */
-public class NoOSMNodeException extends Exception
+public class GeometryTypeSupportException extends Exception
 {
 	/**
      * Unique serial version id.
      */
-	private static final long serialVersionUID = 7212747963244645385L;
+	private static final long serialVersionUID = -3168890817003764727L;
 
 	/**
      * Creates a new ReaderException.
      *
      * @param errorMessage The description of the new exception.
      */
-    public NoOSMNodeException(String errorMessage)
+    public GeometryTypeSupportException(String errorMessage)
     {
         super(errorMessage);
     }
@@ -28,7 +28,7 @@ public class NoOSMNodeException extends Exception
      *
      * @param e The cause of the new exception.
      */
-    public NoOSMNodeException(Throwable e)
+    public GeometryTypeSupportException(Throwable e)
     {
         super(e);
     }
@@ -39,7 +39,7 @@ public class NoOSMNodeException extends Exception
      * @param errorMessage The description of the new exception.
      * @param e The cause of the new exception.
      */
-    public NoOSMNodeException(String errorMessage, Throwable e)
+    public GeometryTypeSupportException(String errorMessage, Throwable e)
     {
         super(errorMessage, e);
     }
