@@ -2,7 +2,7 @@
 <Configuration>
   <Appenders>
     <File name="FileAppender" fileName="C:/projects/OsmDemo/Logs/OSMGeotrigger.log" append="false">
-      <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
+      <PatternLayout pattern="%d %-5p %F:%L - %m%n"/>
     </File>
   </Appenders> 
   <Loggers>

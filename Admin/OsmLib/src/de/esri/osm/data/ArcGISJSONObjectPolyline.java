@@ -1,6 +1,9 @@
 package de.esri.osm.data;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  * Represents a JSON feature polyline for ArcGIS.
@@ -43,6 +46,7 @@ import org.json.JSONArray;
  */
 public class ArcGISJSONObjectPolyline extends ArcGISJSONObject 
 {
+	private static Logger log = LogManager.getLogger(ArcGISJSONObjectPolyline.class.getName());
 	private JSONArray jsonArrayGeometryContainer;
 	
 	/**
@@ -56,7 +60,11 @@ public class ArcGISJSONObjectPolyline extends ArcGISJSONObject
 		this.jsonArrayGeometryContainer = new JSONArray();
 		jsonArray.put(jsonArrayGeometryContainer);
 
-		this.geometry.put("paths", jsonArray);
+		try {
+			this.geometry.put("paths", jsonArray);
+		} catch (JSONException e) {
+			log.error("Error setting path: " + e.getMessage());
+		}
 	}
 	
 	/**
@@ -68,8 +76,12 @@ public class ArcGISJSONObjectPolyline extends ArcGISJSONObject
 	public void addVertex(double x, double y)
 	{
 		JSONArray jsonArrayPointContainer = new JSONArray();
-		jsonArrayPointContainer.put(x);
-		jsonArrayPointContainer.put(y);
+		try {
+			jsonArrayPointContainer.put(x);
+			jsonArrayPointContainer.put(y);
+		} catch (JSONException e) {
+			log.error("Error adding vertex: " + e.getMessage());
+		}
 		
 		this.jsonArrayGeometryContainer.put(jsonArrayPointContainer);
 	}

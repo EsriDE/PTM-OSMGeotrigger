@@ -1,7 +1,12 @@
 package de.esri.osm.data;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import de.esri.geotrigger.core.TriggerBuilder;
 
 /**
  * Represents a JSON feature object for ArcGIS.
@@ -33,6 +38,7 @@ import org.json.JSONObject;
  *
  */
 public abstract class ArcGISJSONObject extends JSONObject {
+	private static Logger log = LogManager.getLogger(ArcGISJSONObject.class.getName());
 		
 	protected JSONObject attributes;
 	
@@ -46,12 +52,16 @@ public abstract class ArcGISJSONObject extends JSONObject {
 		this.attributes = new JSONObject();
 		this.geometry = new JSONObject();
 		
-		this.put("attributes", this.attributes);
-		this.put("geometry", this.geometry);
-		
-		JSONObject jsonObjectWkid = new JSONObject();
-		jsonObjectWkid.put("wkid", 4326);	
-		this.geometry.put("spatialReference", jsonObjectWkid);
+		try {
+			this.put("attributes", this.attributes);
+			this.put("geometry", this.geometry);
+			
+			JSONObject jsonObjectWkid = new JSONObject();
+			jsonObjectWkid.put("wkid", 4326);	
+			this.geometry.put("spatialReference", jsonObjectWkid);
+		} catch (JSONException e) {
+			log.error("Could not set attributes: " + e.getMessage());
+		}
 	}
 	
 	/**
@@ -62,7 +72,11 @@ public abstract class ArcGISJSONObject extends JSONObject {
 	 */
 	public void addAttributeField(String fieldName, Object value)
 	{
-		this.attributes.put(fieldName, value);
+		try {
+			this.attributes.put(fieldName, value);
+		} catch (JSONException e) {
+			log.error("Could not add attribute field: " + e.getMessage());
+		}
 	}
 	
 	/**
@@ -73,7 +87,11 @@ public abstract class ArcGISJSONObject extends JSONObject {
 	 */
 	public void addAttributeField(String fieldName, String value)
 	{
-		this.attributes.put(fieldName, value);
+		try {
+			this.attributes.put(fieldName, value);
+		} catch (JSONException e) {
+			log.error("Could not add attribute field: " + e.getMessage());
+		}
 	}
 	
 	/**
@@ -84,18 +102,22 @@ public abstract class ArcGISJSONObject extends JSONObject {
 	 */
 	public void addAttributeField(String fieldName, JSONObject value)
 	{
-		this.attributes.put(fieldName, value);
+		try {
+			this.attributes.put(fieldName, value);
+		} catch (JSONException e) {
+			log.error("Could not add attribute field: " + e.getMessage());
+		}
 	}
 	
 	/* (non-Javadoc)
 	 * @see org.json.JSONObject#toString()
 	 */
-	public String toString()
-	{
-		JSONArray jsonArray = new JSONArray();
-		jsonArray.put(this);
-		String json = jsonArray.toString();
-		
-		return json;
-	}
+//	public String toString()
+//	{		
+//		JSONArray jsonArray = new JSONArray();
+//		jsonArray.put(this);
+//		String json = jsonArray.toString();
+//		
+//		return json;
+//	}
 }

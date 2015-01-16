@@ -64,7 +64,8 @@ public class Params {
 	 */
 	public String getAccessToken() {
 		if(accessToken == null || tokenExpired()){
-			OAuthUtil.getAccessToken();
+			OAuthUtil oauthUtil = new OAuthUtil();
+			oauthUtil.getAccessToken();
 		}
 		return accessToken;
 	}

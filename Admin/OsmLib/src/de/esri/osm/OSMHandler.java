@@ -7,6 +7,7 @@ import org.apache.http.StatusLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.esri.geotrigger.core.HttpUtil;
@@ -101,7 +102,7 @@ public class OSMHandler
 		
 		log.debug("Start downloading OSM features from " + url);
 		String response = HttpUtil.getRequest(url);
-
+		//log.debug("OSM features response:\n" + response);
 		JSONObject responseJsonOSM = null;
 		
 		try
@@ -114,7 +115,12 @@ public class OSMHandler
 			return;
 		}
 		
-		JSONArray osmElements = responseJsonOSM.getJSONArray("elements");
+		JSONArray osmElements = null;
+		try {
+			osmElements = responseJsonOSM.getJSONArray("elements");
+		} catch (JSONException e) {
+			log.error("Could not get elements: " + e.getMessage());
+		}
 		
 		onOSMFeaturesDownloaded(osmElements, query);
 	}
@@ -157,7 +163,12 @@ public class OSMHandler
 		log.debug("Start converting OSM features to ArcGIS features");
 		for(int i = 0; i < osmElements.length(); i++)
 		{
-			JSONObject osmElement = osmElements.getJSONObject(i);
+			JSONObject osmElement = null;
+			try {
+				osmElement = osmElements.getJSONObject(i);
+			} catch (JSONException e) {
+				log.error("Could not get OSM element: " + e.getMessage());
+			}
 			
 			String json;
 			try 

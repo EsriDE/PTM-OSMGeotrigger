@@ -1,5 +1,9 @@
 package de.esri.osm.data;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONException;
+
 /**
  * Represents a JSON feature point for ArcGIS.
  * used for ArcGIS REST requests such as in:
@@ -31,6 +35,8 @@ package de.esri.osm.data;
  */
 public class ArcGISJSONObjectPoint extends ArcGISJSONObject 
 {
+	private static Logger log = LogManager.getLogger(ArcGISJSONObjectPoint.class.getName());
+	
 	/**
 	 * Constructor.
 	 * 
@@ -41,7 +47,12 @@ public class ArcGISJSONObjectPoint extends ArcGISJSONObject
 	{
 		super();
 
-		this.geometry.put("x", x);
-		this.geometry.put("y", y);
+		try {
+			this.geometry.put("x", x);
+			this.geometry.put("y", y);
+		} catch (JSONException e) {
+			log.error("Could not set coordinates: " + e.getMessage());
+		}
+		
 	}
 }

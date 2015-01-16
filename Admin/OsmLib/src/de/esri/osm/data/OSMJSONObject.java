@@ -1,5 +1,7 @@
 package de.esri.osm.data;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,7 +33,7 @@ import org.json.JSONObject;
  *
  */
 public abstract class OSMJSONObject extends JSONObject {
-	
+	private static Logger log = LogManager.getLogger(OSMJSONObject.class.getName());
 	protected JSONObject jsonObject;
 		
 	public OSMJSONObject(JSONObject jsonObject)
@@ -49,7 +51,13 @@ public abstract class OSMJSONObject extends JSONObject {
 	 */
 	public static String getType(JSONObject jsonObject)
 	{
-		return (String) jsonObject.get("type");
+		String type = null;
+		try {
+			type = (String) jsonObject.get("type");
+		} catch (JSONException e) {
+			log.error("Error getting type: " + e.getMessage());
+		}
+		return type;
 	}
 	
 	/**
@@ -69,7 +77,13 @@ public abstract class OSMJSONObject extends JSONObject {
 	 */
 	public JSONObject getTags()
 	{
-		return this.jsonObject.getJSONObject("tags");
+		JSONObject tags = null;
+		try {
+			tags = this.jsonObject.getJSONObject("tags");
+		} catch (JSONException e) {
+			log.error("" + e.getMessage());
+		}
+		return tags;
 	}
 	
 	/**
@@ -92,6 +106,12 @@ public abstract class OSMJSONObject extends JSONObject {
 	 */
 	public Object getId()
 	{
-		return this.jsonObject.get("id");
+		Object id = null;
+		try {
+			id = this.jsonObject.get("id");
+		} catch (JSONException e) {
+			log.error("Error getting ID: " + e.getMessage());
+		}
+		return id;
 	}
 }

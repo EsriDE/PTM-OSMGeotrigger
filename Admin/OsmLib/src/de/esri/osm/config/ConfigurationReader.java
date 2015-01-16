@@ -22,7 +22,7 @@ public class ConfigurationReader {
 	/**
 	 * The relative path to the schema file.
 	 */
-	private String schemaPath = "configuration.xsd";
+	private String schemaPath = "/res/configuration.xsd";
 	
 	/**
      * File.

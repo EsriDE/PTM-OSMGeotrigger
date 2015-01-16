@@ -1,6 +1,9 @@
 package de.esri.osm.data;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -49,12 +52,17 @@ import org.json.JSONObject;
  */
 public class OSMJSONObjectWay extends OSMJSONObject 
 {
+	private static Logger log = LogManager.getLogger(OSMJSONObjectWay.class.getName());
 	private JSONArray vertices;
 	
 	public OSMJSONObjectWay(JSONObject jsonObject)
 	{
 		super(jsonObject);
-		this.vertices = this.jsonObject.getJSONArray("geometry");
+		try {
+			this.vertices = this.jsonObject.getJSONArray("geometry");
+		} catch (JSONException e) {
+			log.error("Error getting geometry: " + e.getMessage());
+		}
 	}
 	
 	/**
@@ -75,7 +83,12 @@ public class OSMJSONObjectWay extends OSMJSONObject
 	 */
 	public OSMJSONPoint getVertex(int index)
 	{
-		JSONObject vertex = this.vertices.getJSONObject(index);
+		JSONObject vertex = null;
+		try {
+			vertex = this.vertices.getJSONObject(index);
+		} catch (JSONException e) {
+			log.error("Error getting index: " + e.getMessage());
+		}
 		OSMJSONPoint osmjsonPoint = new OSMJSONPoint(vertex);
 		
 		return osmjsonPoint;

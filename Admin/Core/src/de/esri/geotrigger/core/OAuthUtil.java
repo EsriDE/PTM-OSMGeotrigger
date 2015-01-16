@@ -21,13 +21,13 @@ public class OAuthUtil {
 	private static final String OAUTH_TOKEN_URL = "https://www.arcgis.com/sharing/oauth2/token";
 	private static final String USER_TOKEN_URL = "https://www.arcgis.com/sharing/rest/generateToken";
 	private static final String CONTENTTYPE_FORM = "application/x-www-form-urlencoded";
-	private static String accessToken;
-	private static String userToken;
+	private String userToken;
+	private String error;
 			
 	/**
 	 * Get an access token for secured requests.
 	 */
-	public static void getAccessToken(){	
+	public void getAccessToken(){	
 		String clientId = Params.get().getClientId();
 		String clientSecret = Params.get().getClientSecret();
 		if(clientId != null && clientSecret != null){
@@ -35,7 +35,7 @@ public class OAuthUtil {
 				@Override
 				public void onSuccess(JSONObject json) {
 					try {
-						accessToken = json.getString("access_token");
+						String accessToken = json.getString("access_token");
 						Params.get().setAccessToken(accessToken);
 						int expireInterval = json.getInt("expires_in");
 						long now = System.currentTimeMillis();
@@ -65,7 +65,7 @@ public class OAuthUtil {
 	 * @param clientSecret The client secret.
 	 * @param listener The listener for the response.
 	 */
-	public static void requestAccessToken(String clientId, String clientSecret, final JsonRequestListener listener){
+	public void requestAccessToken(String clientId, String clientSecret, final JsonRequestListener listener){
 		try {
 			log.debug("Requesting access token...");
 			// add POST parameters
@@ -112,7 +112,7 @@ public class OAuthUtil {
 	 * @param password The password.
 	 * @return The user token.
 	 */
-	public static String requestUserToken(String user, String password){
+	public String requestUserToken(String user, String password) throws Exception{		
 		try {
 			log.debug("Requesting user token...");
 			// add POST parameters
@@ -136,6 +136,7 @@ public class OAuthUtil {
 						}
 					}else{
 						int errorCode = errorObject.optInt("code", 400);
+						error = "Error code: " + errorCode;
 						log.error("Error requesting user token. Code: " + errorCode);
 					}
 				}
@@ -150,6 +151,9 @@ public class OAuthUtil {
 					log.error("Error requesting user token: " + error);
 				}
 			});
+			if(!Util.isEmpty(error)){
+				throw new Exception(error); 
+			}
 			
 		}catch (UnsupportedEncodingException e) {
 			log.error("Error: "+e.getMessage());

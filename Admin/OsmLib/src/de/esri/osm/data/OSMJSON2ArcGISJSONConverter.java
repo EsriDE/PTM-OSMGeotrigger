@@ -2,6 +2,8 @@ package de.esri.osm.data;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +20,8 @@ import de.esri.osm.config.Query;
  */
 public class OSMJSON2ArcGISJSONConverter 
 {
+	private static Logger log = LogManager.getLogger(OSMJSON2ArcGISJSONConverter.class.getName());
+	
 	private static JSONObject osmRawObject;
 	
 	private static OSMJSONObject osmjsonObject;
@@ -170,14 +174,19 @@ public class OSMJSON2ArcGISJSONConverter
 		//Feature Class name
 		String featureClassUrl = configurationQuery.getArcgis().getFeatureClass();
 		String featureClassName = getFeatureLayerName(featureClassUrl);
-		data.put("layer", featureClassName);
-		
-		//OSM ID
-		data.put("osmid", osmid);
-		
-		//Tags
-		JSONObject tags = osmjsonObject.getTags();
-		data.put("tags", tags);
+		try {
+			data.put("layer", featureClassName);
+			
+			//OSM ID
+			data.put("osmid", osmid);
+			
+			//Tags
+			JSONObject tags = osmjsonObject.getTags();
+			data.put("tags", tags);
+			
+		} catch (JSONException e) {
+			log.error("Error adding attribute field data: " + e.getMessage());
+		}
 		
 		//to String
 		String dataString = data.toString();

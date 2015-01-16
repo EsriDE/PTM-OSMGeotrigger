@@ -238,7 +238,8 @@ public class TriggerHandler {
 			String tokenParam = "";
 			if(!Util.isEmpty(user) && !Util.isEmpty(password)){
 				// request user token
-				String userToken = OAuthUtil.requestUserToken(user, password);
+				OAuthUtil oauthUtil = new OAuthUtil();
+				String userToken = oauthUtil.requestUserToken(user, password);
 				tokenParam = "token=" + userToken + "&";
 			}
 			String whereParam = "where=1%3D1&";
@@ -250,7 +251,7 @@ public class TriggerHandler {
 			String response = HttpUtil.getRequest(url);
 			log.debug("Response: " + response);
 			JSONObject responseJson = new JSONObject(response);
-			String geometryType = responseJson.getString("geometryType");
+			String geometryType = responseJson.getString("geometryType");			
 			// features
 			JSONArray features = responseJson.getJSONArray("features");
 			for(int i = 0; i < features.length(); i++){

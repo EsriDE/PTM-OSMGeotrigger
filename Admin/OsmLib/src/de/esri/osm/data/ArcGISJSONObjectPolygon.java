@@ -1,6 +1,9 @@
 package de.esri.osm.data;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  * Represents a JSON feature polygon for ArcGIS.
@@ -90,6 +93,7 @@ import org.json.JSONArray;
  */
 public class ArcGISJSONObjectPolygon extends ArcGISJSONObject 
 {
+	private static Logger log = LogManager.getLogger(ArcGISJSONObjectPolygon.class.getName());
 	private JSONArray jsonArrayGeometryContainer;
 	
 	/**
@@ -103,7 +107,11 @@ public class ArcGISJSONObjectPolygon extends ArcGISJSONObject
 		this.jsonArrayGeometryContainer = new JSONArray();
 		jsonArray.put(jsonArrayGeometryContainer);
 
-		this.geometry.put("rings", jsonArray);
+		try {
+			this.geometry.put("rings", jsonArray);
+		} catch (JSONException e) {
+			log.error("Error setting ring: " + e.getMessage());
+		}
 	}
 	
 	/**
@@ -115,8 +123,12 @@ public class ArcGISJSONObjectPolygon extends ArcGISJSONObject
 	public void addVertex(double x, double y)
 	{
 		JSONArray jsonArrayPointContainer = new JSONArray();
-		jsonArrayPointContainer.put(x);
-		jsonArrayPointContainer.put(y);
+		try {
+			jsonArrayPointContainer.put(x);
+			jsonArrayPointContainer.put(y);
+		} catch (JSONException e) {
+			log.error("Error adding vertex: " + e.getMessage());
+		}
 		
 		this.jsonArrayGeometryContainer.put(jsonArrayPointContainer);
 	}
@@ -128,7 +140,12 @@ public class ArcGISJSONObjectPolygon extends ArcGISJSONObject
 	 */
 	public void addingVerticesFinished()
 	{
-		Object firstVertex = jsonArrayGeometryContainer.get(0);
+		Object firstVertex = null;
+		try {
+			firstVertex = jsonArrayGeometryContainer.get(0);
+		} catch (JSONException e) {
+			log.error("Error getting first vertex: " + e.getMessage());
+		}
 		this.jsonArrayGeometryContainer.put(firstVertex);
 	}
 }

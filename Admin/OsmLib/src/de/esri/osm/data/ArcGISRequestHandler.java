@@ -74,7 +74,7 @@ public class ArcGISRequestHandler {
 		url = url + "/addFeatures";
 		
 		try {
-			log.debug("Requesting add features...");
+			log.debug("Adding feature: " + features);
 			// add POST parameters
 			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 			nameValuePairs.add(new BasicNameValuePair("f", "json"));
@@ -86,7 +86,7 @@ public class ArcGISRequestHandler {
 			HttpUtil.postRequest(url, CONTENTTYPE_FORM, entity, new JsonRequestListener() {
 				@Override
 				public void onSuccess(JSONObject jsonObject) {
-					log.debug("Response add features: " + jsonObject.toString());
+					log.debug("Add features response: " + jsonObject.toString());
 					JSONObject errorObject = jsonObject.optJSONObject("error");
 					if(errorObject == null){
 						listener.onSuccess(jsonObject);
@@ -115,7 +115,13 @@ public class ArcGISRequestHandler {
 	
 	public static String requestToken(String user, String password)
 	{
-		String token = OAuthUtil.requestUserToken(user, password);
+		String token = "";
+		try{
+			OAuthUtil oauthUtil = new OAuthUtil();		
+			token = oauthUtil.requestUserToken(user, password);			
+		}catch(Exception e){
+			log.error("Could not get user token: " + e.getMessage());
+		}
 		
 		return token;
 	}

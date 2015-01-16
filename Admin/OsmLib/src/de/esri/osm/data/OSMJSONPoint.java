@@ -1,9 +1,13 @@
 package de.esri.osm.data;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class OSMJSONPoint 
 {
+	private static Logger log = LogManager.getLogger(OSMJSONPoint.class.getName());
 	private JSONObject jsonObject;
 	
 	/**
@@ -48,7 +52,13 @@ public class OSMJSONPoint
 	 */
 	public double getLatitude()
 	{
-		return (Double) this.jsonObject.get("lat");
+		double latitude = 0.0;
+		try {
+			latitude = (Double) this.jsonObject.get("lat");
+		} catch (JSONException e) {
+			log.error("Error getting latitude: " + e.getMessage());
+		}
+		return latitude;
 	}
 	
 	/**
@@ -58,6 +68,12 @@ public class OSMJSONPoint
 	 */
 	public double getLongitude()
 	{
-		return (Double) this.jsonObject.get("lon");
+		double longitude = 0.0;
+		try {
+			longitude = (Double) this.jsonObject.get("lon");
+		} catch (JSONException e) {
+			log.error("Error getting longitude: " + e.getMessage());
+		}
+		return longitude;
 	}
 }

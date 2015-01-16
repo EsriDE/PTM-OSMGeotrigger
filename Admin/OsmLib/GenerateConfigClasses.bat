@@ -1,3 +1,3 @@
-xjc -d src -p de.esri.osm.config src\de\esri\osm\config\configuration.xsd
+xjc -d src -p de.esri.osm.config res\configuration.xsd
 
 pause
