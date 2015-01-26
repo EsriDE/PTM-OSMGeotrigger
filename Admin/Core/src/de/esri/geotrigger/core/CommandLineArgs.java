@@ -9,6 +9,7 @@ import java.util.Map;
 public class CommandLineArgs {
 	public static final String HELP = "help";
 	public static final String CREATE_TRIGGER = "createtrigger";
+	public static final String CREATE_TRIGGER_FROM_SERVICE = "triggerfromservice";
 	public static final String RUN_TRIGGER = "runtrigger";
 	public static final String DELETE_TRIGGER = "deletetrigger";
 	
@@ -26,6 +27,9 @@ public class CommandLineArgs {
 				case CREATE_TRIGGER:
 					this.command = CREATE_TRIGGER;
 					break;
+				case CREATE_TRIGGER_FROM_SERVICE:
+					this.command = CREATE_TRIGGER_FROM_SERVICE;
+					break;					
 				case RUN_TRIGGER:
 					this.command = RUN_TRIGGER;
 					break;

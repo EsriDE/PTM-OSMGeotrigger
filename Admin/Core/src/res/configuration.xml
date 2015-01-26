@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<query>
+		<arcgis>
+			<type>point</type><!-- point, polyline, polygon -->
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/OSMTrigger_Amenity_Points/FeatureServer/0</featureClass>
+			<login user="" password=""/>
+			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
+		</arcgis>
+		<trigger>
+			<direction>enter</direction><!-- enter, leave -->
+			<triggerID>{{OSMID}}</triggerID>
+			<radius>200</radius><!-- Meters -->
+			<tags>amenity,nutzung</tags> 
+			<notification>
+				<text>{{name}}</text>
+				<url>http://www.openstreetmap.org/node/{{OSMID}}</url>
+				<data>{{data}}</data>
+			</notification>
+			<where></where>
+		</trigger>
+	</query>
+	<query>
+		<arcgis>
+			<type>polygon</type><!-- point, polyline, polygon -->
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/OSMTrigger_Amenity_Polygons/FeatureServer/0</featureClass>
+			<login user="" password=""/>
+			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
+		</arcgis>
+		<trigger>
+			<direction>enter</direction><!-- enter, leave -->
+			<triggerID>{{OSMID}}</triggerID>
+			<radius>100</radius><!-- Meters -->
+			<tags>amenity</tags> 
+			<notification>
+				<text>{{name}}</text>
+				<url>http://www.openstreetmap.org/way/{{OSMID}}</url>
+				<data>{{data}}</data>
+			</notification>
+			<where></where>
+		</trigger>
+	</query>
+	<query>
+		<arcgis>
+			<type>polyline</type><!-- point, polyline, polygon -->
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/OSMTrigger_Footway_Polylines/FeatureServer/0</featureClass>
+			<login user="" password=""/>
+			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
+		</arcgis>
+		<trigger>
+			<direction>enter</direction><!-- enter, leave -->
+			<triggerID>{{OSMID}}</triggerID>
+			<radius>100</radius><!-- Meters -->
+			<tags>highway,footway</tags> 
+			<notification>
+				<text>Fußweg {{name}}</text>
+				<url>http://www.openstreetmap.org/way/{{OSMID}}</url>
+				<data>{{data}}</data>
+			</notification>
+			<where></where>
+		</trigger>
+	</query>
+	<query>
+		<arcgis>
+			<type>point</type><!-- point, polyline, polygon -->
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/ArcGIS/rest/services/OSMTrigger_Historic_Points/FeatureServer/0</featureClass>
+			<login user="" password=""/>
+			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
+		</arcgis>
+		<trigger>
+			<direction>leave</direction><!-- enter, leave -->
+			<triggerID>{{OSMID}}</triggerID>
+			<radius>50</radius><!-- Meters -->
+			<tags>historic</tags> 
+			<notification>
+				<text>Historische Stätte {{name}} verlassen</text>
+				<url>http://www.openstreetmap.org/node/{{OSMID}}</url>
+				<data>{{data}}</data>
+			</notification>
+			<where></where>
+		</trigger>
+	</query>
+	<query>
+		<arcgis>
+			<type>point</type><!-- point, polyline, polygon -->
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/ArcGIS/rest/services/OSMTrigger_Busstop_Points/FeatureServer/0</featureClass>
+			<login user="" password=""/>
+			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
+		</arcgis>
+		<trigger>
+			<direction>enter</direction><!-- enter, leave -->
+			<triggerID>{{OSMID}}</triggerID>
+			<radius>100</radius><!-- Meters -->
+			<tags>bus_stop,highway</tags> 
+			<notification>
+				<text>Bushaltestelle {{name}} von {{route_ref}} {{line}}</text>
+				<url>http://www.openstreetmap.org/node/{{OSMID}}</url>
+				<data>{{data}}</data>
+			</notification>
+			<where></where>
+		</trigger>
+	</query>
+</configuration>

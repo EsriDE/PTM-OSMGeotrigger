@@ -93,6 +93,9 @@ public class Util {
 					Object attributeValue = attributes.get(attributeName);
 					if(attributeValue != null){
 						valueStr = attributeValue.toString();
+						if(valueStr.equals("null")){
+							 valueStr = "";
+						}
 					}
 					temp = temp.substring(0, start) + valueStr + temp.substring(end + 2);
 				}

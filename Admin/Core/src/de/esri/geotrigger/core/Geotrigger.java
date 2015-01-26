@@ -1,9 +1,19 @@
 package de.esri.geotrigger.core;
 
+import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import de.esri.geotrigger.config.Arcgis;
+import de.esri.geotrigger.config.Configuration;
+import de.esri.geotrigger.config.ConfigurationReader;
+import de.esri.geotrigger.config.Notification;
+import de.esri.geotrigger.config.Query;
+import de.esri.geotrigger.config.ReaderException;
+import de.esri.geotrigger.config.Trigger;
 
 /**
  * Command line tool to create triggers and perform other geotrigger tasks.
@@ -35,6 +45,7 @@ public class Geotrigger {
 	public static final String TO_TIMESTAMP = "totimestamp";
 	public static final String CLIENTID = "clientid";
 	public static final String CLIENTSECRET = "clientsecret";
+	public static final String CONFIGFILE = "configfile";
 
 	public static void main(String[] args) {	
 		CommandLineArgs commandLineArgs = new CommandLineArgs(args);
@@ -46,6 +57,10 @@ public class Geotrigger {
 			// create Trigger
 			createTrigger(commandLineArgs.getParameters());
 			break;
+		case CommandLineArgs.CREATE_TRIGGER_FROM_SERVICE:
+			// create Trigger from feature service
+			createTriggerFromService(commandLineArgs.getParameters());
+			break;	
 		case CommandLineArgs.DELETE_TRIGGER:
 			// create Trigger
 			deleteTrigger(commandLineArgs.getParameters());
@@ -149,6 +164,84 @@ public class Geotrigger {
 			}
 		}		
 	}
+	
+	/**
+	 * Create geotriggers from a feature service.
+	 * @param params The parameters for the trigger.
+	 */
+	private static void createTriggerFromService(Map<String, String> params){
+		log.info("Creating triggers from service...");
+		String configXml = params.containsKey(CONFIGFILE) ? params.get(CONFIGFILE) : null;
+		log.debug("Config file: "+configXml);
+		if(!Util.isEmpty(configXml)){
+			File configFile = new File(configXml);			
+			if(configFile.exists()){
+				ConfigurationReader reader = new ConfigurationReader(configFile);
+				try {
+					Configuration configuration = reader.read();
+					// delete the old triggers
+					deleteTriggers(configuration);
+					// create new triggers
+					generateTriggers(configuration);
+				} catch (ReaderException e) {
+					log.error("Error parsing configuration file: " + e.getMessage());
+				}
+			}else{
+				log.error("The configuration file does not exist.");
+			}
+		}
+	}
+	
+	/**
+	 * Delete old triggers by the specified tags.
+	 */
+	private static void deleteTriggers(Configuration configuration){
+		List<Query> queries = configuration.getQuery();
+		for(Query query : queries){
+			Arcgis arcgis = query.getArcgis();
+			String clientId = arcgis.getApp().getClientId();		
+			String clientSecret = arcgis.getApp().getClientSecret();
+			setAppId(clientId, clientSecret);
+			
+			Trigger trigger = query.getTrigger();			
+			String tagStr = trigger.getTags();
+			String[] tags = tagStr.split(",");
+			
+			TriggerHandler triggerHandler = new TriggerHandler();
+			triggerHandler.deleteTriggersByTags(tags);
+		}
+	}
+	
+	/**
+	 * Generate triggers for the features in the services as defined in the configuration.
+	 */
+	public static void generateTriggers(Configuration configuration){
+		List<Query> queries = configuration.getQuery();
+		for(Query query : queries){
+			Arcgis arcgis = query.getArcgis();
+			String featureServiceUrl = arcgis.getFeatureClass();
+			String user = arcgis.getLogin().getUser();
+			String password = arcgis.getLogin().getPassword();
+			String clientId = arcgis.getApp().getClientId();		
+			String clientSecret = arcgis.getApp().getClientSecret();
+			setAppId(clientId, clientSecret);
+			
+			Trigger trigger = query.getTrigger();
+			String triggerId = trigger.getTriggerID();			
+			String tagStr = trigger.getTags();
+			String[] tags = tagStr.split(",");
+			String direction = trigger.getDirection();
+			float radius = trigger.getRadius();
+			Notification notification = trigger.getNotification();
+			String notificationText = notification.getText();
+			String notificationUrl = notification.getUrl();
+			String notificationData = notification.getData();
+			String where = trigger.getWhere();
+			
+			TriggerHandler triggerHandler = new TriggerHandler();
+			triggerHandler.createTriggersFromService(featureServiceUrl, user, password, triggerId, tags, direction, radius, notificationText, notificationUrl, notificationData, where);
+		}
+	}	
 	
 	/**
 	 * Delete a trigger.

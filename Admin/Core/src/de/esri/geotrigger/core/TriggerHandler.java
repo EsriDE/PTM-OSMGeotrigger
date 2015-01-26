@@ -279,7 +279,7 @@ public class TriggerHandler {
 					log.info("Geometry type not supported.");
 				}
 			}
-			log.info("Triggers for service created.");
+			log.info("Triggers from service created.");
 		}catch(Exception ex){
 			log.error(ex.getMessage());
 		}

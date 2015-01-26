@@ -112,7 +112,7 @@ public class OAuthUtil {
 	 * @param password The password.
 	 * @return The user token.
 	 */
-	public String requestUserToken(String user, String password) throws Exception{		
+	public String requestUserToken(String user, String password) throws TokenException{		
 		try {
 			log.debug("Requesting user token...");
 			// add POST parameters
@@ -136,7 +136,7 @@ public class OAuthUtil {
 						}
 					}else{
 						int errorCode = errorObject.optInt("code", 400);
-						error = "Error code: " + errorCode;
+						error = "Error requesting token. Code: " + errorCode;
 						log.error("Error requesting user token. Code: " + errorCode);
 					}
 				}
@@ -152,7 +152,7 @@ public class OAuthUtil {
 				}
 			});
 			if(!Util.isEmpty(error)){
-				throw new Exception(error); 
+				throw new TokenException(error); 
 			}
 			
 		}catch (UnsupportedEncodingException e) {
