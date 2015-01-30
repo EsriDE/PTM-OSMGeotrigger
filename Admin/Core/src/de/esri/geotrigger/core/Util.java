@@ -107,7 +107,7 @@ public class Util {
 	}
 	
 	/**
-	 * Create a buffer for e line.
+	 * Create a buffer for a line.
 	 * @param lineJsonString A JSON string defining the line.
 	 * @param distance The buffer distance.
 	 * @return A JSON string with the buffer polygon.
@@ -137,6 +137,41 @@ public class Util {
 			geoJson = GeometryEngine.geometryToJson(srsWGS84, polygon);			
 		}catch(Exception e){
 			log.error("Error creating line buffer: "+e.getMessage());
+		}
+		return geoJson;
+	}
+	
+	/**
+	 * Create a buffer for a polygon.
+	 * @param polygonJsonString A JSON string defining the polygon.
+	 * @param distance The buffer distance.
+	 * @return A JSON string with the buffer polygon.
+	 */
+	public static String bufferPolygon(String polygonJsonString, double distance){
+		String geoJson = null;
+		try{
+			Polygon polygon = new Polygon();
+			JSONObject polygonJson = new JSONObject(polygonJsonString);
+			JSONArray paths = polygonJson.getJSONArray("rings");
+			JSONArray path = paths.getJSONArray(0);
+			for(int k = 0; k < path.length(); k++){
+				JSONArray point = path.getJSONArray(k);
+				double x = point.getDouble(0);
+				double y = point.getDouble(1);
+				if(k == 0){
+					polygon.startPath(x, y);
+				}else{
+					polygon.lineTo(x, y);
+				}
+			}
+			SpatialReference srsWGS84 = SpatialReference.create(SpatialReference.WKID_WGS84);
+			SpatialReference srsWebMercator = SpatialReference.create(SpatialReference.WKID_WGS84_WEB_MERCATOR);
+			Geometry mercatorPolygon = GeometryEngine.project(polygon, srsWGS84, srsWebMercator);
+			Polygon bufferPolygon = GeometryEngine.buffer(mercatorPolygon, srsWebMercator, distance, srsWebMercator.getUnit());
+			Polygon wgsPolygon = (Polygon) GeometryEngine.project(bufferPolygon, srsWebMercator, srsWGS84);
+			geoJson = GeometryEngine.geometryToJson(srsWGS84, wgsPolygon);			
+		}catch(Exception e){
+			log.error("Error creating polygon buffer: "+e.getMessage());
 		}
 		return geoJson;
 	}

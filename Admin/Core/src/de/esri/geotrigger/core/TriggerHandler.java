@@ -273,8 +273,9 @@ public class TriggerHandler {
 					String polygonJson = Util.bufferLine(lineJson, radius);
 					createTrigger(parsedTriggerId, tags, direction, polygonJson, parsedNotificationText, parsedNotificationUrl, null, null, parsedNotificationData, null, null, null, -1, -1, null, null, -1, -1);
 				}else if(geometryType.equals("esriGeometryPolygon")){
-					String geoJson = geometry.toString();
-					createTrigger(parsedTriggerId, tags, direction, geoJson, parsedNotificationText, parsedNotificationUrl, null, null, parsedNotificationData, null, null, null, -1, -1, null, null, -1, -1);
+					String polygonJson = geometry.toString();
+					String bufferJson = Util.bufferPolygon(polygonJson, radius);
+					createTrigger(parsedTriggerId, tags, direction, bufferJson, parsedNotificationText, parsedNotificationUrl, null, null, parsedNotificationData, null, null, null, -1, -1, null, null, -1, -1);
 				}else{
 					log.info("Geometry type not supported.");
 				}
@@ -283,6 +284,42 @@ public class TriggerHandler {
 		}catch(Exception ex){
 			log.error(ex.getMessage());
 		}
+	}
+	
+	/**
+	 * Run a trigger.
+	 * @param triggerIds The trigger ids.
+	 * @param deviceIds The device ids.
+	 */
+	public void runTrigger(String[] triggerIds, String[] deviceIds){
+		log.info("Run trigger");
+		
+		JSONObject params = new JSONObject();
+		JSONArray triggerIdArray = new JSONArray();
+		for(String triggerId : triggerIds){
+			triggerIdArray.put(triggerId);			
+		}
+		JSONArray deviceIdArray = new JSONArray();
+		for(String deviceId : deviceIds){
+			deviceIdArray.put(deviceId);			
+		}
+        try {
+            params.put("triggerIds", triggerIdArray);
+            params.put("deviceIds", deviceIdArray);
+        } catch (JSONException e) {
+        	log.error("Error setting trigger and device ids: "+e.getMessage());
+        }
+		
+        GeotriggerApiClient.runRequest("trigger/run", params, new GeotriggerApiListener() {
+            public void onSuccess(JSONObject data) {
+            	log.debug(data.toString());
+            	log.info("Trigger run.");
+            }
+
+            public void onFailure(Throwable error) {
+            	log.error("Error running trigger: "+error.getMessage());
+            }
+        });
 	}
 	
 	/**
@@ -330,7 +367,7 @@ public class TriggerHandler {
         try {
             params.put("tags", tagsArray);
         } catch (JSONException e) {
-        	log.error("Error setting trigger ids: "+e.getMessage());
+        	log.error("Error setting tags: "+e.getMessage());
         }
 
         GeotriggerApiClient.runRequest("trigger/delete", params, new GeotriggerApiListener() {
@@ -341,6 +378,36 @@ public class TriggerHandler {
 
             public void onFailure(Throwable error) {
             	log.error("Error deleating triggers: "+error.getMessage());
+            }
+        });
+	}
+	
+	/**
+	 * Delete tags.
+	 * @param tags The tags to delete.
+	 */
+	public void deleteTags(String[] tags){
+		log.info("Deleting tags");
+		
+		JSONObject params = new JSONObject();
+		JSONArray tagsArray = new JSONArray();
+		for(String tag : tags){
+			tagsArray.put(tag);			
+		}
+        try {
+            params.put("tags", tagsArray);
+        } catch (JSONException e) {
+        	log.error("Error setting tags: "+e.getMessage());
+        }
+
+        GeotriggerApiClient.runRequest("tag/delete", params, new GeotriggerApiListener() {
+            public void onSuccess(JSONObject data) {
+            	log.debug(data.toString());
+            	log.info("Tags deleted.");
+            }
+
+            public void onFailure(Throwable error) {
+            	log.error("Error deleating tags: "+error.getMessage());
             }
         });
 	}

@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import de.esri.geotrigger.core.HttpUtil;
 import de.esri.geotrigger.core.JsonRequestListener;
 import de.esri.geotrigger.core.OAuthUtil;
+import de.esri.geotrigger.core.TokenException;
 
 public class ArcGISRequestHandler {
 	
@@ -119,7 +120,7 @@ public class ArcGISRequestHandler {
 		try{
 			OAuthUtil oauthUtil = new OAuthUtil();		
 			token = oauthUtil.requestUserToken(user, password);			
-		}catch(Exception e){
+		}catch(TokenException e){
 			log.error("Could not get user token: " + e.getMessage());
 		}
 		

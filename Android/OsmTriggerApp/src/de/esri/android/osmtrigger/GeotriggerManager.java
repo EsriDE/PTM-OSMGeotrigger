@@ -14,31 +14,65 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 
 public class GeotriggerManager {
 	// define the categories used in your service (insert your own categories)
-	public static final String[] CATEGORIES = new String[]{"FIXME","Natural Water"};
+	// public static final String[] CATEGORIES = new String[]{"FIXME","Natural Water"};
+	//public static final String[] CATEGORIES = new String[]{"amenity","footway", "historic", "bus_stop","nutzung","highway"};
+	//public static final String[] CATEGORIES = new String[]{"amenity","footway", "historic", "bus_stop"};
 	private static final String TAG = "OSM Geotrigger";
+	private static String[] categories;
 	private Activity activity;
 	
 	public GeotriggerManager(Activity activity){
 		this.activity = activity;
 	}
 	
+	public String[] getCategories(){
+		return categories;
+	}
+	
+	public void getTagList(){
+    	Log.d(TAG, "Get tag list...");
+    	GeotriggerApiClient.runRequest(activity, "tag/list", new GeotriggerApiListener() {
+            public void onSuccess(JSONObject data) {
+                try {
+					JSONArray tags = data.getJSONArray("tags");
+					categories = new String[tags.length()];
+					for(int i = 0; i < tags.length(); i++){
+						JSONObject tag = tags.getJSONObject(i);
+						String tagName = tag.getString("name");
+						Log.d(TAG, "Tag: " + tagName);
+						categories[i] = tagName;
+					}
+				} catch (JSONException e) {
+					Log.e(TAG, "Error reading JSON: " + e.getMessage());
+				}
+            }
+
+            public void onFailure(Throwable error) {
+                Log.d(TAG, "Failed to get tag list.", error);
+            }
+        });   
+	}
+	
 	/**
 	 * Sets the selected search categories by updating the tags registered for the device.
 	 */
 	public void setSearchCategories(){
-		List<String> activeCategories = new ArrayList<String>();
-		SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);		
-		for(String category : CATEGORIES){
-			boolean isActive = preferences.getBoolean(category, false);
-			if(isActive){
-				activeCategories.add(category);
+		if(categories != null){
+			List<String> activeCategories = new ArrayList<String>();
+			SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);		
+			for(String category : categories){
+				boolean isActive = preferences.getBoolean(category, false);
+				if(isActive){
+					activeCategories.add(category);
+				}
 			}
+			registerTagsForDevice(activeCategories);			
 		}
-		registerTagsForDevice(activeCategories);
 	}
 	
 	/**
@@ -61,6 +95,7 @@ public class GeotriggerManager {
         GeotriggerApiClient.runRequest(activity, "device/update", params, new GeotriggerApiListener() {
             public void onSuccess(JSONObject data) {
                 Log.d(TAG, "Device updated: " + data.toString());
+                Toast.makeText(activity, "Registriert beim Geotrigger Service", Toast.LENGTH_LONG).show();
             }
 
             public void onFailure(Throwable error) {

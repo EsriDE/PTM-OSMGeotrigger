@@ -6,6 +6,8 @@ import org.json.JSONObject;
 
 import com.esri.android.map.Callout;
 import com.esri.android.map.Layer;
+import com.esri.android.map.LocationDisplayManager;
+import com.esri.android.map.LocationDisplayManager.AutoPanMode;
 import com.esri.android.map.MapView;
 import com.esri.android.map.ags.ArcGISFeatureLayer;
 import com.esri.core.geometry.Envelope;
@@ -16,6 +18,7 @@ import com.esri.core.map.FeatureSet;
 import com.esri.core.map.Graphic;
 import com.esri.core.tasks.ags.query.Query;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.Color;
@@ -28,21 +31,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Fragment that displays the map.
  */
 public class MapFragment extends Fragment{
 	private static final String TAG = "OSM Geotrigger";
-	private String webMapUrl = "http://esri-de-dev.maps.arcgis.com/home/item.html?id=26d316dfb7034da1991cc862a51d04e2";
+	//private String webMapUrl = "http://esri-de-dev.maps.arcgis.com/home/item.html?id=26d316dfb7034da1991cc862a51d04e2";
+	private String webMapUrl = "http://esri-de-dev.maps.arcgis.com/home/item.html?id=f3759fc6ac34457bb4abfa236f7df671";	
 	private MapView mapView;
 	private String mapState;
 	private final String MAP_STATE = "MapState";
 	private Callout popup;
+	private LocationDisplayManager locationDisplayManager;
+	private boolean showingGpsPosition;
 	
 	public MapFragment(){
 		
@@ -58,8 +67,34 @@ public class MapFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.i(TAG, "MapFragment, onCreateView()");
 		
+		RelativeLayout mapLayout = new RelativeLayout(getActivity());
+		mapLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT));
 		// load webmap
 		mapView = new MapView(getActivity(), webMapUrl, null, null);
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		mapLayout.addView(mapView, params);
+		
+		final ImageButton gpsButton = new ImageButton(getActivity());
+		gpsButton.setImageResource(R.drawable.ic_location_off);
+		RelativeLayout.LayoutParams gpsParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		gpsParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		gpsParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		gpsButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				if(showingGpsPosition){
+					locationDisplayManager.stop();
+					gpsButton.setImageResource(R.drawable.ic_location_off);
+					showingGpsPosition = false;
+				}else{
+					locationDisplayManager = mapView.getLocationDisplayManager();
+					locationDisplayManager.setAutoPanMode(AutoPanMode.LOCATION);
+					locationDisplayManager.start();
+					gpsButton.setImageResource(R.drawable.ic_location_on);
+					showingGpsPosition = true;
+				}
+			}
+		});
+		mapLayout.addView(gpsButton, gpsParams);
 		
 	    if (savedInstanceState != null) {
 	        mapState = savedInstanceState.getString(MAP_STATE);
@@ -68,7 +103,7 @@ public class MapFragment extends Fragment{
 			mapView.restoreState(mapState);
 		}
 		
-		return mapView;
+		return mapLayout;
 	}
 	
 	@Override
@@ -98,7 +133,7 @@ public class MapFragment extends Fragment{
 	 * @param url The notification url.
 	 * @param data The notification data.
 	 */
-	public void showFeature(String text, String url, String data){		
+	public void showFeature(String text, String url, String data){	
 		try {
 			// get the layer 
 			JSONObject dataJson = new JSONObject(data);
@@ -115,7 +150,7 @@ public class MapFragment extends Fragment{
 				}
 				// get the osmid
 				String osmId = dataJson.getString("osmid");
-				String where = "OSMID=" + osmId;
+				String where = "OSMID='" + osmId + "'";
 				// query the feature
 				Query query = new Query();
 				query.setWhere(where);
@@ -179,7 +214,6 @@ public class MapFragment extends Fragment{
 		closeButton.setTypeface(null, Typeface.BOLD);
 		closeButton.setBackgroundColor(Color.rgb(84, 145, 184));
 		closeButton.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				popup.hide();
 			}
@@ -194,7 +228,7 @@ public class MapFragment extends Fragment{
 		
 		String[] attrNames = feature.getAttributeNames();
 		for(String attrName : attrNames){
-			if(!attrName.equals("KeyValueAll")){
+			if(!attrName.equals("data")){
 				Object attrValue = feature.getAttributeValue(attrName);
 				TableRow row = new TableRow(activity);
 				TextView nameText = new TextView(activity);

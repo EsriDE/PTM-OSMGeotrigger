@@ -1,10 +1,5 @@
 package de.esri.android.osmtrigger;
 
-import com.esri.android.geotrigger.GeotriggerBroadcastReceiver;
-import com.esri.android.geotrigger.GeotriggerService;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -14,6 +9,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -26,15 +22,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-/**
- * The main activity of the application.
- */
-public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastReceiver.PushMessageListener {
+import com.esri.android.geotrigger.GeotriggerBroadcastReceiver;
+import com.esri.android.geotrigger.GeotriggerService;
+import com.esri.android.map.MapView;
+
+
+public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastReceiver.PushMessageListener{
 	private static final String TAG = "OSM Geotrigger";
-	private static final String AGO_CLIENT_ID = ""; //TODO insert your ArcGIS Client ID
-	private static final String GCM_SENDER_ID = ""; //TODO insert your Google Cloud Messaging ID
+	private static final String AGO_CLIENT_ID = "Ied6w56BNs5jSrQ0"; //TODO insert your ArcGIS Client ID
+	private static final String GCM_SENDER_ID = "509218283675"; //TODO insert your Google Cloud Messaging ID
 	private static final String METHOD_NOTIFICATION = "Notification";
 	private static final String TAG_MAP_FRAGMENT = "MapFragment";
 	private static final String TAG_SEARCH_FRAGMENT = "SearchFragment";
@@ -51,8 +48,8 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
     private SettingsFragment settingsFragment;
     private InfoFragment infoFragment;
     private Fragment currentFragment; 
-    private int currentPosition = -1;	
-	
+    private int currentPosition = -1;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,6 +88,12 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
         };
         drawerLayout.setDrawerListener(drawerToggle);
         
+        if(App.getInstance().getGeotriggerManager() == null){
+        	GeotriggerManager geotriggerManager = new GeotriggerManager(this);
+        	App.getInstance().setGeotriggerManager(geotriggerManager);
+            geotriggerManager.getTagList();
+        }
+
         geotriggerBroadcastReceiver = new GeotriggerBroadcastReceiver();
         
         if (savedInstanceState == null) {
@@ -104,7 +107,7 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
     	GeotriggerService.setLoggingLevel(Log.DEBUG);
     	GeotriggerService.setPushNotificationHandlingEnabled(this, false);
     	GeotriggerService.init(this, AGO_CLIENT_ID, GCM_SENDER_ID, GeotriggerService.TRACKING_PROFILE_ADAPTIVE);      
-    }    
+    } 
 
 	@Override
 	protected void onDestroy() {
@@ -122,7 +125,7 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
 		super.onResume();
 		registerReceiver(geotriggerBroadcastReceiver, GeotriggerBroadcastReceiver.getDefaultIntentFilter());
 	}
-
+	
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	Log.i(TAG, "OSM Activity, onOptionsItemSelected()");
@@ -136,10 +139,9 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
         default:
             return super.onOptionsItemSelected(item);
         }
-    }    
+    }
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
         }
@@ -231,8 +233,7 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
     /**
      * Handle push message events.
      */
-	@Override
-	public void onPushMessage(Bundle data) {;
+	public void onPushMessage(Bundle data) {
 		selectItem(0);
 		
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -249,7 +250,8 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
 				.setSmallIcon(R.drawable.ic_launcher)
 				.setContentTitle("OSM Trigger")
 				.setContentText(notificationText)
-				.setContentIntent(pendingIntent);
+				.setContentIntent(pendingIntent)
+				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 			
 			Notification notification = notificationBuilder.build();
 			
@@ -276,9 +278,9 @@ public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastR
 	 * Show a specific OSM object (for testing).
 	 */
 	public void showObject(){
-		String text = "FIXME: T¸rkenstraﬂe";
-		String url = "http://www.openstreetmap.org/node/296231135";
-		String triggerdata = "{ \"layer\": \"FIXME_Points\",\"osmid\":\"296231135\",\"tags\": { \"OSMID\": \"296231135\", \"bus_routes\": \"154; 153\", \"fixme\": \"genaue Position\", \"highway\": \"bus_stop\", \"name\": \"T√ºrkenstra√üe\", \"operator\": \"MVG\", \"public_transport\": \"stop_position\", \"wheelchair\": \"yes\" } }";
+		String text = "Obere Dorfstraﬂe";
+		String url = "http://www.openstreetmap.org/node/848949217";
+		String triggerdata = "{ \"layer\": \"OSMTrigger_Busstop_Points\",\"osmid\":\"848949217\",\"tags\": {\"bench\":\"no\",\"name\":\"Obere Dorfstraﬂe\",\"highway\":\"bus_stop\"} }";
 		Bundle data = new Bundle();
 		data.putString("text", text);
 		data.putString("url", url);

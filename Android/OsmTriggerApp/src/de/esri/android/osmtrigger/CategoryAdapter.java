@@ -30,29 +30,16 @@ public class CategoryAdapter extends ArrayAdapter<String> implements OnCheckedCh
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		CategoryHolder holder = null;
-		if(convertView == null){
-			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-			convertView = inflater.inflate(layoutResourceId, parent, false);
-			holder = new CategoryHolder();
-			holder.text = (TextView)convertView.findViewById(R.id.category_text);
-			Switch categorySwitch = (Switch)convertView.findViewById(R.id.category_switch);
-			categorySwitch.setTag(categories[position]);
-			categorySwitch.setChecked(isCategoryActive(categories[position]));
-			categorySwitch.setOnCheckedChangeListener(this);
-			holder.categorySwitch = categorySwitch;
-			convertView.setTag(holder);
-		}else{
-			holder = (CategoryHolder)convertView.getTag();
-		}
-		holder.text.setText(categories[position]);
+		LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+		View row = inflater.inflate(layoutResourceId, parent, false);
+		TextView categoryText = (TextView)row.findViewById(R.id.category_text);
+		categoryText.setText(categories[position]);
+		Switch categorySwitch = (Switch)row.findViewById(R.id.category_switch);
+		categorySwitch.setTag(categories[position]);
+		categorySwitch.setChecked(isCategoryActive(categories[position]));
+		categorySwitch.setOnCheckedChangeListener(this);
 		
-		return convertView;
-	}
-	
-	static class CategoryHolder{
-		TextView text;
-		Switch categorySwitch;
+		return row;
 	}
 	
 	/**
@@ -81,7 +68,6 @@ public class CategoryAdapter extends ArrayAdapter<String> implements OnCheckedCh
 	/**
 	 * Event handler function called when a category state was changed by its switch. 
 	 */
-	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		String category = (String)buttonView.getTag();
 		setCategoryState(category, isChecked);

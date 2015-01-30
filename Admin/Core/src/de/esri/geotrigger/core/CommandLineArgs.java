@@ -11,7 +11,8 @@ public class CommandLineArgs {
 	public static final String CREATE_TRIGGER = "createtrigger";
 	public static final String CREATE_TRIGGER_FROM_SERVICE = "triggerfromservice";
 	public static final String RUN_TRIGGER = "runtrigger";
-	public static final String DELETE_TRIGGER = "deletetrigger";
+	public static final String DELETE_TRIGGERS = "deletetriggers";
+	public static final String DELETE_TAGS = "deletetags";
 	
 	private String command;
 	private Map<String, String> params;
@@ -33,8 +34,11 @@ public class CommandLineArgs {
 				case RUN_TRIGGER:
 					this.command = RUN_TRIGGER;
 					break;
-				case DELETE_TRIGGER:
-					this.command = DELETE_TRIGGER;
+				case DELETE_TRIGGERS:
+					this.command = DELETE_TRIGGERS;
+					break;
+				case DELETE_TAGS:
+					this.command = DELETE_TAGS;
 					break;
 				}
 				params = new HashMap<String, String>();

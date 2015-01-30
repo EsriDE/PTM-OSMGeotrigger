@@ -23,6 +23,7 @@ public class Geotrigger {
 	
 	public static final String TRIGGER_ID = "triggerid";
 	public static final String TRIGGER_IDS = "triggerids";
+	public static final String DEVICE_IDS = "deviceids";
 	public static final String TAGS = "tags";
 	public static final String DIRECTION = "direction";
 	public static final String LATITUDE = "latitude";
@@ -61,9 +62,17 @@ public class Geotrigger {
 			// create Trigger from feature service
 			createTriggerFromService(commandLineArgs.getParameters());
 			break;	
-		case CommandLineArgs.DELETE_TRIGGER:
-			// create Trigger
-			deleteTrigger(commandLineArgs.getParameters());
+		case CommandLineArgs.RUN_TRIGGER:
+			// run Trigger
+			runTrigger(commandLineArgs.getParameters());
+			break;
+		case CommandLineArgs.DELETE_TRIGGERS:
+			// delete Trigger
+			deleteTriggers(commandLineArgs.getParameters());
+			break;
+		case CommandLineArgs.DELETE_TAGS:
+			// delete tags
+			deleteTags(commandLineArgs.getParameters());
 			break;
 		}
 	}
@@ -244,10 +253,10 @@ public class Geotrigger {
 	}	
 	
 	/**
-	 * Delete a trigger.
-	 * @param params The parameters for the trigger.
+	 * Delete triggers by tags.
+	 * @param params The parameters for the triggers.
 	 */
-	private static void deleteTrigger(Map<String, String> params){
+	private static void deleteTriggers(Map<String, String> params){
 		log.info("Deleating trigger...");
 		String tagStr = params.containsKey(TAGS) ? params.get(TAGS) : null;
 		String[] tags = tagStr.split(",");
@@ -263,6 +272,57 @@ public class Geotrigger {
 				setAppId(clientId, clientSecret);
 				TriggerHandler handler = new TriggerHandler();
 				handler.deleteTriggersByTags(tags);
+			}
+		}
+	}
+	
+	/**
+	 * Run a trigger.
+	 * @param params The parameters for the trigger.
+	 */
+	private static void runTrigger(Map<String, String> params){
+		log.info("Run trigger...");
+		
+		String triggerIdsStr = params.containsKey(TRIGGER_IDS) ? params.get(TRIGGER_IDS) : null;
+		String[] triggerIds = triggerIdsStr.split(",");
+		String deviceIdsStr = params.containsKey(DEVICE_IDS) ? params.get(DEVICE_IDS) : null;
+		String[] deviceIds = deviceIdsStr.split(",");
+		
+		String clientId =  params.containsKey(CLIENTID) ? params.get(CLIENTID) : null;
+		String clientSecret =  params.containsKey(CLIENTSECRET) ? params.get(CLIENTSECRET) : null;
+		if(Util.isEmpty(clientId)){
+			log.error("Client ID not set.");			
+		}else{
+			if(Util.isEmpty(clientSecret)){
+				log.error("Client secret not set.");
+			}else{
+				setAppId(clientId, clientSecret);
+				TriggerHandler handler = new TriggerHandler();
+				handler.runTrigger(triggerIds, deviceIds);
+			}
+		}
+	}
+	
+	/**
+	 * Delete tags.
+	 * @param params The parameters for the trigger.
+	 */
+	private static void deleteTags(Map<String, String> params){
+		log.info("Deleating tags...");
+		String tagStr = params.containsKey(TAGS) ? params.get(TAGS) : null;
+		String[] tags = tagStr.split(",");
+		
+		String clientId =  params.containsKey(CLIENTID) ? params.get(CLIENTID) : null;
+		String clientSecret =  params.containsKey(CLIENTSECRET) ? params.get(CLIENTSECRET) : null;
+		if(Util.isEmpty(clientId)){
+			log.error("Client ID not set.");			
+		}else{
+			if(Util.isEmpty(clientSecret)){
+				log.error("Client secret not set.");
+			}else{
+				setAppId(clientId, clientSecret);
+				TriggerHandler handler = new TriggerHandler();
+				handler.deleteTags(tags);
 			}
 		}
 	}
