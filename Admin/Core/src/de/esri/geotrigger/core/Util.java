@@ -90,7 +90,7 @@ public class Util {
 					int end = temp.indexOf("}}");
 					String attributeName = temp.substring(start + 2, end);
 					String valueStr = "";
-					Object attributeValue = attributes.get(attributeName);
+					Object attributeValue = attributes.opt(attributeName);
 					if(attributeValue != null){
 						valueStr = attributeValue.toString();
 						if(valueStr.equals("null")){

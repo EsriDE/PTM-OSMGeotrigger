@@ -44,7 +44,6 @@ import android.widget.Toast;
  */
 public class MapFragment extends Fragment{
 	private static final String TAG = "OSM Geotrigger";
-	//private String webMapUrl = "http://esri-de-dev.maps.arcgis.com/home/item.html?id=26d316dfb7034da1991cc862a51d04e2";
 	private String webMapUrl = "http://esri-de-dev.maps.arcgis.com/home/item.html?id=f3759fc6ac34457bb4abfa236f7df671";	
 	private MapView mapView;
 	private String mapState;

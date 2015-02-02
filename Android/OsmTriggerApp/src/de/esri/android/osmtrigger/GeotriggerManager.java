@@ -18,10 +18,6 @@ import android.widget.Toast;
 
 
 public class GeotriggerManager {
-	// define the categories used in your service (insert your own categories)
-	// public static final String[] CATEGORIES = new String[]{"FIXME","Natural Water"};
-	//public static final String[] CATEGORIES = new String[]{"amenity","footway", "historic", "bus_stop","nutzung","highway"};
-	//public static final String[] CATEGORIES = new String[]{"amenity","footway", "historic", "bus_stop"};
 	private static final String TAG = "OSM Geotrigger";
 	private static String[] categories;
 	private Activity activity;

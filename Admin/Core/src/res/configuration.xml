@@ -33,7 +33,7 @@
 			<radius>100</radius><!-- Meters -->
 			<tags>amenity</tags> 
 			<notification>
-				<text>{{name}}</text>
+				<text>{{amenity}}</text>
 				<url>http://www.openstreetmap.org/way/{{OSMID}}</url>
 				<data>{{data}}</data>
 			</notification>

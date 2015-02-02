@@ -30,8 +30,8 @@ import com.esri.android.map.MapView;
 
 public class OsmTriggerActivity extends Activity implements GeotriggerBroadcastReceiver.PushMessageListener{
 	private static final String TAG = "OSM Geotrigger";
-	private static final String AGO_CLIENT_ID = "Ied6w56BNs5jSrQ0"; //TODO insert your ArcGIS Client ID
-	private static final String GCM_SENDER_ID = "509218283675"; //TODO insert your Google Cloud Messaging ID
+	private static final String AGO_CLIENT_ID = ""; //TODO insert your ArcGIS Client ID
+	private static final String GCM_SENDER_ID = ""; //TODO insert your Google Cloud Messaging ID
 	private static final String METHOD_NOTIFICATION = "Notification";
 	private static final String TAG_MAP_FRAGMENT = "MapFragment";
 	private static final String TAG_SEARCH_FRAGMENT = "SearchFragment";
