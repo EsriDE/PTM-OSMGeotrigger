@@ -30,19 +30,8 @@ import de.esri.geotrigger.admin.tools.NewMapTool;
 import de.esri.geotrigger.admin.tools.OpenWebMapTool;
 import de.esri.geotrigger.admin.tools.SetAppIdTool;
 
-/**
- * Web Map:
- * http://esri-de-dev.maps.arcgis.com/home/item.html?id=26d316dfb7034da1991cc862a51d04e2
- * 
- * http://esri-de-dev.maps.arcgis.com/home/item.html?id=bf5dbd7d583543f795fde3e6731d48c6
- *
- * - Logging
- * - Lokalisierung
- * - Lizensierung
- */
+
 public class AdminApplication implements ActionListener{
-//	private String portalUrl = "http://esri-de-dev.maps.arcgis.com";
-//	private String webMapId = "bf5dbd7d583543f795fde3e6731d48c6";
 	private static JFrame window;
 	private JMap map;
 	private JMenuItem appIdMenuItem;

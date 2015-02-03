@@ -294,30 +294,6 @@ public class CreateMultipleTriggersTool {
 					System.out.println("Error: "+e.getMessage());
 				}
 			});
-			
-			
-//			// query features
-//			QueryParameters queryParams = new QueryParameters();
-//			queryParams.setOutFields(new String[] {"*"});
-//			queryParams.setOutSpatialReference(SpatialReference.create(4326));
-//			queryParams.setWhere(where);
-//			
-////			UserCredentials credentials = new UserCredentials();
-////			credentials.setUserAccount("", "");
-//			QueryTask task = new QueryTask(layerUrl);
-//			task.execute(queryParams, new CallbackListener<FeatureResult>() {
-//				
-//				@Override
-//				public void onCallback(FeatureResult result) {
-//					createTrigger(result);
-//				}
-//				
-//				@Override
-//				public void onError(Throwable e) {
-//					System.out.println("Error: "+e.getMessage());
-//				}
-//			});
-			
 		}
 		
 		private void createTrigger(FeatureSet featureSet){
@@ -367,38 +343,6 @@ public class CreateMultipleTriggersTool {
 				triggerhandler.createTrigger(triggerId, tags, direction, latitude, longitude, radius, notificationText, notificationUrl, null, null, notificationData, callBackUrl, properties, trackingProfile, -1, -1, null, null, -1, -1);					
 				JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor(map), "Triggers created.");
 			}
-			
-//			Iterator<Object> i = result.iterator();
-//			while(i.hasNext()){
-//				Object o = i.next();
-//				if(o instanceof Feature){
-//					Feature feature = (Feature)o;
-//					Map<String, Object> attrs = feature.getAttributes();
-////					for (Object key : attrs.keySet()) {
-////						System.out.println("Key : " + key.toString() + " Value : "+ attrs.get(key));
-////					}
-//					String triggerId = Util.parseAttributes(triggerIdStr, feature);
-//					String notificationData = Util.parseAttributes(notificationDataStr, feature);
-//					String properties = Util.parseAttributes(propertiesStr, feature);
-//					Geometry geometry = feature.getGeometry();
-//					double latitude = 0.0;
-//					double longitude = 0.0;
-//					Geometry.Type geometryType = geometry.getType();
-//					if(geometryType == Geometry.Type.POINT){
-//						Point midPoint = (Point)geometry;
-//						longitude = midPoint.getX();
-//						latitude = midPoint.getY();
-//					}else if(geometryType == Geometry.Type.POLYLINE){
-//						// for now not supported
-//						return;
-//					}else if(geometryType == Geometry.Type.POLYGON){
-//						// for now not supported
-//						return;
-//					}
-//					TriggerHandler triggerhandler = new TriggerHandler();
-//					triggerhandler.createTrigger(triggerId, tags, direction, latitude, longitude, radius, notificationText, notificationUrl, null, null, notificationData, callBackUrl, properties, trackingProfile, -1, -1, null, null, -1, -1);					
-//				}
-//			}
 		}
 	}
 }
