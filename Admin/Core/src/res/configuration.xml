@@ -5,7 +5,7 @@
 			<type>point</type><!-- point, polyline, polygon -->
 			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/OSMTrigger_Amenity_Points/FeatureServer/0</featureClass>
 			<login user="" password=""/>
-			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
+			<app clientId="" clientSecret=""/>
 		</arcgis>
 		<trigger>
 			<direction>enter</direction><!-- enter, leave -->
@@ -25,7 +25,7 @@
 			<type>polygon</type><!-- point, polyline, polygon -->
 			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/OSMTrigger_Amenity_Polygons/FeatureServer/0</featureClass>
 			<login user="" password=""/>
-			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
+			<app clientId="" clientSecret=""/>
 		</arcgis>
 		<trigger>
 			<direction>enter</direction><!-- enter, leave -->
@@ -45,7 +45,7 @@
 			<type>polyline</type><!-- point, polyline, polygon -->
 			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/OSMTrigger_Footway_Polylines/FeatureServer/0</featureClass>
 			<login user="" password=""/>
-			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
+			<app clientId="" clientSecret=""/>
 		</arcgis>
 		<trigger>
 			<direction>enter</direction><!-- enter, leave -->
@@ -65,7 +65,7 @@
 			<type>point</type><!-- point, polyline, polygon -->
 			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/ArcGIS/rest/services/OSMTrigger_Historic_Points/FeatureServer/0</featureClass>
 			<login user="" password=""/>
-			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
+			<app clientId="" clientSecret=""/>
 		</arcgis>
 		<trigger>
 			<direction>leave</direction><!-- enter, leave -->
@@ -85,7 +85,7 @@
 			<type>point</type><!-- point, polyline, polygon -->
 			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/ArcGIS/rest/services/OSMTrigger_Busstop_Points/FeatureServer/0</featureClass>
 			<login user="" password=""/>
-			<app clientId="Ied6w56BNs5jSrQ0" clientSecret="b569f1d96b1d46f1a868a434b113b675"/>
+			<app clientId="" clientSecret=""/>
 		</arcgis>
 		<trigger>
 			<direction>enter</direction><!-- enter, leave -->

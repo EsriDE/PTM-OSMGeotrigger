@@ -97,41 +97,10 @@ public class AdminApplication implements ActionListener{
 		createMultipleTriggersMenuItem = new JMenuItem("Create multiple Triggers...");
 		createMultipleTriggersMenuItem.addActionListener(this);
 		triggerMenu.add(createMultipleTriggersMenuItem);
-		
-
-	    // Before this application is deployed please register the application on http://developers.esri.com 
-	    // and set the Client ID in the application as shown below.  This will license your application 
-	    // to use Basic level functionality.
-	    // 
-	    // If you require to license your application for Standard level functionality, please refer to the 
-	    // documentation on http://developers.esri.com
-	    //
-	    // ArcGISRuntime.setClientID("your client id");
-	
-	    //map options allow for a common base map to be chosen
-	    //MapOptions mapOptions = new MapOptions(MapType.TOPO);
-    
-//		UserCredentials credentials = new UserCredentials();
-//		credentials.setUserAccount("rsu4devprog", "devprog42195");
-//		Portal portal = new Portal(portalUrl, credentials);
-//		
-//		WebMap webMap = null;
-//		try{
-//			webMap = WebMap.newInstance(webMapId, portal);
-//		}catch(Exception e){
-//			
-//		}
 
 		//create a map using the map options
 		map = new JMap();
-//		map.loadWebMap(webMap);
 		window.getContentPane().add(map, BorderLayout.CENTER);
-
-
-		// The code below shows how to add a tiled layer if you don't use MapOptions
-		//ArcGISTiledMapServiceLayer tiledLayer = new ArcGISTiledMapServiceLayer(
-		// "http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
-		// map.getLayers().add(tiledLayer);
 		
 		// tools
 		appIdTool = new SetAppIdTool(map);
