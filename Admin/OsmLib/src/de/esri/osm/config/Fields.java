@@ -8,10 +8,9 @@
 
 package de.esri.osm.config;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -26,7 +25,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{}field" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{}matching"/>
+ *         &lt;element name="data" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="osmurl" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="osmid" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,40 +39,116 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "field"
+    "matching",
+    "data",
+    "osmurl",
+    "osmid"
 })
 @XmlRootElement(name = "fields")
 public class Fields {
 
-    protected List<Field> field;
+    @XmlElement(required = true)
+    protected Matching matching;
+    @XmlElement(required = true)
+    protected String data;
+    @XmlElement(required = true)
+    protected String osmurl;
+    @XmlElement(required = true)
+    protected String osmid;
 
     /**
-     * Gets the value of the field property.
+     * Gets the value of the matching property.
      * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the field property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getField().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Field }
-     * 
-     * 
+     * @return
+     *     possible object is
+     *     {@link Matching }
+     *     
      */
-    public List<Field> getField() {
-        if (field == null) {
-            field = new ArrayList<Field>();
-        }
-        return this.field;
+    public Matching getMatching() {
+        return matching;
     }
 
+    /**
+     * Sets the value of the matching property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Matching }
+     *     
+     */
+    public void setMatching(Matching value) {
+        this.matching = value;
+    }
+    
+    /**
+     * Gets the value of the data property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getData() {
+        return data;
+    }
+
+    /**
+	 * Sets the value of the data property.
+	 * 
+	 * @param value
+	 *     allowed object is
+	 *     {@link String }
+	 *     
+	 */
+	public void setData(String value) {
+	    this.data = value;
+	}
+	
+	/**
+     * Gets the value of the osmurl property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getOsmurl() {
+        return osmurl;
+    }
+
+    /**
+	 * Sets the value of the osmurl property.
+	 * 
+	 * @param value
+	 *     allowed object is
+	 *     {@link String }
+	 *     
+	 */
+	public void setOsmurl(String value) {
+	    this.osmurl = value;
+	}
+
+	/**
+     * Gets the value of the osmid property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getOsmid() {
+        return osmid;
+    }
+
+    /**
+	 * Sets the value of the osmid property.
+	 * 
+	 * @param value
+	 *     allowed object is
+	 *     {@link String }
+	 *     
+	 */
+	public void setOsmid(String value) {
+	    this.osmid = value;
+	}
 }

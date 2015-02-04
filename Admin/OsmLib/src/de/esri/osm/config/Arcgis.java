@@ -27,9 +27,9 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *          &lt;element name="delete" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="featureClass" type="{http://www.w3.org/2001/XMLSchema}anyURI"/>
  *         &lt;element ref="{}login" minOccurs="0"/>
- *         &lt;element ref="{}app" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -41,9 +41,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "type",
+    "delete",
     "featureClass",
     "login",
-    "app"
 })
 @XmlRootElement(name = "arcgis")
 public class Arcgis {
@@ -51,10 +51,11 @@ public class Arcgis {
     @XmlElement(required = true)
     protected String type;
     @XmlElement(required = true)
+    protected boolean delete;
+    @XmlElement(required = true)
     @XmlSchemaType(name = "anyURI")
     protected String featureClass;
     protected Login login;
-    protected App app;
 
     /**
      * Gets the value of the type property.
@@ -69,6 +70,18 @@ public class Arcgis {
     }
 
     /**
+	 * Sets the value of the type property.
+	 * 
+	 * @param value
+	 *     allowed object is
+	 *     {@link String }
+	 *     
+	 */
+	public void setType(String value) {
+	    this.type = value;
+	}
+
+	/**
      * Sets the value of the type property.
      * 
      * @param value
@@ -76,8 +89,20 @@ public class Arcgis {
      *     {@link String }
      *     
      */
-    public void setType(String value) {
-        this.type = value;
+    public void setDelete(boolean value) {
+        this.delete = value;
+    }
+    
+    /**
+     * Gets the value of the delete property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link boolean }
+     *     
+     */
+    public boolean getDelete() {
+        return delete;
     }
 
     /**
@@ -126,30 +151,6 @@ public class Arcgis {
      */
     public void setLogin(Login value) {
         this.login = value;
-    }
-
-    /**
-     * Gets the value of the app property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link App }
-     *     
-     */
-    public App getApp() {
-        return app;
-    }
-
-    /**
-     * Sets the value of the app property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link App }
-     *     
-     */
-    public void setApp(App value) {
-        this.app = value;
     }
 
 }

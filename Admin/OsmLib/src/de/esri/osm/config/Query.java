@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element ref="{}overpass"/>
  *         &lt;element ref="{}arcgis"/>
  *         &lt;element ref="{}matching"/>
- *         &lt;element ref="{}trigger"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -41,8 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "overpass",
     "arcgis",
-    "matching",
-    "trigger"
+    "fields",
 })
 @XmlRootElement(name = "query")
 public class Query {
@@ -52,9 +50,7 @@ public class Query {
     @XmlElement(required = true)
     protected Arcgis arcgis;
     @XmlElement(required = true)
-    protected Matching matching;
-    @XmlElement(required = true)
-    protected Trigger trigger;
+    protected Fields fields;
 
     /**
      * Gets the value of the overpass property.
@@ -105,51 +101,27 @@ public class Query {
     }
 
     /**
-     * Gets the value of the matching property.
+     * Gets the value of the fields property.
      * 
      * @return
      *     possible object is
-     *     {@link Matching }
+     *     {@link Fields }
      *     
      */
-    public Matching getMatching() {
-        return matching;
+    public Fields getFields() {
+        return fields;
     }
 
     /**
-     * Sets the value of the matching property.
+     * Sets the value of the fields property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Matching }
+     *     {@link Fields }
      *     
      */
-    public void setMatching(Matching value) {
-        this.matching = value;
-    }
-
-    /**
-     * Gets the value of the trigger property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Trigger }
-     *     
-     */
-    public Trigger getTrigger() {
-        return trigger;
-    }
-
-    /**
-     * Sets the value of the trigger property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Trigger }
-     *     
-     */
-    public void setTrigger(Trigger value) {
-        this.trigger = value;
+    public void setFields(Fields value) {
+        this.fields = value;
     }
 
 }

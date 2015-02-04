@@ -1,7 +1,5 @@
 package de.esri.osm.data;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 
 /**
@@ -14,7 +12,7 @@ import org.json.JSONException;
  * 
  * {
       "attributes":{
-         "KeyValueAll":"{\"osmid\":296231135,\"layer\":\"FIXME_Points_Test\",\"tags\":{\"wheelchair\":\"yes\",\"fixme\":\"genaue Position\",\"name\":\"Türkenstraße\",\"public_transport\":\"stop_position\",\"highway\":\"bus_stop\",\"operator\":\"MVG\",\"bus_routes\":\"154; 153\"}}",
+         "data":"{\"osmid\":296231135,\"layer\":\"FIXME_Points_Test\",\"tags\":{\"wheelchair\":\"yes\",\"fixme\":\"genaue Position\",\"name\":\"Türkenstraße\",\"public_transport\":\"stop_position\",\"highway\":\"bus_stop\",\"operator\":\"MVG\",\"bus_routes\":\"154; 153\"}}",
          "fixme":"genaue Position",
          "OSMID":296231135,
          "name":"Türkenstraße",
@@ -30,20 +28,19 @@ import org.json.JSONException;
       }
    }
  * 
- * @author evp
+ * @author Eva Peters
  *
  */
 public class ArcGISJSONObjectPoint extends ArcGISJSONObject 
-{
-	private static Logger log = LogManager.getLogger(ArcGISJSONObjectPoint.class.getName());
-	
+{	
 	/**
 	 * Constructor.
 	 * 
 	 * @param x The longitude.
 	 * @param y The latitude.
+	 * @throws GeometryGenerationException If the geometry geometry can not be generated.
 	 */
-	public ArcGISJSONObjectPoint(double x, double y)
+	public ArcGISJSONObjectPoint(double x, double y) throws GeometryGenerationException
 	{
 		super();
 
@@ -51,7 +48,7 @@ public class ArcGISJSONObjectPoint extends ArcGISJSONObject
 			this.geometry.put("x", x);
 			this.geometry.put("y", y);
 		} catch (JSONException e) {
-			log.error("Could not set coordinates: " + e.getMessage());
+			throw new GeometryGenerationException("Could not set coordinates: " + e.getMessage());
 		}
 		
 	}

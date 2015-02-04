@@ -1,12 +1,8 @@
 package de.esri.osm.data;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import de.esri.geotrigger.core.TriggerBuilder;
 
 /**
  * Represents a JSON feature object for ArcGIS.
@@ -18,7 +14,7 @@ import de.esri.geotrigger.core.TriggerBuilder;
  * 
  * {
       "attributes":{
-         "KeyValueAll":"{\"osmid\":296231135,\"layer\":\"FIXME_Points_Test\",\"tags\":{\"wheelchair\":\"yes\",\"fixme\":\"genaue Position\",\"name\":\"Türkenstraße\",\"public_transport\":\"stop_position\",\"highway\":\"bus_stop\",\"operator\":\"MVG\",\"bus_routes\":\"154; 153\"}}",
+         "data":"{\"osmid\":296231135,\"layer\":\"FIXME_Points_Test\",\"tags\":{\"wheelchair\":\"yes\",\"fixme\":\"genaue Position\",\"name\":\"Türkenstraße\",\"public_transport\":\"stop_position\",\"highway\":\"bus_stop\",\"operator\":\"MVG\",\"bus_routes\":\"154; 153\"}}",
          "fixme":"genaue Position",
          "OSMID":296231135,
          "name":"Türkenstraße",
@@ -34,18 +30,22 @@ import de.esri.geotrigger.core.TriggerBuilder;
       }
    }
  * 
- * @author evp
+ * @author Eva Peters
  *
  */
 public abstract class ArcGISJSONObject extends JSONObject {
-	private static Logger log = LogManager.getLogger(ArcGISJSONObject.class.getName());
 		
 	protected JSONObject attributes;
 	
 	protected JSONObject geometry;
 	
 	
-	public ArcGISJSONObject()
+	/**
+	 * Constructor.
+	 * 
+	 * @throws GeometryGenerationException If the geometry can not be generated.
+	 */
+	public ArcGISJSONObject() throws GeometryGenerationException
 	{
 		super();
 		
@@ -60,7 +60,7 @@ public abstract class ArcGISJSONObject extends JSONObject {
 			jsonObjectWkid.put("wkid", 4326);	
 			this.geometry.put("spatialReference", jsonObjectWkid);
 		} catch (JSONException e) {
-			log.error("Could not set attributes: " + e.getMessage());
+			throw new GeometryGenerationException("Could not set attributes: " + e.getMessage());
 		}
 	}
 	
@@ -69,13 +69,14 @@ public abstract class ArcGISJSONObject extends JSONObject {
 	 * 
 	 * @param fieldName The field name.
 	 * @param value The name as Object.
+	 * @throws GeometryGenerationException If the geometry can not be generated.
 	 */
-	public void addAttributeField(String fieldName, Object value)
+	public void addAttributeField(String fieldName, Object value) throws GeometryGenerationException
 	{
 		try {
 			this.attributes.put(fieldName, value);
 		} catch (JSONException e) {
-			log.error("Could not add attribute field: " + e.getMessage());
+			throw new GeometryGenerationException("Could not add attribute field: " + e.getMessage());
 		}
 	}
 	
@@ -84,13 +85,14 @@ public abstract class ArcGISJSONObject extends JSONObject {
 	 * 
 	 * @param fieldName The field name.
 	 * @param value The name as String.
+	 * @throws GeometryGenerationException If the geometry can not be generated.
 	 */
-	public void addAttributeField(String fieldName, String value)
+	public void addAttributeField(String fieldName, String value) throws GeometryGenerationException
 	{
 		try {
 			this.attributes.put(fieldName, value);
 		} catch (JSONException e) {
-			log.error("Could not add attribute field: " + e.getMessage());
+			throw new GeometryGenerationException("Could not add attribute field: " + e.getMessage());
 		}
 	}
 	
@@ -99,13 +101,14 @@ public abstract class ArcGISJSONObject extends JSONObject {
 	 * 
 	 * @param fieldName The field name.
 	 * @param value The name as JSONObject.
+	 * @throws GeometryGenerationException If the geometry can not be generated.
 	 */
-	public void addAttributeField(String fieldName, JSONObject value)
+	public void addAttributeField(String fieldName, JSONObject value) throws GeometryGenerationException
 	{
 		try {
 			this.attributes.put(fieldName, value);
 		} catch (JSONException e) {
-			log.error("Could not add attribute field: " + e.getMessage());
+			throw new GeometryGenerationException("Could not add attribute field: " + e.getMessage());
 		}
 	}
 	
@@ -120,4 +123,29 @@ public abstract class ArcGISJSONObject extends JSONObject {
 //		
 //		return json;
 //	}
+
+
+	
+	/**
+	 * Gets the X value / longitude of the given coordinate.
+	 * 
+	 * @param jsonArray The coordinate, e.g. vertex.
+	 * @return The X value / longitude.
+	 */
+	public static double getXLongitude(JSONArray jsonArray)
+	{
+		return (Double)jsonArray.get(0);
+	}
+	
+	/**
+	 * Gets the Y value / latitude of the given coordinate.
+	 * 
+	 * @param jsonArray The coordinate, e.g. vertex.
+	 * @return The Y value / latitude.
+	 */
+	public static double getYLatitude(JSONArray jsonArray)
+	{
+		return (Double)jsonArray.get(1);
+	}
+	
 }

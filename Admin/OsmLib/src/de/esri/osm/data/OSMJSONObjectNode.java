@@ -26,7 +26,7 @@ import org.json.JSONObject;
          }
       }
  * 
- * @author evp
+ * @author Eva Peters
  *
  */
 public class OSMJSONObjectNode extends OSMJSONObject 

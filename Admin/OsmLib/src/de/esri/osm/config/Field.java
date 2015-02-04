@@ -24,8 +24,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="tag" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="osm" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="arcgis" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -38,57 +38,57 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "field")
 public class Field {
 
-    @XmlAttribute(name = "tag")
-    protected String tag;
-    @XmlAttribute(name = "name")
-    protected String name;
+    @XmlAttribute(name = "osm")
+    protected String osm;
+    @XmlAttribute(name = "arcgis")
+    protected String arcgis;
 
     /**
-     * Gets the value of the tag property.
+     * Gets the value of the osm property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getTag() {
-        return tag;
+    public String getOsm() {
+        return osm;
     }
 
     /**
-     * Sets the value of the tag property.
+     * Sets the value of the osm property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setTag(String value) {
-        this.tag = value;
+    public void setOsm(String value) {
+        this.osm = value;
     }
 
     /**
-     * Gets the value of the name property.
+     * Gets the value of the arcgis property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getName() {
-        return name;
+    public String getArcgis() {
+        return arcgis;
     }
 
     /**
-     * Sets the value of the name property.
+     * Sets the value of the arcgis property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setName(String value) {
-        this.name = value;
+    public void setArcgis(String value) {
+        this.arcgis = value;
     }
 
 }

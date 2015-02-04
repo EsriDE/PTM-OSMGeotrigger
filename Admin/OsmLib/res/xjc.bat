@@ -1,0 +1,2 @@
+"C:\data\Edu\Software\portabel\jaxb-ri-2.2.11\jaxb-ri\bin\xjc.bat" "C:\data\Edu\Git\PTM-OSMGeotrigger\Admin\OsmLib\src\res\configuration.xsd" -d "C:\data\Edu\Git\PTM-OSMGeotrigger\Admin\OsmLib\src" -p de.esri.osm.config.gen
+pause

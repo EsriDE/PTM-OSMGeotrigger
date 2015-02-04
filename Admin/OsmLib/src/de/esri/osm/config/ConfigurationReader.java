@@ -22,7 +22,7 @@ public class ConfigurationReader {
 	/**
 	 * The relative path to the schema file.
 	 */
-	private String schemaPath = "/res/configuration.xsd";
+	private String schemaPath = "/configuration.xsd";
 	
 	/**
      * File.
@@ -49,9 +49,9 @@ public class ConfigurationReader {
      * </p>
      *
      * @return The parameters.
-     * @throws ReaderException If the unmarshalling of the given file failed. Maybe the file isn't valid.
+     * @throws XMLReaderException If the unmarshalling of the given file failed. Maybe the file isn't valid.
      */
-    public Configuration read() throws ReaderException
+    public Configuration read() throws XMLReaderException
     {
     	String failedMessage = "The reading process of the file '" + file.getAbsolutePath() + "' failed:\n\t";
 
@@ -63,7 +63,7 @@ public class ConfigurationReader {
     	}
     	catch(JAXBException e)
     	{
-    		throw new ReaderException(failedMessage + "The unmarshaller could not be initialized.\n\t" + e);
+    		throw new XMLReaderException(failedMessage + "The unmarshaller could not be initialized.\n\t" + e);
     	}
 
     	SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -72,7 +72,7 @@ public class ConfigurationReader {
     	
     	if(schemaURL == null)
     	{
-    		throw new ReaderException(failedMessage + "The XML schema could not be read.");
+    		throw new XMLReaderException(failedMessage + "The XML schema could not be read.");
     	}
 
     	Schema schema = null; //Initialize
@@ -83,11 +83,11 @@ public class ConfigurationReader {
     	}
     	catch(SAXException e)
     	{
-    		throw new ReaderException(failedMessage + "The schema '" + schemaURL.getPath() + "' could not be generated.\n\t" + e);
+    		throw new XMLReaderException(failedMessage + "The schema '" + schemaURL.getPath() + "' could not be generated.\n\t" + e);
     	}
     	catch(Exception e)
     	{
-    		throw new ReaderException(failedMessage + "The schema '" + schemaURL.getPath() + "' could not be generated.\n\t" + e);
+    		throw new XMLReaderException(failedMessage + "The schema '" + schemaURL.getPath() + "' could not be generated.\n\t" + e);
     	}
 
     	unmarshaller.setSchema(schema);
@@ -99,7 +99,7 @@ public class ConfigurationReader {
     	}
     	catch(JAXBException e)
     	{
-    		throw new ReaderException(failedMessage + "The file could not be unmarshalled. Maybe the file isn't valid.\n\t" + e);
+    		throw new XMLReaderException(failedMessage + "The file could not be unmarshalled. Maybe the file isn't valid.\n\t" + e);
     	}
 		
     	return configuration;

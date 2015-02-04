@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Configuration>
   <Appenders>
-    <File name="FileAppender" fileName="C:/projects/OsmDemo/Logs/OSMGeotrigger.log" append="false">
+    <File name="FileAppender" fileName="C:/temp/Logs/OSMGeotrigger.log" append="false">
       <PatternLayout pattern="%d %-5p %F:%L - %m%n"/>
     </File>
   </Appenders> 

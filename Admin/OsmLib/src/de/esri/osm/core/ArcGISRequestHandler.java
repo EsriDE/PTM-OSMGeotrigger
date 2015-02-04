@@ -1,4 +1,4 @@
-package de.esri.osm.data;
+package de.esri.osm.core;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -15,10 +15,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
-import de.esri.geotrigger.core.HttpUtil;
-import de.esri.geotrigger.core.JsonRequestListener;
-import de.esri.geotrigger.core.OAuthUtil;
-
+/**
+ * Handles the ArcGIS requests.
+ * 
+ * @author Eva Peters
+ *
+ */
 public class ArcGISRequestHandler {
 	
 	private static Logger log = LogManager.getLogger(ArcGISRequestHandler.class.getName());
@@ -86,7 +88,7 @@ public class ArcGISRequestHandler {
 			HttpUtil.postRequest(url, CONTENTTYPE_FORM, entity, new JsonRequestListener() {
 				@Override
 				public void onSuccess(JSONObject jsonObject) {
-					log.debug("Add features response: " + jsonObject.toString());
+					log.debug("Response add features: " + jsonObject.toString());
 					JSONObject errorObject = jsonObject.optJSONObject("error");
 					if(errorObject == null){
 						listener.onSuccess(jsonObject);
@@ -113,17 +115,17 @@ public class ArcGISRequestHandler {
 		}		
 	}
 	
-	public static String requestToken(String user, String password)
+	/**
+	 * Requests the token.
+	 * 
+	 * @param user The user name.
+	 * @param password The password.
+	 * @param listener The listener with the token in onSuccess()
+	 */
+	public static void requestToken(String user, String password, final JsonRequestListener listener)
 	{
-		String token = "";
-		try{
-			OAuthUtil oauthUtil = new OAuthUtil();		
-			token = oauthUtil.requestUserToken(user, password);			
-		}catch(Exception e){
-			log.error("Could not get user token: " + e.getMessage());
-		}
-		
-		return token;
+		OAuthUtil oauthUtil = new OAuthUtil();		
+		oauthUtil.requestUserToken(user, password, listener);			
 	}
 
 }

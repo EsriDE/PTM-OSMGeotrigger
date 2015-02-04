@@ -1,7 +1,5 @@
 package de.esri.osm.data;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,21 +45,26 @@ import org.json.JSONObject;
 	  }
 	}
  * 
- * @author evp
+ * @author Eva Peters
  *
  */
 public class OSMJSONObjectWay extends OSMJSONObject 
 {
-	private static Logger log = LogManager.getLogger(OSMJSONObjectWay.class.getName());
 	private JSONArray vertices;
 	
-	public OSMJSONObjectWay(JSONObject jsonObject)
+	/**
+	 * Constructor.
+	 * 
+	 * @param jsonObject The OSM JSON way.
+	 * @throws GeometryReaderException If the geometry can not be read.
+	 */
+	public OSMJSONObjectWay(JSONObject jsonObject) throws GeometryReaderException
 	{
 		super(jsonObject);
 		try {
 			this.vertices = this.jsonObject.getJSONArray("geometry");
 		} catch (JSONException e) {
-			log.error("Error getting geometry: " + e.getMessage());
+			throw new GeometryReaderException("Error getting geometry: " + e.getMessage());
 		}
 	}
 	
@@ -80,14 +83,15 @@ public class OSMJSONObjectWay extends OSMJSONObject
 	 * 
 	 * @param index The index.
 	 * @return The vertex.
+	 * @throws GeometryReaderException If the geometry can not be read.
 	 */
-	public OSMJSONPoint getVertex(int index)
+	public OSMJSONPoint getVertex(int index) throws GeometryReaderException
 	{
 		JSONObject vertex = null;
 		try {
 			vertex = this.vertices.getJSONObject(index);
 		} catch (JSONException e) {
-			log.error("Error getting index: " + e.getMessage());
+			throw new GeometryReaderException("Error getting index: " + e.getMessage());
 		}
 		OSMJSONPoint osmjsonPoint = new OSMJSONPoint(vertex);
 		

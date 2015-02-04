@@ -35,15 +35,7 @@ public class ObjectFactory {
      */
     public ObjectFactory() {
     }
-
-    /**
-     * Create an instance of {@link App }
-     * 
-     */
-    public App createApp() {
-        return new App();
-    }
-
+    
     /**
      * Create an instance of {@link Notification }
      * 
@@ -101,14 +93,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Matching }
-     * 
-     */
-    public Matching createMatching() {
-        return new Matching();
-    }
-
-    /**
      * Create an instance of {@link Fields }
      * 
      */
@@ -117,11 +101,10 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Trigger }
+     * Create an instance of {@link Matching }
      * 
      */
-    public Trigger createTrigger() {
-        return new Trigger();
+    public Matching createMatching() {
+        return new Matching();
     }
-
 }

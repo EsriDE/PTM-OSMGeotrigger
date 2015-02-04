@@ -1,4 +1,4 @@
-package de.esri.osm;
+package de.esri.osm.conversion;
 
 import java.io.File;
 
@@ -7,10 +7,16 @@ import org.apache.logging.log4j.Logger;
 
 import de.esri.osm.config.Configuration;
 import de.esri.osm.config.ConfigurationReader;
-import de.esri.osm.config.ReaderException;
+import de.esri.osm.config.XMLReaderException;
 
 
 
+/**
+ * Starts the conversion process from OSM Overpass to ArcGIS feature services.
+ * 
+ * @author Eva Peters
+ *
+ */
 public class OsmToArcGis {
 	private static Logger log = LogManager.getLogger(OsmToArcGis.class.getName());
 	
@@ -26,8 +32,13 @@ public class OsmToArcGis {
 			String xmlConfig = args[0];
 			File configFile = new File(xmlConfig);			
 			if(configFile.exists()){
-				OsmToArcGis osmToArcGis = new OsmToArcGis(xmlConfig);
-				osmToArcGis.process();
+				OsmToArcGis osmToArcGis = null;
+				try {
+					osmToArcGis = new OsmToArcGis(xmlConfig);
+					osmToArcGis.process();
+				} catch (XMLReaderException e) {
+					log.error(e);
+				}
 			}else{
 				log.error("The configuration file does not exist.");
 			}
@@ -38,32 +49,25 @@ public class OsmToArcGis {
 		}
 	}
 	
-	public OsmToArcGis(String xmlConfig)
+	/**
+	 * Constructor.
+	 * 
+	 * @param xmlConfig The XML configuration.
+	 * @throws XMLReaderException If the reading process of the XML file failed.
+	 */
+	public OsmToArcGis(String xmlConfig) throws XMLReaderException
 	{
 		//Read configuration
 		this.configuration = parseConfig(xmlConfig);
 	}
 	
 	/**
-	 * Read OSM data.
-	 * Fill feature services with OSM data.
-	 * Create triggers from feature services.
-	 */
-	private void process()
-	{
-		//Read OSM over OverpassAPI and fill feature services
-		fillFeatureServices();
-				
-		//Create Trigger
-		createTrigger();
-	}
-	
-	/**
 	 * Parse the xml configuration file.
-	 * @param xmlConfig
-	 * @return
+	 * @param xmlConfig The XML configuration.
+	 * @return The configuration.
+	 * @throws XMLReaderException If the reading process of the XML file failed.
 	 */
-	private Configuration parseConfig(String xmlConfig){
+	private Configuration parseConfig(String xmlConfig) throws XMLReaderException{
 		log.debug("Parsing configuration file...");
 		File file = new File(xmlConfig);
 		ConfigurationReader reader = new ConfigurationReader(file);
@@ -71,31 +75,21 @@ public class OsmToArcGis {
 		try {
 			this.configuration = reader.read();
 			
-		} catch (ReaderException e) {
-			log.error("Error parsing configuration file: " + e.getMessage());
+		} catch (XMLReaderException e) {
+			throw new XMLReaderException("Error parsing configuration file: " + e.getMessage());
 		}
 		
 		return configuration;
 	}
-	
+
 	/**
-	 * Fills features services with OSM data.
+	 * Read OSM data.
+	 * Fill feature services with OSM data.
 	 */
-	private void fillFeatureServices()
+	private void process()
 	{
+		//Read OSM over OverpassAPI and fill feature services
 		OSMHandler osmHandler = new OSMHandler(configuration);
 		osmHandler.start();
-	}
-	
-	/**
-	 * Create triggers as defined in the configuration file.
-	 */
-	private void createTrigger()
-	{
-		TriggerGenerator triggerGenerator = new TriggerGenerator(configuration);
-		// delete old triggers
-		triggerGenerator.deleteTriggers();
-		// create new triggers
-		triggerGenerator.generateTriggers();
 	}
 }

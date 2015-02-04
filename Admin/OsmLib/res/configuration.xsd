@@ -11,8 +11,7 @@
 			<xs:sequence>
 				<xs:element ref="overpass" minOccurs="1" maxOccurs="1"/>
 				<xs:element ref="arcgis" minOccurs="1" maxOccurs="1"/>
-				<xs:element ref="matching" minOccurs="1" maxOccurs="1"/>
-				<xs:element ref="trigger" minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="fields" minOccurs="1" maxOccurs="1"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -27,9 +26,9 @@
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element type="xs:string" name="type"/>
+				<xs:element type="xs:boolean" name="delete"/>
 				<xs:element type="xs:anyURI" name="featureClass"/>
 				<xs:element ref="login" minOccurs="0" maxOccurs="1"/>
-				<xs:element ref="app" minOccurs="0" maxOccurs="1"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -39,20 +38,17 @@
 			<xs:attribute type="xs:string" name="password" use="optional"/>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="app">
-		<xs:complexType>
-			<xs:attribute type="xs:string" name="clientId" use="optional"/>
-			<xs:attribute type="xs:string" name="clientSecret" use="optional"/>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="matching">
+	<xs:element name="fields">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element ref="fields"  minOccurs="1" maxOccurs="1"/>
+				<xs:element ref="matching"  minOccurs="1" maxOccurs="1"/>
+				<xs:element type="xs:string" name="data"/>
+				<xs:element type="xs:string" name="osmurl"/>
+				<xs:element type="xs:string" name="osmid"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="fields">
+	<xs:element name="matching">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element ref="field"  minOccurs="0" maxOccurs="unbounded"/>
@@ -61,28 +57,8 @@
 	</xs:element>
 	<xs:element name="field">
 		<xs:complexType>
-			<xs:attribute type="xs:string" name="tag" use="optional"/>
-			<xs:attribute type="xs:string" name="name" use="optional"/>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="trigger">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element type="xs:string" name="direction"/>
-				<xs:element type="xs:string" name="triggerID">
-					<xs:annotation>
-						<xs:documentation>enter, leave</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element type="xs:float" name="radius"/>
-				<xs:element type="xs:string" name="tags">
-					<xs:annotation>
-						<xs:documentation>Meters</xs:documentation>
-					</xs:annotation>
-				</xs:element>
-				<xs:element ref="notification"  minOccurs="1" maxOccurs="1"/>
-				<xs:element type="xs:string" name="where" minOccurs="0" maxOccurs="1"/>
-			</xs:sequence>
+			<xs:attribute type="xs:string" name="osm" use="optional"/>
+			<xs:attribute type="xs:string" name="arcgis" use="optional"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="notification">

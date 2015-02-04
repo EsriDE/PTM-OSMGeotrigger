@@ -1,7 +1,5 @@
 package de.esri.osm.data;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,59 +27,29 @@ import org.json.JSONObject;
          }
       }
  * 
- * @author evp
+ * @author Eva Peters
  *
  */
-public abstract class OSMJSONObject extends JSONObject {
-	private static Logger log = LogManager.getLogger(OSMJSONObject.class.getName());
-	protected JSONObject jsonObject;
+public abstract class OSMJSONObject extends OSMJSONObjectRaw {
 		
 	public OSMJSONObject(JSONObject jsonObject)
 	{
-		super();
-		
-		this.jsonObject = jsonObject;
-	}
-	
-	/**
-	 * Gets the OSM type.
-	 * 
-	 * @param jsonObject The OSM object as JSON.
-	 * @return The OSM type.
-	 */
-	public static String getType(JSONObject jsonObject)
-	{
-		String type = null;
-		try {
-			type = (String) jsonObject.get("type");
-		} catch (JSONException e) {
-			log.error("Error getting type: " + e.getMessage());
-		}
-		return type;
-	}
-	
-	/**
-	 * Gets the OSM type.
-	 * 
-	 * @return The OSM type.
-	 */
-	public String getType()
-	{
-		return getType(this.jsonObject);
+		super(jsonObject);
 	}
 	
 	/**
 	 * Gets the OSM tags.
 	 * 
 	 * @return The OSM tags.
+	 * @throws GeometryReaderException If the geometry can not be read.
 	 */
-	public JSONObject getTags()
+	public JSONObject getTagCollection() throws GeometryReaderException
 	{
 		JSONObject tags = null;
 		try {
 			tags = this.jsonObject.getJSONObject("tags");
 		} catch (JSONException e) {
-			log.error("" + e.getMessage());
+			throw new GeometryReaderException("Error getting tags: " + e.getMessage());
 		}
 		return tags;
 	}
@@ -92,8 +60,9 @@ public abstract class OSMJSONObject extends JSONObject {
 	 * @param key The key.
 	 * @return The value.
 	 * @throws JSONException If the key is not found.
+	 * @throws GeometryReaderException If the geometry can not be read.
 	 */
-	public String getTag(String key) throws JSONException
+	public String getTag(String key) throws JSONException, GeometryReaderException
 	{
 		JSONObject tags = getTags();
 		return (String) tags.get(key);
@@ -103,14 +72,15 @@ public abstract class OSMJSONObject extends JSONObject {
 	 * Gets the ID.
 	 * 
 	 * @return The ID.
+	 * @throws GeometryReaderException If the geometry can not be read.
 	 */
-	public Object getId()
+	public Object getId() throws GeometryReaderException
 	{
 		Object id = null;
 		try {
 			id = this.jsonObject.get("id");
 		} catch (JSONException e) {
-			log.error("Error getting ID: " + e.getMessage());
+			throw new GeometryReaderException("Error getting ID: " + e.getMessage());
 		}
 		return id;
 	}

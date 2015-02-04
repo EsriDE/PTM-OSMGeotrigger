@@ -1,7 +1,5 @@
 package de.esri.osm.data;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -15,7 +13,7 @@ import org.json.JSONException;
  * 
  * {
       "attributes":{
-         "KeyValueAll":"{\"osmid\":7920367,\"layer\":\"FIXME_Polygons_Test\",\"tags\":{\"area\":\"yes\",\"natural\":\"water\",\"name\":\"Mittelkanal\",\"source\":\"onsite legend\"}}",
+         "data":"{\"osmid\":7920367,\"layer\":\"FIXME_Polygons_Test\",\"tags\":{\"area\":\"yes\",\"natural\":\"water\",\"name\":\"Mittelkanal\",\"source\":\"onsite legend\"}}",
          "OSMID":7920367,
          "natural":"water",
          "name":"Mittelkanal",
@@ -88,18 +86,19 @@ import org.json.JSONException;
       }
    }
  * 
- * @author evp
+ * @author Eva Peters
  *
  */
 public class ArcGISJSONObjectPolygon extends ArcGISJSONObject 
 {
-	private static Logger log = LogManager.getLogger(ArcGISJSONObjectPolygon.class.getName());
 	private JSONArray jsonArrayGeometryContainer;
 	
 	/**
 	 * Constructor.
+	 * 
+	 * @throws GeometryGenerationException If the geometry geometry can not be generated.
 	 */
-	public ArcGISJSONObjectPolygon()
+	public ArcGISJSONObjectPolygon() throws GeometryGenerationException
 	{
 		super();
 		
@@ -110,7 +109,7 @@ public class ArcGISJSONObjectPolygon extends ArcGISJSONObject
 		try {
 			this.geometry.put("rings", jsonArray);
 		} catch (JSONException e) {
-			log.error("Error setting ring: " + e.getMessage());
+			throw new GeometryGenerationException("Error setting ring: " + e.getMessage());
 		}
 	}
 	
@@ -119,32 +118,45 @@ public class ArcGISJSONObjectPolygon extends ArcGISJSONObject
 	 * 
 	 * @param x The longitude.
 	 * @param y The latitude.
+	 * @throws GeometryGenerationException If the geometry geometry can not be generated.
 	 */
-	public void addVertex(double x, double y)
+	public void addVertex(double x, double y) throws GeometryGenerationException
 	{
 		JSONArray jsonArrayPointContainer = new JSONArray();
 		try {
 			jsonArrayPointContainer.put(x);
 			jsonArrayPointContainer.put(y);
 		} catch (JSONException e) {
-			log.error("Error adding vertex: " + e.getMessage());
+			throw new GeometryGenerationException("Error adding vertex: " + e.getMessage());
 		}
 		
 		this.jsonArrayGeometryContainer.put(jsonArrayPointContainer);
+	}
+	
+	/**
+	 * Gets the last vertex.
+	 * 
+	 * @return The last vertex.
+	 */
+	public JSONArray getLastVertex()
+	{
+		int length = this.jsonArrayGeometryContainer.length();
+		return this.jsonArrayGeometryContainer.getJSONArray(length - 1);
 	}
 
 	/**
 	 * Calls this method when last vertex was added.
 	 * 
 	 * Then the very last vertex is added with the coordinates of the first vertex.
+	 * @throws GeometryGenerationException If the geometry geometry can not be generated.
 	 */
-	public void addingVerticesFinished()
+	public void addingVerticesFinished() throws GeometryGenerationException
 	{
 		Object firstVertex = null;
 		try {
 			firstVertex = jsonArrayGeometryContainer.get(0);
 		} catch (JSONException e) {
-			log.error("Error getting first vertex: " + e.getMessage());
+			throw new GeometryGenerationException("Error getting first vertex: " + e.getMessage());
 		}
 		this.jsonArrayGeometryContainer.put(firstVertex);
 	}

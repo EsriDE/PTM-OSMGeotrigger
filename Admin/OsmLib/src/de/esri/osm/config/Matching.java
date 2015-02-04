@@ -8,9 +8,11 @@
 
 package de.esri.osm.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -25,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{}fields"/>
+ *         &lt;element ref="{}field" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +38,40 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "fields"
+    "field"
 })
 @XmlRootElement(name = "matching")
 public class Matching {
 
-    @XmlElement(required = true)
-    protected Fields fields;
+    protected List<Field> field;
 
     /**
-     * Gets the value of the fields property.
+     * Gets the value of the field property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Fields }
-     *     
-     */
-    public Fields getFields() {
-        return fields;
-    }
-
-    /**
-     * Sets the value of the fields property.
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the field property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Fields }
-     *     
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getField().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Field }
+     * 
+     * 
      */
-    public void setFields(Fields value) {
-        this.fields = value;
+    public List<Field> getField() {
+        if (field == null) {
+            field = new ArrayList<Field>();
+        }
+        return this.field;
     }
 
 }

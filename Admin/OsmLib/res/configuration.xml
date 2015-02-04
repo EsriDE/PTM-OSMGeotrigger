@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<query>
+		<!-- OSM Overpass configuration -->
+		<overpass>
+			<!-- OSM request via Overpass QL http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL 
+				Requirements:
+					* output Format JSON: [out:json] (http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Output_Format_.28out.29)
+					* print out including the geometry: out geom; (http://wiki.openstreetmap.org/wiki/Overpass_API/Overpass_QL#Print_.28out.29)
+			-->
+			<url>http://www.overpass-api.de/api/interpreter?data=[out:json];node(48.3946,11.5962,48.4151,11.6305)[amenity=post_box];out%20geom;</url>
+		</overpass>
+		<!-- ArcGIS configuration -->
+		<arcgis>
+			<!-- interpret data as point, polyline, or polygon 
+				OSM nodes can be interpreted as points, e.g. points of interest.
+				OSM ways can be interpreted as polylines and polygons, e.g. highways or lakes.
+				OSM relations can be interpreted as polylines and polygons, e.g. administrative boundaries. The relation role is not interpreted.
+			-->
+			<type>point</type>
+			<!-- true if all features should be deleted at first. Oterwise false -->
+			<delete>true</delete>
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/OSMGeotriggerSamplePostbox/FeatureServer/0</featureClass><!-- create feature service in advance -->
+			<login user="" password=""/><!-- empty strings or configure user name and password -->
+		</arcgis>
+		<!-- Configuration of fields -->
+		<fields>
+			<!-- matching between OSM and ArcGIS -->
+			<matching>
+				<field osm="amenity" arcgis="amenity"/><!-- create ArcGIS field in advance -->
+				<field osm="operator" arcgis="operator"/><!-- create ArcGIS field in advance -->
+				<field osm="ref" arcgis="ref"/><!-- create ArcGIS field in advance -->
+				<field osm="collection_times" arcgis="collection_times"/><!-- create ArcGIS field in advance -->
+			</matching>
+			<data>data</data><!-- required ArcGIS field which contains all OSM tags, the OSM ID and the layer name; create ArcGIS field in advance -->
+			<osmurl>osmorgurl</osmurl><!-- required ArcGIS field which contains the OSM URL, create ArcGIS field in advance -->
+			<osmid>OSMID</osmid><!-- required ArcGIS field which contains the OSM ID, create ArcGIS field in advance -->
+		</fields>
+	</query>
+	<query>
+		<overpass>
+			<url>http://www.overpass-api.de/api/interpreter?data=[out:json];node(48.3805,11.7058,48.4160,11.7770)[amenity=post_box];out%20geom;</url>
+		</overpass>
+		<arcgis>
+			<type>point</type>
+			<delete>false</delete>
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/OSMGeotriggerSamplePostbox/FeatureServer/0</featureClass>
+			<login user="" password=""/>
+		</arcgis>
+		<fields>
+			<matching>
+				<field osm="amenity" arcgis="amenity"/>
+				<field osm="operator" arcgis="operator"/>
+				<field osm="ref" arcgis="ref"/>
+				<field osm="collection_times" arcgis="collection_times"/>
+			</matching>
+			<data>data</data>
+			<osmurl>osmorgurl</osmurl>
+			<osmid>OSMID</osmid>
+		</fields>
+	</query>
+	<query>
+		<overpass>
+			<url>http://www.overpass-api.de/api/interpreter?data=[out:json];(way(48.3946,11.5962,48.4151,11.6305)[highway=cycleway];way(48.3946,11.5962,48.4151,11.6305)[cycleway];way(48.3946,11.5962,48.4151,11.6305)[bicycle_road];way(48.3946,11.5962,48.4151,11.6305)[highway=track][bicycle][bicycle!=no][bicycle!=destination][bicycle!=private];way(48.3946,11.5962,48.4151,11.6305)[highway=footway][bicycle][bicycle!=no][bicycle!=destination][bicycle!=private];way(48.3946,11.5962,48.4151,11.6305)[highway=pedestrian][bicycle][bicycle!=no][bicycle!=destination][bicycle!=private];way(48.3946,11.5962,48.4151,11.6305)[highway=path][bicycle][bicycle!=no][bicycle!=destination][bicycle!=private];);out%20geom;</url>
+		</overpass>
+		<arcgis>
+			<type>polyline</type><
+			<delete>true</delete>
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/OSMGeotriggerSampleCycleway/FeatureServer/0</featureClass>
+			<login user="" password=""/>
+		</arcgis>
+		<fields>
+			<matching>
+				<field osm="highway" arcgis="highway"/>
+				<field osm="cycleway" arcgis="cycleway"/>
+				<field osm="bicycle_road" arcgis="bicycle_road"/>
+				<field osm="bicycle" arcgis="bicycle"/>
+				<field osm="name" arcgis="name"/>
+			</matching>
+			<data>data</data>
+			<osmurl>osmorgurl</osmurl>
+			<osmid>OSMID</osmid>
+		</fields>
+	</query>
+	<query>
+		<overpass>
+			<url>http://www.overpass-api.de/api/interpreter?data=%5Bout:json%5D;way%2848.3946,11.5962,48.4151,11.6305%29%5Bnatural=water%5D;out%20geom;</url>
+		</overpass>
+		<arcgis>
+			<type>polygon</type>
+			<delete>true</delete>
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/OSMGeotriggerSampleNaturalWater/FeatureServer/0</featureClass>
+			<login user="" password=""/>
+		</arcgis>
+		<fields>
+			<matching>
+				<field osm="natural" arcgis="naturaltag"/>
+				<field osm="name" arcgis="name"/>
+			</matching>
+			<data>data</data>
+			<osmurl>osmorgurl</osmurl>
+			<osmid>OSMID</osmid>
+		</fields>
+	</query>
+	<query>
+		<overpass>
+			<url>http://www.overpass-api.de/api/interpreter?data=[out:json];relation(48.3581,11.5422,48.4654,11.7155)[admin_level=8];out%20geom;</url>
+		</overpass>
+		<arcgis>
+			<type>polygon</type>
+			<delete>true</delete>
+			<featureClass>http://services2.arcgis.com/tISIjAqoejGPFbAF/arcgis/rest/services/OSMGeotriggerSampleBoundary/FeatureServer/0</featureClass>
+			<login user="" password=""/>
+		</arcgis>
+		<fields>
+			<matching>
+				<field osm="name" arcgis="name"/>
+				<field osm="boundary" arcgis="boundary"/>
+				<field osm="admin_level" arcgis="admin_level"/>
+				<field osm="type" arcgis="typetag"/>
+			</matching>
+			<data>data</data>
+			<osmurl>osmorgurl</osmurl>
+			<osmid>OSMID</osmid>
+		</fields>
+	</query>
+</configuration>

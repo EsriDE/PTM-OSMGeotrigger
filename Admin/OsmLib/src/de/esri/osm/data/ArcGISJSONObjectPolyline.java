@@ -1,7 +1,5 @@
 package de.esri.osm.data;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -15,7 +13,7 @@ import org.json.JSONException;
  * 
  * {
       "attributes":{
-         "KeyValueAll":"{\"osmid\":18281905,\"layer\":\"FIXME_Polylines_Test\",\"tags\":{\"fixme\":\"check speed limit\",\"maxspeed\":\"30\",\"name\":\"Theodor-Storm-Straﬂe\",\"highway\":\"residential\"}}",
+         "data":"{\"osmid\":18281905,\"layer\":\"FIXME_Polylines_Test\",\"tags\":{\"fixme\":\"check speed limit\",\"maxspeed\":\"30\",\"name\":\"Theodor-Storm-Straﬂe\",\"highway\":\"residential\"}}",
          "fixme":"check speed limit",
          "OSMID":18281905,
          "name":"Theodor-Storm-Straﬂe",
@@ -41,18 +39,20 @@ import org.json.JSONException;
       }
    }
  * 
- * @author evp
+ * @author Eva Peters
  *
  */
 public class ArcGISJSONObjectPolyline extends ArcGISJSONObject 
 {
-	private static Logger log = LogManager.getLogger(ArcGISJSONObjectPolyline.class.getName());
+
 	private JSONArray jsonArrayGeometryContainer;
 	
 	/**
 	 * Constructor.
+	 * 
+	 * @throws GeometryGenerationException If the geometry geometry can not be generated.
 	 */
-	public ArcGISJSONObjectPolyline()
+	public ArcGISJSONObjectPolyline() throws GeometryGenerationException
 	{
 		super();
 		
@@ -63,7 +63,7 @@ public class ArcGISJSONObjectPolyline extends ArcGISJSONObject
 		try {
 			this.geometry.put("paths", jsonArray);
 		} catch (JSONException e) {
-			log.error("Error setting path: " + e.getMessage());
+			throw new GeometryGenerationException("Error setting path: " + e.getMessage());
 		}
 	}
 	
@@ -72,17 +72,29 @@ public class ArcGISJSONObjectPolyline extends ArcGISJSONObject
 	 * 
 	 * @param x The longitude.
 	 * @param y The latitude.
+	 * @throws GeometryGenerationException If the geometry geometry can not be generated.
 	 */
-	public void addVertex(double x, double y)
+	public void addVertex(double x, double y) throws GeometryGenerationException
 	{
 		JSONArray jsonArrayPointContainer = new JSONArray();
 		try {
 			jsonArrayPointContainer.put(x);
 			jsonArrayPointContainer.put(y);
 		} catch (JSONException e) {
-			log.error("Error adding vertex: " + e.getMessage());
+			throw new GeometryGenerationException("Error adding vertex: " + e.getMessage());
 		}
 		
 		this.jsonArrayGeometryContainer.put(jsonArrayPointContainer);
+	}
+	
+	/**
+	 * Gets the last vertex.
+	 * 
+	 * @return The last vertex.
+	 */
+	public JSONArray getLastVertex()
+	{
+		int length = this.jsonArrayGeometryContainer.length();
+		return this.jsonArrayGeometryContainer.getJSONArray(length - 1);
 	}
 }

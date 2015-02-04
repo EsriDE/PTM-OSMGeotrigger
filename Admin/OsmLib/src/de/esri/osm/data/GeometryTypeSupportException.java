@@ -1,24 +1,24 @@
-package de.esri.osm.config;
+package de.esri.osm.data;
 
 /**
- * This exception is thrown if the reading process failed.
+ * This exception is thrown if the geometry types of OSM and ArcGIS are not supported.
  *
  * @author Eva Peters
  *
  */
-public class ReaderException extends Exception
+public class GeometryTypeSupportException extends Exception
 {
 	/**
      * Unique serial version id.
      */
-	private static final long serialVersionUID = -3081918239407257048L;
+	private static final long serialVersionUID = -3168890817003764727L;
 
 	/**
      * Creates a new ReaderException.
      *
      * @param errorMessage The description of the new exception.
      */
-    public ReaderException(String errorMessage)
+    public GeometryTypeSupportException(String errorMessage)
     {
         super(errorMessage);
     }
@@ -28,7 +28,7 @@ public class ReaderException extends Exception
      *
      * @param e The cause of the new exception.
      */
-    public ReaderException(Throwable e)
+    public GeometryTypeSupportException(Throwable e)
     {
         super(e);
     }
@@ -39,7 +39,7 @@ public class ReaderException extends Exception
      * @param errorMessage The description of the new exception.
      * @param e The cause of the new exception.
      */
-    public ReaderException(String errorMessage, Throwable e)
+    public GeometryTypeSupportException(String errorMessage, Throwable e)
     {
         super(errorMessage, e);
     }
