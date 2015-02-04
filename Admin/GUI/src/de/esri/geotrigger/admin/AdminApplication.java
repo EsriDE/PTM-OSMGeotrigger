@@ -30,19 +30,8 @@ import de.esri.geotrigger.admin.tools.NewMapTool;
 import de.esri.geotrigger.admin.tools.OpenWebMapTool;
 import de.esri.geotrigger.admin.tools.SetAppIdTool;
 
-/**
- * Web Map:
- * http://esri-de-dev.maps.arcgis.com/home/item.html?id=26d316dfb7034da1991cc862a51d04e2
- * 
- * http://esri-de-dev.maps.arcgis.com/home/item.html?id=bf5dbd7d583543f795fde3e6731d48c6
- *
- * - Logging
- * - Lokalisierung
- * - Lizensierung
- */
+
 public class AdminApplication implements ActionListener{
-//	private String portalUrl = "http://esri-de-dev.maps.arcgis.com";
-//	private String webMapId = "bf5dbd7d583543f795fde3e6731d48c6";
 	private static JFrame window;
 	private JMap map;
 	private JMenuItem appIdMenuItem;
@@ -108,41 +97,10 @@ public class AdminApplication implements ActionListener{
 		createMultipleTriggersMenuItem = new JMenuItem("Create multiple Triggers...");
 		createMultipleTriggersMenuItem.addActionListener(this);
 		triggerMenu.add(createMultipleTriggersMenuItem);
-		
-
-	    // Before this application is deployed please register the application on http://developers.esri.com 
-	    // and set the Client ID in the application as shown below.  This will license your application 
-	    // to use Basic level functionality.
-	    // 
-	    // If you require to license your application for Standard level functionality, please refer to the 
-	    // documentation on http://developers.esri.com
-	    //
-	    // ArcGISRuntime.setClientID("your client id");
-	
-	    //map options allow for a common base map to be chosen
-	    //MapOptions mapOptions = new MapOptions(MapType.TOPO);
-    
-//		UserCredentials credentials = new UserCredentials();
-//		credentials.setUserAccount("rsu4devprog", "devprog42195");
-//		Portal portal = new Portal(portalUrl, credentials);
-//		
-//		WebMap webMap = null;
-//		try{
-//			webMap = WebMap.newInstance(webMapId, portal);
-//		}catch(Exception e){
-//			
-//		}
 
 		//create a map using the map options
 		map = new JMap();
-//		map.loadWebMap(webMap);
 		window.getContentPane().add(map, BorderLayout.CENTER);
-
-
-		// The code below shows how to add a tiled layer if you don't use MapOptions
-		//ArcGISTiledMapServiceLayer tiledLayer = new ArcGISTiledMapServiceLayer(
-		// "http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer");
-		// map.getLayers().add(tiledLayer);
 		
 		// tools
 		appIdTool = new SetAppIdTool(map);
