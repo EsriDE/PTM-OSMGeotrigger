@@ -22,8 +22,8 @@ Example: [http://www.overpass-api.de/api/interpreter?data=\[out:json\];node\(48.
 
 ## **Getting Started**
 
-* Create the configuration file.
-* Create the feature services in advance (see configuration file).
+* Create the [configuration file](./res/configuration.xml).
+* Create the feature services in advance (see [configuration file](./res/configuration.xml)).
  * [Sample Web Map](http://esri-de-dev.maps.arcgis.com/home/item.html?id=72117966ec084c3b95ead6dc359e3764) with sample feature services
 * Start the OSM ArcGIS Loader as command line tool without installation.
 * Pass the path to the configuration file as argument. 
