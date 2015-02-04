@@ -1,35 +1,36 @@
 # **Geotrigger Administrator**
 
-*Geotrigger Administrator ist eine Java-Anwendung, mit der Geotrigger verwaltet werden können.*
+*The Geotrigger Administrator is a Java application to create and administer geotriggers.*
 
 
 ## **Features**
-*Mit dem Geotrigger Administrator kann man z.B.:*
+*With the Geotrigger Administrator you can e.g.:*
 
-* Eine Karte als WebMap oder aus einzelnen Layern anzeigen.
-* Sich mit Client ID und Client Secret zum Geotrigger Service verbinden.
-* Automatisiert Geotrigger zu Features eines Feature-Layers erstellen.
+* Display a map as WebMap or build from several layers.
+* Connect to the Geotrigger Service with your client id and client secret.
+* Automaticly create geotriggers from the features of a feature service.
 
 ## **Getting Started**
-*Die Applikation kann einfach als Java-Anwendung gestartet werden. Eine Installation ist nicht erforderlich.*
+*The application can simply be started as a Java application. There is no installation required.*
 
 
 ## **Ressourcen**
-*Ressourcen und Third-Party-Lizenzbestimmungen*
 
-*Die Applikation verwendet das ArcGIS Runtime SDK for Java:*
+*The application uses the ArcGIS Runtime SDK for Java:*
 
 * [ArcGIS Runtime SDK for Java](https://developers.arcgis.com/java/ "")
 
-## **FAQ (optional)**
+*Other used libraries:*
+* log4j-api-2.0.2.jar
+* log4j-core-2.0.2.jar
 
+## **Contributing**
+
+You are welcome to checkout this sample code to get inspirated for your own work.
 
 ## **Lizenzbestimmungen**
-*Beschreibung der Nutzungsbedingungen und Copyright*
 
-*Beispiel:*
-
-Copyright 2013 Esri
+Copyright 2015 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

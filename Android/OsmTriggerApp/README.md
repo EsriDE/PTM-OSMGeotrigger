@@ -1,34 +1,37 @@
-# **OSM Geotrigger App Android**
-*Die OSM Geotrigger App ist eine Android-App, mit der Benachrichtigungen von Geotriggern empfangen werden können, die für OSM-Objekte angelegt wurden.*
+# **OSM Geotrigger Android App**
+*The OSM Geotrigger App is an Android app that receives notifications from the geotriggers that have been created for OSM objects.*
 
 
 ## **Features**
 
-*Die OSM Geotrigger App unterstützt u.a.:*
-* Anzeige einer Karte
-* Aktivieren/Deaktivieren der einzelnen OSM-Kategorien
-* Enpfangen von Benachrichtigungen des Geotrigger Service
-* Anzeige von Detailinformationen zu OSM-Objekt eines ausgelösten Triggers.
+*The OSM Geotrigger App supports e.g.:*
+* Display a map
+* Activate/deactivate OSM categories
+* Receive notifications from the Geotrigger Service
+* Show detailed information about the OSM object related to the trigger
 
 ## **Getting Started**
-*Die OSM Geotrigger App liegt als APK-Datei vor und wird wie andere Android Apps auf einem Android-Gerät installiert.*
 
+*The OSM Geotrigger App can be build from the source files. The resulting APK file can be installed like other Android apps on Android devices.*
 
 
 ## **Ressourcen**
-*Ressourcen und Third-Party-Lizenzbestimmungen*
 
-*Die OSM Geotrigger App verwendet das ArcGIS Runtime SDK for Android:*
-
+*The OSM Geotrigger App uses the ArcGIS Runtime SDK for Android:*
 * [ArcGIS Runtime SDK for Android](https://developers.arcgis.com/android/ "")
 
+*Other used libraries:*
+* android-support-v4.jar
+* google-play-services.jar
+* geotrigger-sdk-1.0.2.jar
 
-## **Lizenzbestimmungen**
-*Beschreibung der Nutzungsbedingungen und Copyright*
+## **Contributing**
 
-*Beispiel:*
+You are welcome to checkout this sample code to get inspirated for your own work.
 
-Copyright 2013 Esri
+## **License Agreement**
+
+Copyright 2015 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
