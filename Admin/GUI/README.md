@@ -8,7 +8,7 @@
 
 * Display a map as WebMap or build from several layers.
 * Connect to the Geotrigger Service with your client id and client secret.
-* Automaticly create geotriggers from the features of a feature service.
+* Automatically create geotriggers from the features of a feature service.
 
 ## **Getting Started**
 *The application can simply be started as a Java application. There is no installation required.*
@@ -28,7 +28,7 @@
 
 You are welcome to checkout this sample code to get inspirated for your own work.
 
-## **Lizenzbestimmungen**
+## **Licensing**
 
 Copyright 2015 Esri
 

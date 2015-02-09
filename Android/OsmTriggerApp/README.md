@@ -29,7 +29,7 @@
 
 You are welcome to checkout this sample code to get inspirated for your own work.
 
-## **License Agreement**
+## **Licensing**
 
 Copyright 2015 Esri
 

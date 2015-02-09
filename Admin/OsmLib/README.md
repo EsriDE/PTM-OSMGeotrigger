@@ -1,5 +1,5 @@
 # **OSM ArcGIS Loader**
-*The OSM ArcGIS Loader converts [OpenStreetMap](http://www.openstreetmap.org) (OSM) data to ArcGIS feature services. This library is part of the OSM-Geotrigger-App.*
+*The OSM ArcGIS Loader converts [OpenStreetMap](http://www.openstreetmap.org) (OSM) data to ArcGIS feature services. This library is part of the OSM Geotrigger App.*
 
 ## **Features**
 

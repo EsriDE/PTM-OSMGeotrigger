@@ -1,6 +1,6 @@
 # **Geotrigger Core Library**
 
-*The Geotrigger Core Library is a library writte in Java that can be used to communicate with the Geotrigger Service. With the library you can send geotrigger requests for example to create or delete geotriggers and much more.*
+*The Geotrigger Core Library is a library written in Java that can be used to communicate with the Geotrigger Service. With the library you can send geotrigger requests for example to create or delete geotriggers and much more.*
 
 
 ## **Features** 
@@ -33,7 +33,7 @@
 
 You are welcome to checkout this sample code to get inspirated for your own work.
 
-## **Lizenzbestimmungen**
+## **Licensing**
 
 Copyright 2015 Esri
 
