@@ -3,7 +3,7 @@
 
 This repository contains the source code for the OSM Geotrigger App, a sample Java and Android project to demonstrate the [Esri Geotrigger Service](https://developers.arcgis.com/en/features/geotrigger-service/).
 
-For more information see GeoNet.
+For more information see [GeoNet](https://geonet.esri.com/groups/geodev-germany/blog/2015/02/10/esri-geotrigger-service-mit-osm).
 
 ![Android App](./Doc/app.png "")
 
